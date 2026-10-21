@@ -96,6 +96,7 @@ Source basis: Email A and Email B excerpts supplied by the user. Original mailbo
 - Branch: main, tracking origin/main
 - Remote: `https://github.com/TiKyisme/co3094-lab2-network-streaming.git`
 - Last commit: HEAD; verify with `rtk git rev-parse HEAD`
+- The user-provided forum PDF, source ZIP, extracted pack and handoff are present as untracked repo-root copies. The PDF, ZIP and handoff byte-match the copies in the external course folder. They were left unchanged, unstaged and uncommitted; `git ls-files` contains no PDF or ZIP.
 
 ## Important File Paths
 - [README](README.md)

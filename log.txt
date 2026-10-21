@@ -235,3 +235,7 @@ Execution/state:
 - No VM settings changed. The local Ubuntu VM remains powered off; no current TCP, curl, browser, or server-log test was run.
 - Updated README, source inventory, requirements matrix, HTTP analysis, network setup/test cases, open questions, state, prompt history, and this log. Saved the user's exact PDF-path reply under prompts/.
 - This evidence update is included in the current repository milestone; remote status is verified after pushing.
+
+Post-push verification:
+- Commit `853aec27f875522bcf123cfd9554ad71eb38c796` was pushed; `origin/main` resolved to the same hash.
+- The forum PDF, source ZIP, extracted pack and handoff are untracked copies present in the repo worktree. The PDF, ZIP and handoff match the external course-folder copies byte-for-byte. They were left unchanged and uncommitted; no PDF or ZIP is tracked.
