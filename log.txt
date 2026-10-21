@@ -296,3 +296,37 @@ Git and review handoff:
 - Branch feat/reliability-lab2-draft is pushed to origin; local and remote content commit is 6514a17e6399307de4d704be5d4159f1ffaf2b8e, based on main commit f34bd9e0cb8538f39f7459b364c83dd884cd7a7a.
 - Opened draft PR #1, https://github.com/TiKyisme/co3094-lab2-network-streaming/pull/1, targeting main. It is OPEN, DRAFT, and NOT MERGED.
 - No student technical review, team decision, test, or approval is claimed.
+
+[2026-10-22] [RELIABILITY FINAL CORRECTION PASS]
+Task and prompt evidence:
+- Continued on feat/reliability-lab2-draft for a final technical correction before the pair review.
+- Saved the exact current user prompt to prompts/2026-10-21-reliability-final-correction.txt (2,235 bytes; SHA-256 3530ec029a0939f57d6c8604f7aeb74ed200b548bc232031e61a358416995620). The original prompt arrived under the 2026-10-21 workspace date; no separate attachment was supplied.
+- Read state.md, this log, and the existing Reliability design, presentation, oral preparation, and interface review before editing.
+
+Technical corrections:
+- Distinguished the draft's custom packet-count rule (three distinct higher PNs that are ACKed and marked ack-eliciting) from RFC 9002's raw packet-number-distance condition (largest_acked >= packet.PN + 3). Added the worked PN 100-103 example: RFC distance can meet 3 while the custom count is only 1 because PNs 101-102 are ACK-only. Explicitly stated that the rules are different and not equivalent.
+- Corrected ACK-range semantics to record received PNs including ACK-only PNs, while filtering the custom count by the sender's ack-eliciting metadata.
+- Added scheduled loss_time computation and on_loss_time_expiry() re-evaluation without a new ACK. Documented the single loss-detection timer, loss_time precedence over PTO, and that PTO expiry probes but never declares existing packets lost.
+- Replaced the presentation's lost-ACK sequence diagram with a prominent packet-loss recovery diagram. The two-page PDF was regenerated from the updated presentation content.
+- Updated the oral review prompts and Reliability interface review to match. All student-review checkboxes remain unchecked.
+
+Validation:
+- Mermaid CLI 12.0.0 rendered all five detailed-design diagrams and both presentation diagrams successfully. The updated packet-loss diagrams were inspected for clipping and label readability.
+- Regenerated output/pdf/reliability-lab2-presentation.pdf: 2 pages, 174,750 bytes, SHA-256 1c2e3918802c4b24978afca135f4c2b88c445ac1b88ef9c6738d34a40b46dc4d. Rendered and visually inspected both pages; the recovery diagram is legible and the page layout remains within two pages.
+- No protocol implementation, transport tests, or network tests were run. These edits remain a design draft pending student review.
+
+Files intentionally updated:
+- docs/reliability-design.md
+- docs/reliability-lab2-presentation.md
+- docs/reliability-oral-preparation.md
+- docs/reliability-interface-review.md
+- output/pdf/reliability-lab2-presentation.pdf
+- prompts/2026-10-21-reliability-final-correction.txt
+- prompts/prompt-history.md
+- state.md
+- log.txt
+
+GitHub:
+- Content commit `053ad2a225853903386739f1afb57aa6187f098e` was pushed to `origin/feat/reliability-lab2-draft`; `git ls-remote` matched that commit.
+- `gh pr view 1` reported head `053ad2a225853903386739f1afb57aa6187f098e`, state OPEN, `isDraft=true`, and `mergedAt=null`. PR #1 was not merged or marked student-approved.
+- This state/log push-verification update is recorded separately from the Reliability content commit.

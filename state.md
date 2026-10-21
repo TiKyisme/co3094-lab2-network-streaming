@@ -56,10 +56,10 @@ GOOGLE_DOC_STATUS: GOOGLE_DOC_SYNC_PENDING (exact-ID metadata and native text re
 HTTP_DEMO_STATUS: WAITING_FOR_MANUAL_TEST (syntax only; VM powered off)
 STREAMING_DESIGN_STATUS: PROPOSED_NOT_REVIEWED_BY_PAIRS
 GROUP_ROSTER_STATUS: PARTIAL (2 tentative names, 4 placeholders, HTTP owners unassigned)
-PROMPT_EVIDENCE_STATUS: latest user master prompt saved byte-identically; student prompts pending
+PROMPT_EVIDENCE_STATUS: current correction prompt saved verbatim (2,235 bytes; SHA-256 3530ec029a0939f57d6c8604f7aeb74ed200b548bc232031e61a358416995620); student prompts pending
 RELIABILITY_DRAFT_STATUS: AI_DRAFT_COMPLETE; TECHNICAL_REVIEW_PENDING; TEAM_DECISION_PENDING
-RELIABILITY_NEXT_ACTION: REL-01 and REL-02 review packet/ACK and recovery sections; keep every team-review box unchecked
-NEXT_ACTION: REL-01 and REL-02 review the Reliability draft; VM network checks remain pending
+RELIABILITY_NEXT_ACTION: REL-01 and REL-02 review the corrected ACK-range, custom threshold, loss_time/PTO, and retransmission sections; keep every team-review box unchecked
+NEXT_ACTION: REL-01 and REL-02 personally review the corrected Reliability draft; VM network checks remain pending
 ```
 
 ## Completed Tasks
@@ -85,9 +85,14 @@ NEXT_ACTION: REL-01 and REL-02 review the Reliability draft; VM network checks r
 - Preserved the earlier Reliability-pair names as TENTATIVE.
 - Copied the continuation prompt byte-for-byte into `prompts/`; verified both copies are 8208 bytes and identical.
 - Updated requirements/conflict matrix, source inventory, guide review, HTTP analysis, network setup, open questions and A1 compatibility notes.
+- Completed the Reliability final correction pass: distinguished the custom count of three later ACKed ack-eliciting packets from RFC 9002's raw PN-distance condition with a worked PN 100-103 comparison; added scheduled `loss_time` re-evaluation, single-timer precedence over PTO, and the rule that PTO alone never declares loss.
+- Replaced the presentation's lost-ACK diagram with a prominent loss-recovery sequence showing PN 100 loss, the custom threshold, retransmission of bytes 0-99 under PN 106, ACK, and one receiver delivery. Cross-checked the detailed design, presentation, oral preparation, and interface review.
+- Mermaid CLI 12.0.0 rendered all five detailed-design diagrams and both presentation diagrams; all seven rendered successfully, and the updated loss-recovery diagrams were visually inspected.
+- Regenerated the presentation PDF and visually inspected both rendered pages. It remains two pages; final PDF SHA-256 is `1c2e3918802c4b24978afca135f4c2b88c445ac1b88ef9c6738d34a40b46dc4d`.
+- Saved this exact user correction prompt in `prompts/2026-10-21-reliability-final-correction.txt` (2,235 bytes; SHA-256 `3530ec029a0939f57d6c8604f7aeb74ed200b548bc232031e61a358416995620`). No student-review checkbox was checked; no protocol code or network test was added or run.
 
 ## Waiting / Pending
-- REL-01/REL-02 technical review and cross-pair agreement on packet semantics, ACK-only congestion treatment, expiry clock, and retry cap; no student confirmations are recorded.
+- REL-01/REL-02 technical review and cross-pair agreement on packet semantics, the custom packet-count rule, ACK-only congestion treatment, expiry clock, and retry cap; no student confirmations are recorded.
 - Complete forum-linked `sample_code_http_server_process.txt` or matching server source, including the accept/thread call that must match `new_connection(conn, addr)`.
 - Confirm whether the local `ubuntu` VM is the intended test guest.
 - Start the intended Ubuntu VM; obtain guest `ip -4 addr`, then proceed to listener, Windows TCP, curl and Chrome checks.
@@ -125,7 +130,7 @@ NEXT_ACTION: REL-01 and REL-02 review the Reliability draft; VM network checks r
 - Repo: [public repository](https://github.com/TiKyisme/co3094-lab2-network-streaming)
 - Branch: feat/reliability-lab2-draft, tracking origin/feat/reliability-lab2-draft; draft PR #1 targets main
 - Remote: `https://github.com/TiKyisme/co3094-lab2-network-streaming.git`
-- Reliability content commit: 6514a17e6399307de4d704be5d4159f1ffaf2b8e (pushed; state/log handoff updates are recorded separately)
+- Reliability final correction content commit: 053ad2a225853903386739f1afb57aa6187f098e (pushed; origin branch ref verified; state/log push evidence is recorded separately)
 - Pull request: [#1 - Reliability Lab 2 draft](https://github.com/TiKyisme/co3094-lab2-network-streaming/pull/1), OPEN / DRAFT / NOT MERGED
 - Handover package commit `10087e85a7c8d0e57995156df2f1044077cd5f94` was pushed to `origin/main`; `git ls-remote` matched at the post-push check. GitHub API readback confirmed the guide, handover, assignments, announcement, review checklist, prompt instructions and DOCX paths.
 - The user-provided forum PDF, source ZIP, extracted pack and handoff are present as untracked repo-root copies. The PDF, ZIP and handoff byte-match the copies in the external course folder. They were left unchanged, unstaged and uncommitted; `git ls-files` contains no PDF or ZIP.
@@ -143,7 +148,7 @@ NEXT_ACTION: REL-01 and REL-02 review the Reliability draft; VM network checks r
 - [prompt history](prompts/prompt-history.md)
 
 ## Next 3 Actions
-1. REL-01 and REL-02 review the Reliability draft and record real decisions and prompt evidence.
+1. REL-01 and REL-02 personally review the corrected ACK semantics, custom threshold, `loss_time`/PTO behavior, and retransmission sequence; VM network checks remain pending.
 2. Start the intended Ubuntu VM and share ip -4 addr output so the HTTP network checks can proceed.
 3. Obtain the linked full server attachment and ask the instructor about Assignment 1 conflicts when available.
 
