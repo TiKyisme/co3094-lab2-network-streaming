@@ -1,0 +1,228 @@
+# CO3094 LAB 2 — FINAL SUBMISSION CLEANUP
+
+Bạn đang tiếp tục repository `TiKyisme/co3094-lab2-network-streaming`, branch `feat/reliability-lab2-draft`.
+
+File cần chỉnh:
+- `report/co3094_lab2_report.tex`
+
+File đầu ra bắt buộc:
+- `output/pdf/co3094_lab2_report.pdf`
+
+## MỤC TIÊU
+
+Hoàn thiện báo cáo LaTeX hiện tại thành **bản báo cáo sạch, chuyên nghiệp, sẵn sàng nộp cho giảng viên Nguyễn Phương Duy**.
+
+Báo cáo đã có 10 trang, 3 phần thiết kế, 5 hình minh họa và đã compile thành công.
+
+**KHÔNG viết lại toàn bộ. Chỉ chỉnh những nội dung không phù hợp với bản nộp, cập nhật danh sách thành viên và kiểm tra chất lượng lần cuối.**
+
+## 1. XÓA NỘI DUNG NỘI BỘ KHỎI REPORT
+
+Báo cáo hiện chứa những thông tin tôi chỉ cung cấp cho AI để nghiên cứu và xác minh yêu cầu.
+
+Các thông tin này KHÔNG được xuất hiện trong PDF nộp thầy.
+
+Hãy xóa hoặc viết lại những câu mang tính nhật ký như:
+
+- "Các trích đoạn Email A/B do người dùng cung cấp..."
+- "Email gốc trong hộp thư chưa được mở lại độc lập..."
+- "Theo Gmail..."
+- "Theo prompt của người dùng..."
+- "AI draft complete..."
+- "Technical review pending..."
+- "Chưa được sinh viên duyệt..."
+- "Codex đã xác minh..."
+- "Không tìm thấy tài liệu trong workspace..."
+- "Nhóm cần xác nhận deck CO3093 có phù hợp..."
+- "Repository hiện..."
+- "Prompt evidence đã lưu..."
+- "Tài liệu handover/draft..."
+- Những ghi chú về giới hạn công cụ AI, Git, email hoặc quy trình làm việc nội bộ.
+
+Không sử dụng nhãn `TENTATIVE`, `UNVERIFIED`, `AI-ASSISTED DRAFT`, `SOURCE VERIFICATION` trong bản báo cáo nộp.
+
+Không đặt header "Bản dự thảo - chờ nhóm phản biện".
+
+**LƯU Ý:** Không xóa kiến thức kỹ thuật, giả định thuật toán hoặc hạn chế thật sự của thiết kế. Chỉ loại bỏ những thông tin về quá trình AI/người dùng chuẩn bị tài liệu.
+
+Thông tin nào chưa được kiểm chứng thì không biến thành thành tích hoặc kết quả đã hoàn thành.
+
+## 2. VIẾT LẠI INTRODUCTION
+
+Thay các đoạn kể về Gmail và quá trình thu thập yêu cầu bằng phần mở đầu học thuật, ngắn gọn.
+
+Ví dụ nội dung mong muốn:
+
+"Bài báo cáo trình bày thiết kế đề xuất cho ba cơ chế quan trọng trong truyền dữ liệu qua mạng: Reliability, Flow Control và Congestion Control. Mỗi cơ chế được mô tả thông qua nguyên lý hoạt động, thuật toán cơ bản và các tình huống minh họa. Các thiết kế được xây dựng dựa trên kiến thức của chương Transport Layer và phục vụ việc thảo luận, đánh giá trong Lab 2."
+
+Có thể diễn đạt tốt hơn nhưng phải giữ tính chính xác.
+
+Không cần giải thích nguồn yêu cầu lấy từ email nào.
+
+Không tự tuyên bố đã triển khai hoặc kiểm thử hoàn chỉnh các cơ chế.
+
+## 3. CẬP NHẬT DANH SÁCH NHÓM
+
+Danh sách chính xác:
+
+| No. | Member | Student ID |
+|---|---|---|
+| 1 | Nguyễn Đổng Thiên Kỳ (Group Leader) | 2411818 |
+| 2 | Nguyễn Đăng Gia Đạo | 2410652 |
+| 3 | Trần Trọng Vũ | 2414026 |
+| 4 | Hà Duy Lộc | — |
+| 5 | Lê Thành Tiến | — |
+| 6 | Nguyễn Tuấn Anh | — |
+
+Cập nhật bảng này trong trang bìa LaTeX.
+
+Yêu cầu:
+- Chính xác tên, dấu tiếng Việt và MSSV.
+- Không sử dụng tên từ report CO3001 mẫu.
+- Không bịa MSSV còn thiếu.
+- Không hiển thị các ghi chú "chờ xác nhận thành viên" trên bìa.
+- Nếu group number chưa được cung cấp thì bỏ trường này hoặc để trống hợp lý, không tự suy đoán.
+
+Course: `CO3094 — Mạng máy tính (Thí nghiệm)`.
+
+Lecturer: `Nguyễn Phương Duy`.
+
+Group Leader: `Nguyễn Đổng Thiên Kỳ`.
+
+## 4. CHỈNH PHẦN REFERENCES
+
+Giữ các nguồn học thuật phù hợp, nhất là bài giảng:
+
+`Chapter 3 — Transport Layer — Chapter_3_v9.0`
+
+Duy trì số slide tham khảo cho:
+- Reliability.
+- Flow Control.
+- Congestion Control.
+
+Không cần kể về sự khác biệt thư mục CO3093/CO3094 hoặc tình trạng tìm kiếm file trên máy.
+
+Không ghi tài liệu nội bộ `state.md`, `log.txt`, `requirements-matrix.md`, Gmail, prompt history hay GitHub như tài liệu tham khảo học thuật.
+
+Không ghi nguồn giả hoặc nói nội dung do giảng viên yêu cầu nếu thực tế đó là lựa chọn thiết kế của nhóm.
+
+Có thể giữ một mục "References" ngắn với tên bài giảng và thông tin tài liệu được xác minh.
+
+## 5. CHỈNH CÁCH DIỄN ĐẠT
+
+Hãy rà soát toàn bộ report và thay những câu mang tính quá trình bằng cách diễn đạt học thuật.
+
+Ví dụ:
+
+Sai: "Đây là đề xuất AI chưa được thành viên nhóm duyệt."
+
+Đúng: "Nhóm trình bày một phương án thiết kế dựa trên cơ chế RDT 3.0."
+
+Sai: "Người dùng gửi email cho AI để kiểm tra yêu cầu."
+
+Đúng: Bỏ câu này hoàn toàn.
+
+Sai: "Codex chưa chạy test thực tế."
+
+Đúng: Nếu cần, chỉ ghi "Phạm vi báo cáo tập trung vào thiết kế, chưa bao gồm đánh giá thực nghiệm."
+
+Không cần ghi rõ một lựa chọn là của AI. Tuy nhiên, phải mô tả trung thực những nội dung vẫn chỉ là phương án đề xuất, chưa được kiểm thử hoặc xác nhận.
+
+## 6. KIỂM TRA NHẤT QUÁN KỸ THUẬT
+
+Giữ nguyên ba phần:
+
+1. Reliability.
+2. Flow Control.
+3. Congestion Control.
+
+Giữ nguyên các sơ đồ và ví dụ hữu ích.
+
+Đặc biệt với Reliability:
+
+- Report chọn RDT 3.0 Stop-and-Wait.
+- Slide sử dụng sequence number luân phiên 0/1.
+- Hai hình trước đó dùng nhãn VITAL Seq=1/2/3 là số thứ tự minh họa.
+
+Hãy chỉnh các hình để thống nhất với nguyên lý RDT 3.0 nếu cần, nhưng phải giữ đúng hai tình huống: mất packet và mất ACK.
+
+Nếu sử dụng timer 100 ms, phải ghi gọn rằng đây là giá trị ví dụ, không phải thông số do giảng viên quy định.
+
+Không tự bổ sung kỹ thuật QUIC/RFC nâng cao.
+
+## 7. CHỈNH PHẦN PHÂN CÔNG
+
+Danh sách thành viên trên bìa đã có sáu người.
+
+Tuy nhiên, chưa xác minh đầy đủ ai phụ trách Flow Control hoặc Congestion Control.
+
+Vì vậy:
+
+- Reliability: có thể ghi Thiên Kỳ và Gia Đạo theo phân công đã được đề xuất.
+- Không tự gán vai trò cho Trần Trọng Vũ, Hà Duy Lộc, Lê Thành Tiến hoặc Nguyễn Tuấn Anh.
+- Nếu phần phân công trong report chưa được chốt, tốt nhất bỏ bảng phân công chi tiết khỏi PDF nộp thầy.
+
+Tránh đưa các placeholder hoặc trạng thái quản lý công việc vào bản nộp.
+
+## 8. GIỮ NGUYÊN THIẾT KẾ LATEX ĐẸP
+
+Giữ:
+- Logo HCMUT.
+- Cover page.
+- Navy/blue theme.
+- Font học thuật.
+- Table of Contents.
+- Header/Footer.
+- Figure captions.
+- Các sơ đồ được vẽ bằng TikZ.
+- Các bảng minh họa.
+
+Không tự đổi toàn bộ layout.
+
+Nếu có thể, giữ báo cáo khoảng 8–11 trang.
+
+## 9. KIỂM TRA PDF BẮT BUỘC
+
+Sau khi chỉnh sửa:
+
+1. Compile LaTeX ít nhất hai lượt.
+2. Đảm bảo PDF được cập nhật thật sự.
+3. Render tất cả các trang.
+4. Kiểm tra không tràn chữ hoặc lỗi font.
+5. Kiểm tra logo và trang bìa.
+6. Kiểm tra đủ sáu tên.
+7. Kiểm tra năm hình minh họa.
+8. Kiểm tra mục lục và số trang.
+9. Kiểm tra phần References.
+10. Trích xuất text của PDF cuối và tìm các cụm không phù hợp như `Gmail`, `trích đoạn`, `Codex`, `AI draft`, `chờ xác nhận`, `hộp thư`, `requirements-matrix`, `state.md`, `log.txt`.
+
+Nếu còn xuất hiện trong nội dung bản nộp, tiếp tục chỉnh.
+
+Không được chỉ sửa file `.tex` mà quên build lại PDF.
+
+## 10. GIT
+
+- Giữ nguyên repository và branch đang có.
+- Không xóa prompt history, state.md hoặc log.txt.
+- Các thông tin nội bộ vẫn có thể được giữ trong hồ sơ dự án, chỉ không xuất hiện trong PDF nộp.
+- Commit/push các thay đổi hợp lệ.
+- Không merge PR #1.
+- Không tự đánh dấu student approval.
+
+## 11. KẾT QUẢ CUỐI
+
+Trả lời ngắn gọn:
+
+- Final PDF: đường dẫn chính xác.
+- LaTeX source: đường dẫn chính xác.
+- Số trang.
+- Sáu tên thành viên đã cập nhật.
+- Nội dung nội bộ đã loại bỏ.
+- Kết quả kiểm tra năm hình.
+- Kết quả compile.
+- Những thông tin nào còn thiếu.
+- Commit hash.
+
+**Ưu tiên tuyệt đối: PDF cuối phải sạch, chỉn chu, giống một bài báo cáo được nhóm sinh viên trực tiếp chuẩn bị để nộp cho giảng viên, không giống nhật ký trao đổi với AI.**
+
+START NOW.

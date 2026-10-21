@@ -61,3 +61,9 @@ Exact prompt: [2026-10-22-reliability-slide-only.txt](2026-10-22-reliability-sli
 Source attachment: f01d3f61-9f96-4924-bc9e-01d896acc635.
 
 Exact prompt: [2026-10-22-final-group-report.txt](2026-10-22-final-group-report.txt). Saved verbatim (12259 bytes; SHA-256 ef2b3a89744fe615308976c70b36e9d3ef922af647a5fb2f0d88813a742c5799). This is task prompt evidence, not student prompt evidence or a full session export.
+
+## 2026-10-22 - Final submission cleanup
+
+Source attachment: 3727d2ce-90a1-4850-bfb8-26bc02d7750c.
+
+Exact prompt: [2026-10-22-final-submission-cleanup.txt](2026-10-22-final-submission-cleanup.txt). Saved verbatim (9364 bytes; SHA-256 f7d8af19bc23140ffbf18696abc6ba029b8b4a6c151eba0364b029042a40469d). This is task prompt evidence, not student prompt evidence or a full session export.

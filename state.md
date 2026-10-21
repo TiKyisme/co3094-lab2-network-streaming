@@ -50,7 +50,7 @@ Source basis: Email A and Email B excerpts supplied by the user. Original mailbo
 - Phase 1B Source Recovery: **PARTIAL** — CO3094/L07 package and forum overwrite/settings verified; the linked complete server source is unavailable.
 - Phase 2 Team handover: **READY FOR LOCAL TEAM START** — main Vietnamese guide, short handover, six detailed task cards, announcement, checklist, prompt instructions and a visually reviewed Word fallback exist. Exact Google Docs read returned 404; sync is pending.
 - Phase 3 HTTP environment: **WAITING_FOR_MANUAL_TEST**. Forum settings and local reconstruction are documented; syntax is checked only. The VM is off and no TCP/HTTP/browser test has been run.
-- Phase 4 Streaming: three design drafts exist; **not reviewed by the pairs, not implemented/tested**, and not confirmed Assignment 1-compliant. The slide-only Reliability candidate and a 10-page group report are ready for review. The report uses an explicitly identified CO3093 L02/L03 lecture deck; student confirmation that it is the intended technical source for CO3094 Lab 2 remains pending.
+- Phase 4 Streaming: three design proposals exist; **not implemented or experimentally evaluated**, and not confirmed Assignment 1-compliant. The CO3094 group report has been cleaned for submission and reduced to 9 pages. The project record retains the source note that its Transport Layer lecture material is from the CO3093 L02/L03 collection.
 - Phase 5 Repository: public GitHub repo; handover remains on main. Reliability review is on feat/reliability-lab2-draft in open draft PR #1; no merge or student approval is recorded.
 
 ## Session Status Fields
@@ -61,19 +61,20 @@ TEAM_HANDOVER_READY: YES (local fallback package; Google Docs sync pending)
 GOOGLE_DOC_STATUS: GOOGLE_DOC_SYNC_PENDING (exact-ID metadata and native text reads returned 404)
 HTTP_DEMO_STATUS: WAITING_FOR_MANUAL_TEST (syntax only; VM powered off)
 STREAMING_DESIGN_STATUS: PROPOSED_NOT_REVIEWED_BY_PAIRS
-GROUP_ROSTER_STATUS: PARTIAL (2 tentative names, 4 placeholders, HTTP owners unassigned)
-PROMPT_EVIDENCE_STATUS: slide-only task prompt and final group-report task prompt saved verbatim; student prompts pending. Report prompt: 12,259 bytes; SHA-256 ef2b3a89744fe615308976c70b36e9d3ef922af647a5fb2f0d88813a742c5799
+GROUP_ROSTER_STATUS: 6 member names supplied; IDs missing for Hà Duy Lộc, Lê Thành Tiến, and Nguyễn Tuấn Anh; group number not supplied
+PROMPT_EVIDENCE_STATUS: slide-only, master report, and final-submission-cleanup prompts saved verbatim; student prompts pending. Cleanup prompt: 9,364 bytes; SHA-256 f7d8af19bc23140ffbf18696abc6ba029b8b4a6c151eba0364b029042a40469d
 RELIABILITY_DRAFT_STATUS: SLIDE_ONLY_DRAFT_READY; TECHNICAL_REVIEW_PENDING; TEAM_DECISION_PENDING
 RELIABILITY_NEXT_ACTION: Gia Đạo and Thiên Kỳ review the slide-only draft and report; confirm the CO3093 slide source, RDT 3.0 choice, sequence-label mapping, timeout example, and scope; keep all review boxes unchecked
-STREAMING_REPORT_STATUS: LATEX_PDF_DRAFT_READY; 10 pages; visually reviewed; student review and source confirmation pending
-NEXT_ACTION: Gia Đạo and Thiên Kỳ review the report and Reliability candidate; fill the four missing roster names; VM network checks remain pending
+STREAMING_REPORT_STATUS: SUBMISSION_CLEANED; LaTeX/PDF 9 pages; visual and text checks passed; personal student review pending
+NEXT_ACTION: Gia Đạo and Thiên Kỳ review the final report and Reliability design; obtain the three missing student IDs if required; VM network checks remain pending
 ```
 
 ## Latest Report Deliverable — 2026-10-22
 - Created `report/co3094_lab2_report.tex`, `report/graphics/hcmut.png`, and `output/pdf/co3094_lab2_report.pdf` for Reliability, Flow Control, and Congestion Control.
 - Report figures: one overview, two Reliability cases, one TCP `rwnd` flow-control diagram, and one AIMD congestion-control graph. Group examples and proposed choices are labeled; the RDT 3.0 bit alternation (0/1) is distinguished from the user-requested example labels (1/2/3).
-- Compiled twice with XeLaTeX/MiKTeX; final PDF is 10 pages, 213,439 bytes, SHA-256 `f3ba1409ddbbab03cf26cba5de7bd3a2286c17b1aaf4e6bf98ec112bac41e877`. All pages were rendered and visually inspected; final runs reported no overfull/underfull layout warnings.
-- The report is a student-review draft. It does not claim that the HTTP VM demo or any network test was completed, and no student approval is recorded.
+- Compiled twice with XeLaTeX/MiKTeX; final cleaned PDF is 9 pages, 198,865 bytes, SHA-256 `4230fb3fe25a947bccfb54397ad543c2ca645378be3a862c4f3e7406c4142f2d`. All pages were rendered and visually inspected; final runs reported no overfull/underfull layout warnings.
+- Removed internal preparation notes from the PDF, added the six supplied member names and three supplied IDs, and kept an em dash where three IDs were not provided. Extracted-text search found none of the specified internal-process terms; all five figures, contents, and references were present.
+- The report does not claim that the HTTP VM demo or any mechanism was implemented or experimentally evaluated. No personal student review or approval is recorded.
 
 ## Completed Tasks
 - Read the continuation prompt, previous README/state/log, requirements, source inventory, open questions, and all five streaming design docs.
@@ -136,7 +137,7 @@ NEXT_ACTION: Gia Đạo and Thiên Kỳ review the report and Reliability candid
 - The forum handler signature is `(conn, addr)`; do not pair it with the sample's `(addr, conn)` thread args without verifying the complete server source.
 - `examples/http_server_reconstructed_demo.py` is a group reconstruction, not an authenticated copy of the instructor's full server. Syntax checks do not prove runtime behavior.
 - Host-only is proposed, but do not change adapters until the linked server source and intended VM are confirmed.
-- Preserve the earlier Reliability names as TENTATIVE; other names remain placeholders.
+- The submission report lists the six names supplied by the user. It does not invent IDs for Hà Duy Lộc, Lê Thành Tiến, or Nguyễn Tuấn Anh and does not infer a group number.
 
 ## Environment & Commands
 - Windows PowerShell; all shell commands are prefixed with `rtk`.
@@ -170,7 +171,7 @@ NEXT_ACTION: Gia Đạo and Thiên Kỳ review the report and Reliability candid
 - [prompt history](prompts/prompt-history.md)
 
 ## Next 3 Actions
-1. Gia Đạo and Thiên Kỳ review the group report and slide-only Reliability candidate; confirm the CO3093 lecture source, sequence-label mapping, timeout example, and congestion-control branch.
+1. Gia Đạo and Thiên Kỳ personally review the cleaned report and Reliability design; confirm the RDT 3.0 sequence-label explanation and 100 ms example.
 2. Start the intended Ubuntu VM and share ip -4 addr output so the HTTP network checks can proceed.
 3. Obtain the linked full server attachment and ask the instructor about Assignment 1 conflicts when available.
 

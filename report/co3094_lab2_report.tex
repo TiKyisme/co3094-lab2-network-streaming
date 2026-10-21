@@ -13,7 +13,7 @@
 \renewcommand{\contentsname}{Mục lục}
 \renewcommand{\figurename}{Hình}
 \renewcommand{\tablename}{Bảng}
-\hypersetup{colorlinks=true,linkcolor=navy,urlcolor=blue,pdftitle={CO3094 Lab 2 Report - Draft Designs},pdfauthor={CO3094 Lab 2 Group}}
+\hypersetup{colorlinks=true,linkcolor=navy,urlcolor=blue,pdftitle={CO3094 Lab 2 Report},pdfauthor={CO3094 Lab 2 Group}}
 \urlstyle{same}
 \captionsetup{font=small,labelfont=bf,skip=5pt}
 \setlength{\parindent}{0pt}
@@ -25,11 +25,11 @@
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 \newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
 \newcommand{\sourcenote}[1]{\par{\small\color{muted}\textit{Căn cứ bài giảng: #1}}\par}
-\newcommand{\proposallabel}{\textbf{\color{navy}ĐỀ XUẤT CỦA NHÓM}}
+\newcommand{\proposallabel}{\textbf{\color{navy}Phương án thiết kế:}\enspace}
 \pagestyle{fancy}
 \fancyhf{}
 \lhead{\small CO3094 Lab 2}
-\rhead{\small Bản dự thảo - chờ nhóm phản biện}
+\rhead{\small Lab 2 | Transport Layer}
 \cfoot{\small\thepage}
 \renewcommand{\headrulewidth}{0.35pt}
 \setlength{\headheight}{14pt}
@@ -45,35 +45,33 @@
   \vspace{0.15cm}
   {\large KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH\par}
   \vspace{0.85cm}
-  {\large\bfseries CO3094 | LAB 2\par}
+  {\large\bfseries CO3094 - Mạng máy tính (Thí nghiệm)\par}
   \vspace{0.55cm}
   {\Huge\bfseries CO3094 Lab 2 Report\par}
   \vspace{0.3cm}
-  {\LARGE Bản thiết kế nháp\par}
+  {\LARGE Báo cáo thiết kế\par}
   \vspace{0.2cm}
   {\Large Reliability, Flow Control và Congestion Control\par}
   \vspace{0.55cm}
-  {\large Báo cáo để nhóm thảo luận và hoàn thiện\par}
   \vspace{0.8cm}
   \begin{tabular}{@{}rl@{}}
     \textbf{Lớp:} & L07 \\
-    \textbf{Nhóm:} & 6 thành viên; mã nhóm chưa xác nhận \\
+    \textbf{Giảng viên:} & Nguyễn Phương Duy \\
     \textbf{Trưởng nhóm:} & Nguyễn Đổng Thiên Kỳ \\
-    \textbf{Trạng thái:} & Draft; chưa có xác nhận của sinh viên \\
   \end{tabular}\par
-  \vspace{0.65cm}
+  \vspace{0.55cm}
   {\large\bfseries Thành viên\par}
   \vspace{0.2cm}
-  \begin{tabularx}{0.84\linewidth}{@{}Y P{6.0cm}@{}}
+  \begin{tabularx}{0.92\linewidth}{@{}c Y P{2.6cm}@{}}
     \toprule
-    \textbf{Tên} & \textbf{Thông tin hiện có} \\
+    \textbf{No.} & \textbf{Member} & \textbf{Student ID} \\
     \midrule
-    Nguyễn Đổng Thiên Kỳ & Trưởng nhóm theo yêu cầu hiện tại \\
-    Nguyễn Đăng Gia Đạo & Thành viên Reliability dự kiến; chờ xác nhận \\
-    Thành viên 3 & Chưa cung cấp tên \\
-    Thành viên 4 & Chưa cung cấp tên \\
-    Thành viên 5 & Chưa cung cấp tên \\
-    Thành viên 6 & Chưa cung cấp tên \\
+    1 & Nguyễn Đổng Thiên Kỳ (Group Leader) & 2411818 \\
+    2 & Nguyễn Đăng Gia Đạo & 2410652 \\
+    3 & Trần Trọng Vũ & 2414026 \\
+    4 & Hà Duy Lộc & --- \\
+    5 & Lê Thành Tiến & --- \\
+    6 & Nguyễn Tuấn Anh & --- \\
     \bottomrule
   \end{tabularx}\par
   \vfill
@@ -86,17 +84,15 @@
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-\section{Mục tiêu và phạm vi}
-\subsection{Yêu cầu Lab 2 đã xác minh}
-Các trích đoạn Email A/B do người dùng cung cấp và được ghi trong \texttt{docs/requirements-matrix.md} nêu hai hướng công việc: demo máy Windows truy cập HTTP server trên Ubuntu VM, và chuẩn bị bản thiết kế nháp cho Reliability, Flow Control, Congestion Control. Email nêu yêu cầu draft; các trích đoạn hiện có không yêu cầu nhóm triển khai hoàn chỉnh cả ba cơ chế. QUIC và Steam được ghi nhận là ví dụ tham khảo, không phải giao thức bắt buộc phải sao chép.
+\section{Giới thiệu}
+\subsection{Mục tiêu}
+Bài báo cáo trình bày thiết kế đề xuất cho ba cơ chế quan trọng trong truyền dữ liệu qua mạng: Reliability, Flow Control và Congestion Control. Mỗi cơ chế được mô tả qua nguyên lý hoạt động, thuật toán cơ bản và các tình huống minh họa. Nội dung dựa trên kiến thức của chương Transport Layer và phục vụ việc thảo luận, đánh giá trong Lab 2.
 
-Báo cáo này tập trung vào ba bản thiết kế. Nó không phải bằng chứng cho demo HTTP: VM và server hiện chưa được kiểm tra chạy thật theo trạng thái dự án. Email gốc trong hộp thư cũng chưa được mở lại độc lập; phần yêu cầu ở đây dựa trên các trích đoạn đã lưu trong repo.
-
-\subsection{Căn cứ kỹ thuật và giới hạn nguồn}
-Cơ chế mạng trong báo cáo được đối chiếu trực tiếp với bộ slide Chapter 3, Transport Layer, của CO3093 L02/L03, do Nguyễn Phương Duy biên soạn. Gói CO3094/L07 đã kiểm tra không có một deck bài giảng Transport Layer riêng; vì vậy báo cáo nói rõ nguồn kỹ thuật đang dùng là deck CO3093, không gắn nhãn nhầm thành slide CO3094. Hai sinh viên cần xác nhận đây là tài liệu bài giảng phù hợp để làm căn cứ cho phần thiết kế Lab 2.
+\subsection{Phạm vi}
+Báo cáo tập trung vào nguyên lý, các bước xử lý và ví dụ minh họa cho ba cơ chế; không mô tả một giao thức truyền dữ liệu hoàn chỉnh.
 
 \subsection{Mô hình khái quát}
-Ở mức ý tưởng, sender gửi dữ liệu tới receiver qua mạng; receiver gửi thông tin điều khiển trở lại. Ba cơ chế trả lời ba câu hỏi khác nhau: dữ liệu có tới đúng không, receiver còn chỗ chứa không, và mạng có đang bị gửi quá nhiều không.
+Sender gửi dữ liệu qua mạng tới receiver; receiver gửi ACK hoặc thông tin điều khiển theo chiều ngược lại. Reliability xử lý lỗi và mất packet, Flow Control giới hạn dữ liệu theo khả năng nhận của receiver, còn Congestion Control điều chỉnh tốc độ gửi theo tình trạng mạng.
 
 \begin{figure}[H]
   \centering
@@ -110,15 +106,15 @@ Cơ chế mạng trong báo cáo được đối chiếu trực tiếp với b�
     \draw[->,very thick,blue] (n.east) -- (r.west);
     \draw[->,thick,teal,bend left=28] (r.south) to node[below,align=center]{ACK / thông tin điều khiển} (s.south);
   \end{tikzpicture}
-  \caption{Khung truyền dữ liệu để thảo luận. Đây là sơ đồ khái quát của nhóm, không phải đặc tả định dạng packet thực tế.}
+  \caption{Mô hình tổng quát giữa sender, mạng và receiver.}
   \label{fig:overview}
 \end{figure}
-\proposallabel: Dùng các cơ chế trên làm bản thiết kế học tập; chưa tuyên bố đây là giao thức hoàn chỉnh, đã lập trình hay tương thích với QUIC.
+\proposallabel Ba cơ chế được trình bày ở mức nguyên lý và ví dụ minh họa.
 
 \clearpage
 \section{Reliability: phát hiện lỗi và gửi lại}
-\subsection{Cơ chế nhóm chọn để thảo luận}
-Slide phát triển reliable data transfer theo từng giả định. RDT 3.0 xét kênh có thể lỗi bit và mất packet hoặc ACK. Nhóm chọn mô hình stop-and-wait của RDT 3.0 làm cơ chế tham khảo đơn giản: gửi một packet, chờ ACK (thông báo xác nhận đã nhận) của packet đó rồi mới đi tiếp. Đây là lựa chọn của nhóm để đáp ứng yêu cầu draft, không phải giao thức mà email Lab 2 bắt buộc.
+\subsection{Nguyên lý hoạt động}
+RDT 3.0 xét kênh có thể làm lỗi bit hoặc làm mất packet và ACK. Phương án thiết kế sử dụng stop-and-wait: sender gửi một packet rồi chờ ACK xác nhận packet đó trước khi gửi packet tiếp theo.
 
 \begin{enumerate}
   \item Sender thêm checksum và sequence number 0 hoặc 1 vào packet, lưu packet đang chờ, gửi packet và bật countdown timer.
@@ -127,18 +123,18 @@ Slide phát triển reliable data transfer theo từng giả định. RDT 3.0 x�
   \item Nếu chưa nhận ACK trong một khoảng chờ hợp lý, sender gửi lại packet đang lưu với cùng sequence number.
   \item Nếu receiver đã nhận packet đó trước đây, receiver nhận ra duplicate, không giao dữ liệu lần hai và gửi lại ACK phù hợp.
 \end{enumerate}
-Checksum giúp phát hiện lỗi bit; sequence number giúp phân biệt packet mới với bản gửi lại; ACK cho biết packet nào đã được nhận. Slide chỉ nói timer chờ một khoảng hợp lý, không ấn định số mili-giây. Slide cũng mô hình hóa dữ liệu đi một chiều và thông tin điều khiển đi hai chiều.
+Checksum giúp phát hiện lỗi bit; sequence number giúp phân biệt packet mới với bản gửi lại; ACK cho biết packet nào đã được nhận. Sender dùng countdown timer để giới hạn thời gian chờ ACK. Mô hình truyền dữ liệu một chiều và thông tin điều khiển hai chiều.
 
 \begin{quote}
 \small
-\textbf{Ưu điểm theo bài giảng:} quy tắc sender/receiver ngắn, xử lý được packet hoặc ACK mất trong ví dụ RDT 3.0, và nhận ra packet trùng.\\
-\textbf{Hạn chế theo bài giảng:} stop-and-wait buộc sender chờ ACK trước packet kế tiếp nên có thể sử dụng kênh kém hiệu quả. Timeout quá sớm cũng có thể gửi lại một packet chỉ đang bị trễ.
+\textbf{Ưu điểm:} quy tắc sender/receiver ngắn, xử lý được packet hoặc ACK mất và nhận ra packet trùng.\\
+\textbf{Hạn chế:} stop-and-wait buộc sender chờ ACK trước packet kế tiếp nên có thể sử dụng kênh kém hiệu quả. Timeout quá sớm cũng có thể gửi lại một packet chỉ đang bị trễ.
 \end{quote}
 \sourcenote{slides 45, 47--48, 53, 56--64, 66--67. Slide 67 nêu hạn chế hiệu năng của stop-and-wait.}
 
 \clearpage
 \subsection{Hai tình huống minh họa Reliability}
-Hai hình dưới đây vẽ lại logic RDT 3.0 cho các nhãn dữ liệu \texttt{VITAL} theo yêu cầu trình bày của nhóm. Chúng không phải hình nguyên bản trong slide.
+Hai hình minh họa hai trường hợp của RDT 3.0: packet dữ liệu bị mất và ACK bị mất.
 
 \begin{figure}[H]
 \centering
@@ -181,16 +177,16 @@ Hai hình dưới đây vẽ lại logic RDT 3.0 cho các nhãn dữ liệu \tex
 \end{figure}
 
 \small
-\textbf{Ghi chú về ví dụ nhóm:} các nhãn \texttt{Seq=1,2,3} đánh số thông điệp \texttt{VITAL} để kể ví dụ. Slide RDT 3.0 dùng packet sequence number luân phiên 0/1; nhóm cần thống nhất cách ánh xạ hai loại nhãn nếu triển khai. Giá trị 100 ms chỉ để minh họa theo yêu cầu vẽ hình, không phải giá trị do slide quy định. Hai tình huống mất packet và ACK được đối chiếu với slide 63(b), 64(c).
+\textbf{Ghi chú:} các nhãn \texttt{Seq=1,2,3} là số thứ tự thông điệp \texttt{VITAL} trong ví dụ; packet sequence number của RDT 3.0 luân phiên 0/1. Timer 100 ms là giá trị minh họa, không phải thông số trong bài giảng; RDT 3.0 dùng một khoảng chờ hợp lý.
 
 \clearpage
 \section{Flow Control: bảo vệ receiver}
-Flow control xử lý tình huống receiver có thể bị quá tải nếu dữ liệu tới nhanh hơn ứng dụng đọc dữ liệu khỏi socket buffer. Đây là giới hạn ở phía receiver; slide phân biệt nó với congestion control, vốn liên quan nhiều sender và năng lực của mạng.
+Flow control xử lý tình huống receiver có thể bị quá tải nếu dữ liệu tới nhanh hơn ứng dụng đọc dữ liệu khỏi socket buffer. Cơ chế này bảo vệ receiver; congestion control xử lý giới hạn năng lực của mạng trên đường truyền.
 \subsection{Cách TCP báo chỗ trống}
 \begin{itemize}
   \item Receiver quảng bá vùng buffer còn trống bằng trường \texttt{rwnd} trong TCP header.
   \item Sender giới hạn tổng lượng dữ liệu chưa được ACK đang trên đường truyền theo \texttt{rwnd} nhận được.
-  \item Mục tiêu được slide nêu là tránh làm tràn receive buffer. Dung lượng buffer do socket options đặt và nhiều hệ điều hành tự điều chỉnh.
+  \item Cơ chế giúp tránh làm tràn receive buffer. Dung lượng buffer do socket options đặt và nhiều hệ điều hành tự điều chỉnh.
 \end{itemize}
 \begin{figure}[H]
 \centering
@@ -205,11 +201,11 @@ Flow control xử lý tình huống receiver có thể bị quá tải nếu d�
   \draw[->,very thick,blue] (1.45,1.15) -- (7.0,1.15) node[midway,above,align=center] {TCP segment payloads\\sender giới hạn theo rwnd};
   \draw[->,very thick,teal] (7.0,0.22) -- (1.45,0.22) node[midway,below,align=center] {receiver quảng bá vùng trống: \texttt{rwnd}};
 \end{tikzpicture}
-\caption{Redraw khái quát từ hình buffer TCP receiver trên slide 97.}
+\caption{Receiver quảng bá vùng buffer còn trống bằng trường \texttt{rwnd}.}
 \label{fig:rwnd}
 \end{figure}
 
-\proposallabel: Ví dụ nhóm giả sử \texttt{RcvBuffer = 4096 B}, trong đó 3072 B đang được giữ và 1024 B còn trống. Khi receiver quảng bá \texttt{rwnd = 1024 B}, sender giới hạn dữ liệu chưa ACK theo mức 1024 B này. Đây là phép tính minh họa; slide chỉ nêu 4096 B là một giá trị mặc định thường gặp và nói hệ điều hành có thể tự điều chỉnh buffer.
+\proposallabel Ví dụ minh họa giả sử \texttt{RcvBuffer = 4096 B}, trong đó 3072 B đang được giữ và 1024 B còn trống. Khi receiver quảng bá \texttt{rwnd = 1024 B}, sender giới hạn dữ liệu chưa ACK theo mức 1024 B này. 4096 B là giá trị mặc định thường gặp; hệ điều hành có thể tự điều chỉnh buffer.
 \begin{quote}
 \small
 \textbf{Ưu điểm:} receiver báo lượng buffer trống; sender có cơ sở để tránh tràn buffer.\\
@@ -219,12 +215,12 @@ Flow control xử lý tình huống receiver có thể bị quá tải nếu d�
 
 \clearpage
 \section{Congestion Control: bảo vệ mạng}
-Congestion xảy ra khi nhiều nguồn gửi quá nhiều dữ liệu quá nhanh so với khả năng mạng xử lý. Các dấu hiệu trong slide là độ trễ hàng đợi tăng và packet bị mất khi buffer router đầy. Flow control và congestion control vì thế giải quyết hai giới hạn khác nhau: receiver đơn lẻ và mạng trên đường truyền.
-\subsection{Cơ chế được bài giảng giới thiệu}
+Congestion xảy ra khi nhiều nguồn gửi quá nhiều dữ liệu quá nhanh so với khả năng mạng xử lý. Dấu hiệu gồm độ trễ hàng đợi tăng và packet bị mất khi buffer router đầy. Flow control bảo vệ receiver đơn lẻ; congestion control điều chỉnh lưu lượng trên đường truyền.
+\subsection{Các cơ chế cơ bản}
 \begin{description}[style=nextline,leftmargin=2.6cm]
-  \item[End-to-end] TCP không nhận phản hồi tường minh từ mạng trong mô hình slide; sender suy luận nghẽn từ loss hoặc delay quan sát được.
+  \item[End-to-end] TCP không nhận phản hồi tường minh từ mạng; sender suy luận nghẽn từ loss hoặc delay quan sát được.
   \item[Slow start] Khi bắt đầu, \texttt{cwnd} khởi đầu ở 1 MSS và tăng gấp đôi mỗi RTT bằng cách tăng \texttt{cwnd} theo ACK nhận được. RTT là thời gian khứ hồi; MSS là kích thước segment tối đa.
-  \item[Ngưỡng] \texttt{ssthresh} được đặt bằng một nửa \texttt{cwnd} ngay trước loss event; slide dùng ngưỡng này để giải thích chuyển từ tăng nhanh sang tăng tuyến tính.
+  \item[Ngưỡng] \texttt{ssthresh} được đặt bằng một nửa \texttt{cwnd} ngay trước loss event; ngưỡng này đánh dấu chuyển từ tăng nhanh sang tăng tuyến tính.
   \item[AIMD] Additive Increase tăng tốc độ gửi khoảng 1 MSS mỗi RTT; Multiplicative Decrease giảm tốc độ gửi còn một nửa khi có loss event.
 \end{description}
 \begin{table}[H]
@@ -232,16 +228,16 @@ Congestion xảy ra khi nhiều nguồn gửi quá nhiều dữ liệu quá nhan
 \small
 \begin{tabularx}{\linewidth}{@{}P{3.3cm}Y Y@{}}
 \toprule
-\textbf{Tình huống trong slide} & \textbf{Phản ứng được dạy} & \textbf{Ghi chú cho draft} \\
+\textbf{Tình huống} & \textbf{Phản ứng} & \textbf{Phiên bản TCP} \\
 \midrule
-Loss có triple duplicate ACK & TCP Reno giảm tốc độ còn một nửa & Cơ chế cụ thể gắn với Reno, slide 123 \\
-Timeout phát hiện loss & TCP Tahoe giảm xuống 1 MSS & Cơ chế cụ thể gắn với Tahoe, slide 123 \\
+Triple duplicate ACK & Giảm tốc độ còn một nửa & TCP Reno \\
+Timeout phát hiện loss & Giảm xuống 1 MSS & TCP Tahoe \\
 \bottomrule
 \end{tabularx}
-\caption{Hai cách giảm khác nhau được slide so sánh; nhóm chưa chọn một biến thể TCP.}
+\caption{Hai phản ứng sau loss minh họa cho TCP Reno và TCP Tahoe.}
 \label{tab:tcp-variants}
 \end{table}
-\proposallabel: Dùng slow start và ý tưởng AIMD làm khung giải thích congestion control. Chưa khẳng định nhóm sẽ triển khai TCP Reno hay TCP Tahoe, và chưa mô tả cách phát hiện loss chi tiết ngoài phạm vi slide.
+\proposallabel Slow start và AIMD mô tả cách sender tăng tốc độ gửi rồi giảm tốc độ khi xuất hiện dấu hiệu nghẽn. Reno và Tahoe minh họa hai phản ứng khác nhau sau loss.
 \sourcenote{slides 108, 112--120, 122--126. Slide 108 phân biệt flow/congestion; slide 119 nói về suy luận end-to-end; slides 122--126 trình bày AIMD, slow start và \texttt{ssthresh}.}
 
 \clearpage
@@ -263,19 +259,19 @@ Timeout phát hiện loss & TCP Tahoe giảm xuống 1 MSS & Cơ chế cụ th�
   \draw[dashed,gray] (8.0,0.6)--(8.0,5.13);
   \node[align=center,text=muted] at (6.2,5.65) {AIMD sawtooth\\không theo tỉ lệ};
 \end{tikzpicture}
-\caption{Redraw định tính ý tưởng AIMD trên slide 122: tăng dần rồi giảm mạnh khi phát hiện loss.}
+\caption{Đồ thị định tính AIMD: tốc độ gửi tăng dần rồi giảm khi phát hiện loss.}
 \label{fig:aimd}
 \end{figure}
 
-Ví dụ nhóm: nếu \texttt{cwnd} là 1 MSS lúc bắt đầu, slow start có thể đi theo 1, 2, 4, 8 MSS qua các RTT; đây là minh họa cách tăng gấp đôi được dạy ở slide 125. Nếu trước loss \texttt{cwnd = 8 MSS} và loss được báo bằng triple duplicate ACK, quy tắc Reno trên slide 123 giảm còn 4 MSS. Với timeout theo Tahoe, slide mô tả giảm về 1 MSS. Các số 8, 4 là ví dụ tính từ quy tắc trên, không phải một bộ số được slide quy định cho nhóm.
+Ví dụ minh họa: nếu \texttt{cwnd} là 1 MSS lúc bắt đầu, slow start có thể đi theo 1, 2, 4, 8 MSS qua các RTT. Nếu trước loss \texttt{cwnd = 8 MSS} và loss được báo bằng triple duplicate ACK, Reno giảm còn 4 MSS. Với timeout theo Tahoe, tốc độ giảm về 1 MSS. Các số 8, 4 được tính từ quy tắc minh họa.
 \begin{quote}
 \small
 \textbf{Ưu điểm:} sender giảm tốc độ sau dấu hiệu nghẽn thay vì cứ tăng; AIMD trình bày được bằng một quy tắc tăng và một quy tắc giảm.\\
-\textbf{Giới hạn:} mất gói và trễ vẫn có thể xảy ra; cách giảm phụ thuộc biến thể TCP. Bản draft chưa chọn biến thể hoặc ngưỡng triển khai.
+\textbf{Giới hạn:} mất gói và trễ vẫn có thể xảy ra; phản ứng giảm tốc độ phụ thuộc biến thể TCP.
 \end{quote}
 
 \clearpage
-\section{Tổng hợp và việc nhóm cần chốt}
+\section{Tổng hợp thiết kế}
 \subsection{Ba cơ chế, ba câu hỏi}
 \begin{tabularx}{\linewidth}{@{}P{3.2cm}Y Y@{}}
 \toprule
@@ -287,45 +283,11 @@ Congestion Control & Đường mạng có đang bị gửi quá nhiều không? 
 \bottomrule
 \end{tabularx}
 
-\subsection{Quy tắc tích hợp ở mức đề xuất}
-\proposallabel: Khi bàn cách gửi reliable data, nhóm nên xét đồng thời lượng receiver báo còn nhận được và giới hạn gửi do congestion control đặt ra. Đây là cách ghép ba phần để nhóm thảo luận; các slide giải thích từng cơ chế riêng và không quy định một thuật toán tích hợp riêng cho Lab 2. ACK, flow-control buffer và mạng có thể ảnh hưởng lẫn nhau, nên cặp phụ trách cần thống nhất ví dụ chung trước khi trình bày.
-
-\subsection{Phân công dự kiến}
-\begin{table}[H]
-\centering
-\small
-\begin{tabularx}{\linewidth}{@{}P{3.0cm}P{4.2cm}Y@{}}
-\toprule
-\textbf{Thành viên / trạng thái} & \textbf{Phần cần giải thích} & \textbf{Căn cứ slide} \\
-\midrule
-Nguyễn Đăng Gia Đạo - dự kiến, chờ xác nhận & Checksum, sequence number 0/1, ACK và cách loại packet trùng & 47--48, 53, 56--58 \\
-Nguyễn Đổng Thiên Kỳ - trưởng nhóm theo yêu cầu hiện tại; owner Reliability dự kiến & Packet/ACK loss, timer, gửi lại và giới hạn stop-and-wait & 59--67 \\
-Thành viên 3, 4 - chưa có tên & Receiver buffer và \texttt{rwnd}; ví dụ Flow Control & 93--98 \\
-Thành viên 5, 6 - chưa có tên & Dấu hiệu nghẽn, slow start, AIMD và TCP Reno/Tahoe & 108, 112--120, 122--126 \\
-\bottomrule
-\end{tabularx}
-\caption{Phân công dự kiến dựa trên handover hiện có; chưa có xác nhận trực tiếp của các thành viên.}
-\label{tab:owners}
-\end{table}
-
-\subsection{Điểm cần xác nhận trước khi chốt}
-\begin{itemize}
-  \item Hai sinh viên Reliability xác nhận slide CO3093 L02/L03 là nguồn phù hợp cho Lab 2 CO3094 L07.
-  \item Thống nhất nhãn thông điệp \texttt{Seq=1,2,3} trong hình sẽ được ánh xạ ra sao với packet sequence number 0/1 của RDT 3.0.
-  \item Chọn timeout khi triển khai; 100 ms trong hình chỉ là minh họa, không có trong slide.
-  \item Cặp Congestion Control xác nhận có trình bày sự khác biệt Reno/Tahoe hay chọn một nhánh cho draft.
-  \item Điền đủ roster sáu người và mã nhóm. Xác nhận riêng trạng thái demo HTTP theo yêu cầu Lab 2; báo cáo này không thay thế kết quả chạy demo.
-\end{itemize}
-
-\clearpage
-\section{Nguồn và ghi chú đối chiếu}
+\section{Tài liệu tham khảo}
 \begin{enumerate}
-  \item \textbf{Yêu cầu Lab 2:} Email A và Email B, các trích đoạn do người dùng cung cấp và lưu trong \url{docs/requirements-matrix.md}, mục \textit{Lab 2 requirements from the instructor emails}. Hộp thư gốc chưa được mở lại độc lập. Các trích đoạn yêu cầu demo HTTP trên VM và draft cho ba cơ chế; QUIC/Steam là ví dụ.
-  \item \textbf{Slide bài giảng dùng cho Reliability:} \emph{Chapter 3\_ Transport Layer - Chapter\_3\_v9.0.pptx}, Chapter 3, slides 45, 47--48, 53, 56--64, 66--67. Các trang tương ứng trong PDF bài giảng cũng được đọc trực tiếp.
-  \item \textbf{Slide bài giảng dùng cho Flow Control:} cùng deck trên, slides 93--98; slide 97 nêu trường \texttt{rwnd}, lượng dữ liệu in-flight và mục tiêu tránh tràn receive buffer.
-  \item \textbf{Slide bài giảng dùng cho Congestion Control:} cùng deck trên, slides 108, 112--120, 122--126; slide 108 phân biệt congestion với flow control; slide 119 mô tả suy luận end-to-end; slides 122--126 trình bày AIMD, slow start và \texttt{ssthresh}.
-  \item \textbf{Bản PDF cùng bài giảng:} \emph{Chapter 3 Transport - Mux\_Demux, RDT- reilable data transfer - Chapter\_3\_v9.0.pdf}, 154 trang; trang PDF và số slide in trong footer trùng nhau ở các phần được trích dẫn.
-  \item \textbf{Tài liệu nhóm đã xem để đối chiếu:} \texttt{docs/reliability-slide-only.md}, \texttt{docs/reliability-easy-study.md}, \texttt{docs/flow-control-design.md}, \texttt{docs/congestion-control-design.md}, \texttt{docs/integration-design.md} và \texttt{docs/streaming-architecture.md}. Đây là tài liệu handover/draft, không thay thế slide và email nguồn.
+  \item Nguyễn Phương Duy, \emph{Chapter 3 - Transport Layer - Chapter\_3\_v9.0}, slides 45, 47--48, 53, 56--64, 66--67 (Reliable Data Transfer).
+  \item Nguyễn Phương Duy, \emph{Chapter 3 - Transport Layer - Chapter\_3\_v9.0}, slides 93--98 (TCP Flow Control).
+  \item Nguyễn Phương Duy, \emph{Chapter 3 - Transport Layer - Chapter\_3\_v9.0}, slides 108, 112--120, 122--126 (Congestion Control).
 \end{enumerate}
-\textbf{Giới hạn báo cáo.} Đây là bản thiết kế học tập để nhóm phản biện. Không dùng RFC làm nguồn thuật toán, không tuyên bố đã code/test ba cơ chế, không tuyên bố đã hoàn thành demo HTTP, và không hàm ý sinh viên đã duyệt nội dung.
+Các thiết kế Reliability, Flow Control và Congestion Control được trình bày bằng nguyên lý, ví dụ và giới hạn hoạt động tương ứng.
 \end{document}

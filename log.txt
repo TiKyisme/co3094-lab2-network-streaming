@@ -396,3 +396,29 @@ Files intentionally updated:
 
 GitHub and review:
 - Content commit `5733f1fa174f94012cd2e153ddef100772f6a0de` was pushed to `origin/feat/reliability-lab2-draft`; `git ls-remote` matched. `gh pr view 1` confirmed PR #1 head `5733f1fa174f94012cd2e153ddef100772f6a0de`, OPEN / DRAFT / NOT MERGED, `mergedAt=null`. No student approval is recorded.
+
+[2026-10-22] [FINAL SUBMISSION CLEANUP]
+
+Prompt evidence:
+- Saved the exact user attachment as `prompts/2026-10-22-final-submission-cleanup.txt` (9,364 bytes; SHA-256 `f7d8af19bc23140ffbf18696abc6ba029b8b4a6c151eba0364b029042a40469d`). It byte-matches the supplied attachment.
+
+Report cleanup:
+- Revised only the submission report content: replaced preparation-log introduction and source-boundary notes with an academic introduction and scope; removed tentative status language, unconfirmed role table, unresolved-action checklist, and internal project references.
+- Updated the cover to CO3094 - Mạng máy tính (Thí nghiệm), lecturer Nguyễn Phương Duy, leader Nguyễn Đổng Thiên Kỳ, and the six supplied names. Student IDs 2411818, 2410652, and 2414026 are included; IDs not supplied for Hà Duy Lộc, Lê Thành Tiến, and Nguyễn Tuấn Anh are shown as em dashes. No group number was inferred.
+- Kept the three technical sections, five figures, diagrams, examples, RDT 3.0 sequence-bit distinction, and 100 ms illustration note. Replaced internal references with slide-only lecture references.
+
+Validation:
+- XeLaTeX compiled twice with no overfull/underfull warnings. Final PDF is 9 pages, 198,865 bytes, SHA-256 `4230fb3fe25a947bccfb54397ad543c2ca645378be3a862c4f3e7406c4142f2d`.
+- Rendered and visually inspected all 9 pages. PDF text scan found no Gmail, Email A/B, user/AI/Codex, internal repository-file, source-verification, pending-status, or draft-label terms named in the request. Cover fields, six members, five figures, table of contents, slide references, and pagination were checked.
+- No protocol implementation or HTTP/network test was performed. The PDF makes no claim of implementation or experimental evaluation. Personal student review remains outstanding.
+
+Files updated:
+- `report/co3094_lab2_report.tex`
+- `output/pdf/co3094_lab2_report.pdf`
+- `prompts/2026-10-22-final-submission-cleanup.txt`
+- `prompts/prompt-history.md`
+- `state.md`
+- `log.txt`
+
+GitHub and review:
+- Submission-cleanup content commit and push verification are recorded after the report commit. PR #1 remains OPEN / DRAFT / NOT MERGED; no student approval is recorded.
