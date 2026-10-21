@@ -330,3 +330,38 @@ GitHub:
 - Content commit `053ad2a225853903386739f1afb57aa6187f098e` was pushed to `origin/feat/reliability-lab2-draft`; `git ls-remote` matched that commit.
 - `gh pr view 1` reported head `053ad2a225853903386739f1afb57aa6187f098e`, state OPEN, `isDraft=true`, and `mergedAt=null`. PR #1 was not merged or marked student-approved.
 - This state/log push-verification update is recorded separately from the Reliability content commit.
+
+[2026-10-22] [RELIABILITY SLIDE-ONLY SIMPLIFICATION]
+Source verification:
+- Located the actual CO3093 Chapter 3 slide deck in the course folder: Chapter 3_ Transport Layer - Chapter_3_v9.0.pptx (8,866,433 bytes; SHA-256 0d30baf63053f753be037a81fc23604c7148ddcf55ff9c650920e28f0c4c2379). The CO3093 Study Pack source index identifies it as slide source src_7d0e4bf812cb; the deck has 154 slides.
+- Read slides 45, 47-48, 53, 56-64, and 66-67. Visually inspected the relevant slide/PDF pages for stop-and-wait, sequence numbers, checksum, ACK, timeout, retransmission, and duplicate handling.
+- Cross-checked the available user-supplied Email A/B excerpts recorded in docs/requirements-matrix.md, section 1: Lab 2 requires draft designs for Reliability, Flow Control, and Congestion Control; QUIC and Steam are examples; implementation is not required by those excerpts. The original mailbox was not independently reopened.
+
+Design and study handoff:
+- Selected RDT 3.0 stop-and-wait as a slide-based candidate: checksum, alternating sequence numbers 0/1, ACK for the matching packet, timer expiry, retransmission of the same packet, and duplicate suppression.
+- Marked the Lab 2 selection, diagram redraw, and reverse-direction extension as group proposals where applicable. Used the lecture's examples rather than creating examples and attributing them to the instructor.
+- Added docs/reliability-slide-only.md and docs/reliability-easy-study.md and simplified docs/reliability-lab2-presentation.md.
+- Preserved docs/reliability-design.md as the prior advanced draft; did not edit Flow Control or Congestion Control documents.
+- Easy-study guide contains exactly five oral questions. Gia Đạo and Thiên Kỳ remain tentative owners pending their own review.
+- Saved the exact current user prompt in prompts/2026-10-22-reliability-slide-only.txt (6,176 bytes; SHA-256 8a1becfaf94abe12afc0f11f2ddab2ebecf86f8b110a01e32c6829ef1464b749).
+
+Validation:
+- Mermaid CLI rendered the one diagram in the slide-only design and the one presentation diagram successfully.
+- Regenerated output/pdf/reliability-lab2-presentation.pdf: 2 pages, 124,874 bytes, SHA-256 e8bcbd9d2e6ac7bd2088726bf66836419ab8ae4b97b2b9572d27f1ff013104ca. Rendered and visually inspected both pages.
+- Existing oral-preparation (18) and interface-review (6) student checkboxes remain unchecked.
+- No protocol implementation, transport tests, or network tests were run.
+
+Files intentionally updated:
+- docs/reliability-slide-only.md
+- docs/reliability-easy-study.md
+- docs/reliability-lab2-presentation.md
+- output/pdf/reliability-lab2-presentation.pdf
+- prompts/2026-10-22-reliability-slide-only.txt
+- prompts/prompt-history.md
+- state.md
+- log.txt
+
+GitHub:
+- Content commit f0fc4abe07a45b2c7288301b1de11cffba1d9396 was pushed to origin/feat/reliability-lab2-draft; git ls-remote matched that commit.
+- gh pr view 1 reported head f0fc4abe07a45b2c7288301b1de11cffba1d9396, state OPEN, isDraft=true, and mergedAt=null. PR #1 was not merged or marked student-approved.
+- This state/log push-verification update is recorded separately from the slide-only content commit.

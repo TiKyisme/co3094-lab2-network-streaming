@@ -44,7 +44,7 @@ Source basis: Email A and Email B excerpts supplied by the user. Original mailbo
 - Phase 1B Source Recovery: **PARTIAL** — CO3094/L07 package and forum overwrite/settings verified; the linked complete server source is unavailable.
 - Phase 2 Team handover: **READY FOR LOCAL TEAM START** — main Vietnamese guide, short handover, six detailed task cards, announcement, checklist, prompt instructions and a visually reviewed Word fallback exist. Exact Google Docs read returned 404; sync is pending.
 - Phase 3 HTTP environment: **WAITING_FOR_MANUAL_TEST**. Forum settings and local reconstruction are documented; syntax is checked only. The VM is off and no TCP/HTTP/browser test has been run.
-- Phase 4 Streaming: draft proposals exist; **not reviewed by the pairs, not implemented/tested**, and not confirmed Assignment 1-compliant. The Reliability review package is AI_DRAFT_COMPLETE; TECHNICAL_REVIEW_PENDING and TEAM_DECISION_PENDING.
+- Phase 4 Streaming: draft proposals exist; **not reviewed by the pairs, not implemented/tested**, and not confirmed Assignment 1-compliant. A slide-only Reliability candidate now accompanies the preserved advanced draft; technical review and team decision remain pending.
 - Phase 5 Repository: public GitHub repo; handover remains on main. Reliability review is on feat/reliability-lab2-draft in open draft PR #1; no merge or student approval is recorded.
 
 ## Session Status Fields
@@ -56,10 +56,10 @@ GOOGLE_DOC_STATUS: GOOGLE_DOC_SYNC_PENDING (exact-ID metadata and native text re
 HTTP_DEMO_STATUS: WAITING_FOR_MANUAL_TEST (syntax only; VM powered off)
 STREAMING_DESIGN_STATUS: PROPOSED_NOT_REVIEWED_BY_PAIRS
 GROUP_ROSTER_STATUS: PARTIAL (2 tentative names, 4 placeholders, HTTP owners unassigned)
-PROMPT_EVIDENCE_STATUS: current correction prompt saved verbatim (2,235 bytes; SHA-256 3530ec029a0939f57d6c8604f7aeb74ed200b548bc232031e61a358416995620); student prompts pending
-RELIABILITY_DRAFT_STATUS: AI_DRAFT_COMPLETE; TECHNICAL_REVIEW_PENDING; TEAM_DECISION_PENDING
-RELIABILITY_NEXT_ACTION: REL-01 and REL-02 review the corrected ACK-range, custom threshold, loss_time/PTO, and retransmission sections; keep every team-review box unchecked
-NEXT_ACTION: REL-01 and REL-02 personally review the corrected Reliability draft; VM network checks remain pending
+PROMPT_EVIDENCE_STATUS: current slide-only task prompt saved verbatim (6,176 bytes; SHA-256 8a1becfaf94abe12afc0f11f2ddab2ebecf86f8b110a01e32c6829ef1464b749); actual student prompts pending
+RELIABILITY_DRAFT_STATUS: SLIDE_ONLY_DRAFT_READY; TECHNICAL_REVIEW_PENDING; TEAM_DECISION_PENDING
+RELIABILITY_NEXT_ACTION: Gia Đạo and Thiên Kỳ read the slide-only draft and easy-study guide; confirm RDT 3.0 suitability, timeout choice, and direction scope; keep all review boxes unchecked
+NEXT_ACTION: Gia Đạo and Thiên Kỳ personally review the slide-only Reliability candidate; VM network checks remain pending
 ```
 
 ## Completed Tasks
@@ -90,9 +90,15 @@ NEXT_ACTION: REL-01 and REL-02 personally review the corrected Reliability draft
 - Mermaid CLI 12.0.0 rendered all five detailed-design diagrams and both presentation diagrams; all seven rendered successfully, and the updated loss-recovery diagrams were visually inspected.
 - Regenerated the presentation PDF and visually inspected both rendered pages. It remains two pages; final PDF SHA-256 is `1c2e3918802c4b24978afca135f4c2b88c445ac1b88ef9c6738d34a40b46dc4d`.
 - Saved this exact user correction prompt in `prompts/2026-10-21-reliability-final-correction.txt` (2,235 bytes; SHA-256 `3530ec029a0939f57d6c8604f7aeb74ed200b548bc232031e61a358416995620`). No student-review checkbox was checked; no protocol code or network test was added or run.
+- Located the original CO3093 Chapter 3 lecture deck in the course folder. The source-pack index identifies Chapter 3_ Transport Layer - Chapter_3_v9.0.pptx as slide source src_7d0e4bf812cb; the actual deck has 154 slides. Read slides 45, 47-48, 53, 56-64, and 66-67; visually inspected the corresponding lecture PDF pages.
+- Cross-checked the available user-supplied Email A/B excerpts recorded in docs/requirements-matrix.md: Lab 2 requires draft designs for Reliability, Flow Control, and Congestion Control; QUIC/Steam are examples; implementation is not required by those excerpts.
+- Added docs/reliability-slide-only.md and docs/reliability-easy-study.md; simplified docs/reliability-lab2-presentation.md to RDT 3.0 stop-and-wait. Preserved docs/reliability-design.md as the earlier advanced draft and left Flow Control/Congestion Control documents unchanged.
+- Mermaid CLI rendered the slide-only design and presentation diagrams successfully. Regenerated the two-page presentation PDF (124,874 bytes) and visually inspected both pages; SHA-256 is e8bcbd9d2e6ac7bd2088726bf66836419ab8ae4b97b2b9572d27f1ff013104ca.
+- Saved the current user prompt in prompts/2026-10-22-reliability-slide-only.txt (6,176 bytes; SHA-256 8a1becfaf94abe12afc0f11f2ddab2ebecf86f8b110a01e32c6829ef1464b749). Existing student-review checkboxes remain unchecked; no implementation or network tests were run.
 
 ## Waiting / Pending
-- REL-01/REL-02 technical review and cross-pair agreement on packet semantics, the custom packet-count rule, ACK-only congestion treatment, expiry clock, and retry cap; no student confirmations are recorded.
+- Gia Đạo and Thiên Kỳ review the slide-only RDT 3.0 proposal, stop-and-wait suitability, timeout choice, direction scope, and pair roles; no student confirmations are recorded.
+- The earlier advanced Reliability design remains preserved and unapproved; it is not the current easier-to-present candidate.
 - Complete forum-linked `sample_code_http_server_process.txt` or matching server source, including the accept/thread call that must match `new_connection(conn, addr)`.
 - Confirm whether the local `ubuntu` VM is the intended test guest.
 - Start the intended Ubuntu VM; obtain guest `ip -4 addr`, then proceed to listener, Windows TCP, curl and Chrome checks.
@@ -130,7 +136,7 @@ NEXT_ACTION: REL-01 and REL-02 personally review the corrected Reliability draft
 - Repo: [public repository](https://github.com/TiKyisme/co3094-lab2-network-streaming)
 - Branch: feat/reliability-lab2-draft, tracking origin/feat/reliability-lab2-draft; draft PR #1 targets main
 - Remote: `https://github.com/TiKyisme/co3094-lab2-network-streaming.git`
-- Reliability final correction content commit: 053ad2a225853903386739f1afb57aa6187f098e (pushed; origin branch ref verified; state/log push evidence is recorded separately)
+- Reliability slide-only content commit: f0fc4abe07a45b2c7288301b1de11cffba1d9396 (pushed; origin ref verified; state/log push evidence is recorded separately)
 - Pull request: [#1 - Reliability Lab 2 draft](https://github.com/TiKyisme/co3094-lab2-network-streaming/pull/1), OPEN / DRAFT / NOT MERGED
 - Handover package commit `10087e85a7c8d0e57995156df2f1044077cd5f94` was pushed to `origin/main`; `git ls-remote` matched at the post-push check. GitHub API readback confirmed the guide, handover, assignments, announcement, review checklist, prompt instructions and DOCX paths.
 - The user-provided forum PDF, source ZIP, extracted pack and handoff are present as untracked repo-root copies. The PDF, ZIP and handoff byte-match the copies in the external course folder. They were left unchanged, unstaged and uncommitted; `git ls-files` contains no PDF or ZIP.
@@ -145,10 +151,11 @@ NEXT_ACTION: REL-01 and REL-02 personally review the corrected Reliability draft
 - [network setup](docs/network-setup.md)
 - [streaming compatibility](docs/streaming-architecture.md)
 - [Reliability draft](docs/reliability-design.md), [presentation](docs/reliability-lab2-presentation.md), [oral prep](docs/reliability-oral-preparation.md), and [interface review](docs/reliability-interface-review.md)
+- [Slide-only Reliability draft](docs/reliability-slide-only.md) and [easy study guide](docs/reliability-easy-study.md)
 - [prompt history](prompts/prompt-history.md)
 
 ## Next 3 Actions
-1. REL-01 and REL-02 personally review the corrected ACK semantics, custom threshold, `loss_time`/PTO behavior, and retransmission sequence; VM network checks remain pending.
+1. Gia Đạo and Thiên Kỳ personally review docs/reliability-slide-only.md and docs/reliability-easy-study.md, then confirm the RDT 3.0 choice and open scope questions.
 2. Start the intended Ubuntu VM and share ip -4 addr output so the HTTP network checks can proceed.
 3. Obtain the linked full server attachment and ask the instructor about Assignment 1 conflicts when available.
 
