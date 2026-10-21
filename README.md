@@ -33,7 +33,7 @@ Use the **local team guide as the current handover**. The original Google Docs l
 - Phase 2: the prior full-text Google Doc review is recorded in `docs/docs-review.md`; the supplied Word copy was not found, and the exact native Doc now returns 404. The local Markdown guide, task cards, announcement, checklist and rendered Word fallback are ready; Google Docs sync is pending.
 - Phase 3: Windows/VirtualBox discovered. The Ubuntu VM is off and bridged; no guest IP, current server listener or connection test has been observed. A separately labeled group-reconstructed demo candidate is syntax-checked only.
 - Phase 4: Reliability, Flow Control and Congestion Control remain AI proposals awaiting pair review. The Reliability draft is complete as a review package on a feature branch; student and team decisions are still pending. Assignment 1 compliance is not claimed.
-- Phase 5: repository is public at [GitHub](https://github.com/TiKyisme/co3094-lab2-network-streaming); the handover is on `main` and Reliability work is isolated for review.
+- Phase 5: repository is public at [GitHub](https://github.com/TiKyisme/co3094-lab2-network-streaming); the handover remains on main and Reliability review is in [draft PR #1](https://github.com/TiKyisme/co3094-lab2-network-streaming/pull/1).
 
 ## Key documents
 

@@ -45,7 +45,7 @@ Source basis: Email A and Email B excerpts supplied by the user. Original mailbo
 - Phase 2 Team handover: **READY FOR LOCAL TEAM START** — main Vietnamese guide, short handover, six detailed task cards, announcement, checklist, prompt instructions and a visually reviewed Word fallback exist. Exact Google Docs read returned 404; sync is pending.
 - Phase 3 HTTP environment: **WAITING_FOR_MANUAL_TEST**. Forum settings and local reconstruction are documented; syntax is checked only. The VM is off and no TCP/HTTP/browser test has been run.
 - Phase 4 Streaming: draft proposals exist; **not reviewed by the pairs, not implemented/tested**, and not confirmed Assignment 1-compliant. The Reliability review package is AI_DRAFT_COMPLETE; TECHNICAL_REVIEW_PENDING and TEAM_DECISION_PENDING.
-- Phase 5 Repository: public GitHub repo; handover is on `main`. Reliability changes are isolated on a feature branch; no merge or student approval is recorded.
+- Phase 5 Repository: public GitHub repo; handover remains on main. Reliability review is on feat/reliability-lab2-draft in open draft PR #1; no merge or student approval is recorded.
 
 ## Session Status Fields
 
@@ -123,9 +123,10 @@ NEXT_ACTION: REL-01 and REL-02 review the Reliability draft; VM network checks r
 
 ## GitHub Status
 - Repo: [public repository](https://github.com/TiKyisme/co3094-lab2-network-streaming)
-- Branch: main, tracking origin/main
+- Branch: feat/reliability-lab2-draft, tracking origin/feat/reliability-lab2-draft; draft PR #1 targets main
 - Remote: `https://github.com/TiKyisme/co3094-lab2-network-streaming.git`
-- Last commit: HEAD; verify with `rtk git rev-parse HEAD`
+- Reliability content commit: 6514a17e6399307de4d704be5d4159f1ffaf2b8e (pushed; state/log handoff updates are recorded separately)
+- Pull request: [#1 - Reliability Lab 2 draft](https://github.com/TiKyisme/co3094-lab2-network-streaming/pull/1), OPEN / DRAFT / NOT MERGED
 - Handover package commit `10087e85a7c8d0e57995156df2f1044077cd5f94` was pushed to `origin/main`; `git ls-remote` matched at the post-push check. GitHub API readback confirmed the guide, handover, assignments, announcement, review checklist, prompt instructions and DOCX paths.
 - The user-provided forum PDF, source ZIP, extracted pack and handoff are present as untracked repo-root copies. The PDF, ZIP and handoff byte-match the copies in the external course folder. They were left unchanged, unstaged and uncommitted; `git ls-files` contains no PDF or ZIP.
 - `server_skeleton_previous_upload.py` remains an untracked user file. The reconstructed example and handover docs are separate files; the original skeleton is not staged.

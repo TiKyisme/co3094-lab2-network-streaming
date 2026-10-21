@@ -268,3 +268,31 @@ Post-push verification:
 - Commit `10087e85a7c8d0e57995156df2f1044077cd5f94` was pushed to `origin/main`; `git ls-remote origin refs/heads/main` matched the same hash.
 - GitHub API readback confirmed the main guide, short handover, assignments, announcement, review checklist, prompt instructions and Word fallback paths.
 - `git ls-files "*.pdf" "*.zip"` returned no tracked source PDFs or ZIPs. The provided course assets and old server skeleton remain untracked and were left untouched.
+
+[2026-10-21] [RELIABILITY DESIGN DRAFT AND REVIEW HANDOFF]
+Task:
+- Prepare an explainable Reliability design proposal for CO3094 Lab 2 with detailed documentation, diagrams, pseudocode, examples, a short presentation, oral preparation, interface questions, and exact prompt evidence.
+Source and scope:
+- Read the user-provided Reliability implementation-draft prompt and saved the attachment byte-identically to prompts/2026-10-21-reliability-design-draft.txt.
+- Continued from the verified CO3094/L07 project state, requirements matrix, tentative REL-01/REL-02 cards, and existing streaming, integration, Flow Control, and Congestion Control drafts.
+- Verified the relevant RFC 9000, RFC 9002, RFC 9221, and Valve GameNetworkingSockets technical references. These remain technical references, not instructor requirements.
+Design decisions recorded:
+- Use per-direction packet numbers and channel plus stream offsets; distinguish packet ACK from application processing and from reliable content identity.
+- Use ACK ranges and selective retransmission of outstanding useful reliable byte ranges in a fresh packet number.
+- Count three later ACKed ack-eliciting packets for the proposed packet threshold, rather than raw packet-number distance, so ACK-only packet numbers do not become false loss evidence. The rule is an application-level adaptation informed by RFC 9002.
+- Use the RFC 9002 time-threshold and PTO formulas as technical references. A PTO probes for progress and does not itself mark old packets lost. Five unacknowledged PTO probe attempts is an explicit application-policy assumption for review.
+- Preserve per-channel ordered delivery, bound out-of-order bytes by Flow Control credit, keep real-time updates non-retransmitted, and expose open expiry-clock questions.
+- Left Flow Control and Congestion Control design documents unchanged. No protocol implementation was added. Assignment 1 conflicts remain unresolved.
+Files and status:
+- Updated docs/reliability-design.md and created docs/reliability-lab2-presentation.md, docs/reliability-oral-preparation.md, and docs/reliability-interface-review.md.
+- Added an accessible two-page presentation PDF at output/pdf/reliability-lab2-presentation.pdf.
+- Owner names remain TENTATIVE. Every TEAM REVIEW REQUIRED checkbox remains unchecked. Status is AI_DRAFT_COMPLETE, TECHNICAL_REVIEW_PENDING, and TEAM_DECISION_PENDING.
+Validation and limits:
+- Prompt copy verified byte-identical: 16,438 bytes; SHA-256 adb66bf54f8964b9233ee1f63a6adf4c5b9a70d9eaaf5cd942e44410e80dadd4.
+- Markdown AST parsing completed for the four Reliability documents. Mermaid CLI 12.0.0 rendered all five detailed-design diagrams and both presentation diagrams; all seven rendered PNGs were visually inspected. Temporary render files were removed.
+- Exported a two-page PDF and visually inspected both pages. PDF SHA-256 at the final render: 769ea9de889d0877526a0f36804eb0d147acd3dc7f7f16eeede02fbf339fbe9e.
+- Staged diff check passed. No transport runtime or network tests were run because this work is a design/documentation draft.
+Git and review handoff:
+- Branch feat/reliability-lab2-draft is pushed to origin; local and remote content commit is 6514a17e6399307de4d704be5d4159f1ffaf2b8e, based on main commit f34bd9e0cb8538f39f7459b364c83dd884cd7a7a.
+- Opened draft PR #1, https://github.com/TiKyisme/co3094-lab2-network-streaming/pull/1, targeting main. It is OPEN, DRAFT, and NOT MERGED.
+- No student technical review, team decision, test, or approval is claimed.
