@@ -1,0 +1,81 @@
+[2026-10-21] [DISCOVERY AND PROJECT SETUP]
+Task:
+- Start Phase 1 for CO3094 Lab 2 and preserve a resumable project record.
+
+Source/Reason:
+- User-provided master prompt and its two quoted instructor email excerpts.
+- Drive Search result for the specified Google Doc.
+- Adjacent local CO3093 MMT bundle, explicitly treated as non-authoritative for CO3094.
+- Official Oracle, Python, IETF, and Valve references listed in the project docs.
+
+Files changed:
+- Initial repository documentation created in this working directory; see README.md and docs/.
+
+Commands/actions:
+- Read the attached prompt and C:\Users\TiKy\.codex\RTK.md with `rtk read`.
+- Queried Google Drive Search for the exact guide title; indexed document text was returned.
+- `google_drive_get_document_text` and `google_drive_fetch` returned 404 for the same document ID. No edit was attempted.
+- Used `rtk proxy python` to inspect the adjacent MMT directory and its files.
+- `pypdf` extraction of Chapter_2_v9.0.pdf page 31 returned a netcat HTTP client exercise.
+- Python-file inventory under the adjacent MMT bundle returned no `.py` files.
+- Searches of the adjacent Lab 1 and Lab 2 PDFs for `new_connection` and `22236` returned no matches.
+- `rtk git --version` returned 2.50.0.windows.1; `rtk gh auth status` showed authenticated user TiKyisme; `rtk proxy VBoxManage --version` failed because VBoxManage is not on PATH.
+- Consulted official VirtualBox 7.2, Python socket/threading, IETF RFC 9000/9002/9221, and Valve GameNetworkingSockets references.
+
+Result:
+- Requirements and evidence are classified in docs/requirements-matrix.md and docs/source-inventory.md.
+- Google Doc content is reviewed text-only; original edit is blocked by connector 404.
+- HTTP server identity and the instructor's `new_connection` remain unverified.
+- Streaming artifacts are proposals and are not implemented or tested.
+
+Evidence:
+- Source inventory and docs review record exact accessible paths, findings, and open issues.
+- No VM test, screenshot, HTTP integration test, or streaming implementation is claimed.
+
+Problems:
+- Supplied CO3094 workspace path is absent; accessible neighboring MMT bundle is CO3093.
+- LMS/forum source, actual CO3094 code, and VirtualBox CLI/GUI are unavailable.
+
+Git commit:
+- None yet.
+
+Next action:
+- Review local files, initialize/commit this separate repository, create it as private on GitHub, then request/provide the exact course forum code and real VM test evidence.
+
+[2026-10-21] [DOCUMENTATION AND PROMPT EVIDENCE]
+Task:
+- Create the separate local CO3094 Lab 2 project record and prepare evidence-grounded handoff docs.
+
+Source/Reason:
+- User's master prompt authorizes local repository setup, prompt history, documentation review, network preparation, and draft streaming design.
+- Technical claims are referenced to Oracle VirtualBox, Python docs, IETF RFCs, and Valve's official repository as listed in docs/source-inventory.md.
+
+Files changed:
+- README.md, state.md, log.txt, .gitignore.
+- docs/requirements-matrix.md, source-inventory.md, docs-review.md, lab2-group-guide.md, network-setup.md, http-server-analysis.md, network-test-cases.md, streaming-architecture.md, reliability-design.md, flow-control-design.md, congestion-control-design.md, integration-design.md, team-assignments.md, decisions.md, open-questions.md.
+- prompts/README.md, prompt-history.md, 2026-10-21-master-prompt.txt, evidence/README.md.
+
+Commands/actions:
+- Created repository folder under D:\01. Dai_Hoc_Dai_Dai_Di\05. HK1_NAM3, separate from the CO3093 source bundle.
+- Initialized Git in the project folder only.
+- Copied the attached prompt and verified source/destination size 30257 bytes and byte equality True.
+- Checked relative Markdown links: 20 Markdown files scanned, no broken local .md links.
+
+Result:
+- Source, requirement, review, networking, and proposal docs are ready.
+- The original Google Doc is unchanged; local Markdown replacement is available.
+- No server code or test result is claimed.
+
+Evidence:
+- Prompt copy equality and link-check outputs observed in this session.
+- Live VirtualBox and HTTP checks remain NOT RUN.
+
+Problems:
+- Same CO3094 path/forum/VirtualBox blockers recorded above.
+- Full conversation export remains NOT YET EXPORTED.
+
+Git commit:
+- Pending staged diff review.
+
+Next action:
+- Review staged files, commit locally, create the private GitHub repository, and verify the remote and branch.

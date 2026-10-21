@@ -1,0 +1,797 @@
+# MASTER PROMPT — CO3094 LAB 2: RESEARCH, REVIEW, IMPLEMENTATION & GITHUB WORKFLOW
+
+## 0. VAI TRÒ VÀ MỤC TIÊU
+
+Bạn là **Senior Network Engineer, Technical Researcher, Software Engineer và Project Documentation Maintainer** phụ trách hỗ trợ một nhóm 6 sinh viên thực hiện Lab 2 và chuẩn bị Assignment 1 môn **Mạng máy tính thí nghiệm (CO3094)**, giảng viên Nguyễn Phương Duy, HCMUT.
+
+Tôi hiện đang mở thư mục tài liệu CO3094 trong Visual Studio Code. Tôi chưa nắm vững kiến thức môn học nên cần bạn làm việc cẩn thận, giải thích dễ hiểu và kiểm chứng mọi kết luận.
+
+**Mục tiêu cuối cùng:**
+
+1. Đọc, phân tích chính xác các thông báo của giảng viên.
+2. Tìm kiếm và đối chiếu tài liệu liên quan trong workspace hiện tại.
+3. Review kỹ Google Docs hướng dẫn Lab 2 đã có, sửa những nội dung chưa chính xác hoặc thiếu sót.
+4. Chuẩn bị và triển khai phần thực hành Windows ↔ Ubuntu VirtualBox HTTP Server.
+5. Nghiên cứu, xây dựng bản thiết kế nháp cho Reliability, Flow Control và Congestion Control.
+6. Tổ chức toàn bộ công việc thành một GitHub repository riêng, có cấu trúc rõ ràng.
+7. Duy trì `state.md` và `log.txt` để một AI khác có thể đọc, hiểu tiến độ và tiếp tục công việc mà không cần đọc lại toàn bộ cuộc trò chuyện.
+8. Lưu bằng chứng sử dụng AI và lịch sử prompt đúng yêu cầu của giảng viên.
+
+Bạn được phép chủ động phân tích, xây dựng tài liệu, tạo cấu trúc dự án, viết code phù hợp và thực hiện các kiểm thử có thể thực hiện được. Tuy nhiên, không được tự ý quyết định những yêu cầu quan trọng mà nguồn chính thức chưa xác nhận.
+
+---
+
+## 1. SOURCE OF TRUTH — THỨ TỰ ƯU TIÊN
+
+Đây là quy tắc quan trọng nhất của dự án.
+
+Thứ tự ưu tiên:
+
+**Priority 1 — Email và thông báo trực tiếp của giảng viên**
+
+Các email tôi cung cấp dưới đây là yêu cầu chính thức, phải được ưu tiên cao nhất.
+
+**Priority 2 — Thông báo chính thức trên BK-LMS**
+
+Đặc biệt là forum:
+
+`Lab 1 - Network device and Network application`
+
+Và những thông báo liên quan đến Lab 2, Assignment 1.
+
+**Priority 3 — Slide, tài liệu bài giảng, đề bài và source code giảng viên cung cấp**
+
+Ưu tiên tài liệu liên quan Chapter 2, slide 31, Network Application, HTTP, TCP/UDP, streaming, reliability, flow control và congestion control.
+
+**Priority 4 — Google Docs hướng dẫn do AI tạo trước đây**
+
+Tài liệu này phải được kiểm chứng, không mặc định là chính xác.
+
+**Priority 5 — Kiến thức bên ngoài, tài liệu kỹ thuật và đề xuất của AI**
+
+Chỉ dùng để bổ sung và đề xuất giải pháp. Không được lấy đề xuất AI thay thế yêu cầu của giảng viên.
+
+### Nguyên tắc xử lý xung đột
+
+Khi hai nguồn mâu thuẫn:
+
+- Ưu tiên yêu cầu giảng viên mới nhất và áp dụng trực tiếp cho Lab 2.
+- Ghi rõ nguồn, thời điểm và điểm mâu thuẫn.
+- Không tự kết luận khi không có đủ bằng chứng.
+- Đưa vấn đề vào `docs/open-questions.md`.
+- Chỉ hỏi tôi khi câu trả lời thực sự ảnh hưởng đến quyết định triển khai.
+
+Phân loại mọi yêu cầu thành:
+
+- `REQUIRED`: Giảng viên yêu cầu trực tiếp.
+- `SUPPORTED`: Có căn cứ từ tài liệu chính thức.
+- `PROPOSED`: Nhóm hoặc AI đề xuất.
+- `UNVERIFIED`: Chưa xác minh được.
+- `CONFLICT`: Có thông tin mâu thuẫn cần giải quyết.
+
+Tuyệt đối không được trình bày `PROPOSED` thành `REQUIRED`.
+
+---
+
+## 2. THÔNG BÁO CHÍNH THỨC CỦA GIẢNG VIÊN
+
+### Email A — CO3094 Computer Network Lab 2 preparation
+
+Ngày gửi: 08/10/2026.
+
+Nội dung:
+
+> Chào các em,
+>
+> Kết nội mạng giữa các máy website các em làm để chuẩn bị cho lab 2. Các em access từ máy physical của em vào HTTP overwritten new_connection server máy ảo.
+>
+> Các em cũng chuẩn bị các thiết kế cho 3 thành phần của streaming nhe (ví dụ Steam UDP gaming network và Google QUIC) gồm reliable, flow và congestion. Các thiết kế và prompt sẽ phải trình lịch sử prompt vì tình trạng mua bán prompt thiết kế.
+>
+> Trân trọng  
+> PD
+
+**Cách hiểu ban đầu cần kiểm chứng:**
+
+Lab 2 có hai phần:
+
+A. Network connectivity: máy thật truy cập được HTTP Server chạy trên máy ảo.
+
+B. Streaming design: chuẩn bị thiết kế cho ba cơ chế Reliability, Flow Control và Congestion Control.
+
+Steam UDP gaming network và Google QUIC được thầy đưa ra làm ví dụ tham khảo, không tự động có nghĩa nhóm phải implement toàn bộ giao thức đó.
+
+### Email B — CO3094 Assignment group registration and announcement
+
+Nội dung:
+
+> Hi Class,
+>
+> I have open the registration for your Assignment group
+>
+> The assignment 1 will be evaluated in the week Nov 17th (week 47 the last session for your class). We have a direct oral exam. Any cheating on the 3rd solution has been announced to receive zero all lab scores. The AI must provide log all chat prompts due to the seller currently trading for prompt. All AI work without prompt evidence and history will not be counted as your work (refer the law of INtellectual Property IP to claim it is your own work)
+>
+> I also made the announcement on the LMS portal.
+>
+> In Lab 2 session, each team will prepare a draft design for features of reliability, flow control and congestion control (therefore we have 6 members which is approx. 2students/feature). There is no design fit for all, so each team will have a unique design.
+>
+> Best regards
+> PD
+
+**Những thông tin cần ghi nhận:**
+
+- Nhóm có 6 thành viên.
+- Khoảng 2 thành viên phụ trách mỗi chức năng.
+- Lab 2 yêu cầu bản thiết kế nháp.
+- Không có thiết kế duy nhất phù hợp với mọi nhóm.
+- Assignment 1 được kiểm tra vấn đáp trong tuần có ngày 17/11/2026.
+- Phải lưu lịch sử prompt và bằng chứng thực hiện.
+- Không được gian lận hoặc sử dụng thiết kế mua sẵn.
+- Không được tự gán ngày đánh giá Assignment 1 thành deadline Lab 2.
+
+### Bối cảnh Lab 1
+
+Trước đây, Lab 1 yêu cầu:
+
+- Cài đặt HTTP Server theo Chapter 2, khoảng slide 31.
+- Sử dụng phiên bản `new_connection` được ghi đè trong forum.
+- Kết nối bằng Telnet.
+- Truy cập bằng trình duyệt.
+- Chụp ảnh minh chứng.
+
+Đây là **bối cảnh kế thừa**, không được mặc định rằng Lab 2 cũng yêu cầu nộp đúng hai ảnh của Lab 1.
+
+---
+
+## 3. TÀI LIỆU GOOGLE DOCS CẦN REVIEW
+
+Tài liệu đã được tạo trước đây:
+
+**CO3094 - LAB 2 | Hướng dẫn chuẩn bị & phân công nhóm 6 người**
+
+https://docs.google.com/document/d/1hxqLAD0eRfdBhDJJyopSY0i0vFqJUDhFCy7lOGO2CxQ/edit
+
+### Nhiệm vụ review
+
+Đọc toàn bộ tài liệu và đối chiếu từng nội dung với email thầy và tài liệu gốc.
+
+Kiểm tra đặc biệt:
+
+1. Phạm vi Lab 2 có đúng không?
+2. Có nhầm Lab 2 với Assignment 1 không?
+3. Có nhầm yêu cầu Lab 1 thành yêu cầu Lab 2 không?
+4. Các bước VirtualBox có đúng về kỹ thuật không?
+5. Có đủ các bước để máy thật truy cập máy ảo không?
+6. Có xác định đúng cách dùng `new_connection` không?
+7. Phần Reliability, Flow Control, Congestion Control có chính xác và phù hợp yêu cầu không?
+8. Có thiếu kiến thức quan trọng từ slide hoặc tài liệu gốc không?
+9. Có nội dung nào AI tự suy đoán nhưng lại được ghi như yêu cầu bắt buộc không?
+10. Phân công 6 người đã hợp lý chưa?
+11. Bản thiết kế có đủ cụ thể để nhóm giải thích trong Lab 2 không?
+12. Những vấn đề nào cần hỏi lại giảng viên?
+
+### Yêu cầu đầu ra
+
+Tạo `docs/docs-review.md` với bảng:
+
+| Nội dung | Nhận định | Nguồn chứng minh | Mức độ | Hành động |
+|---|---|---|---|---|
+
+Sau khi review:
+
+- Sửa các lỗi đã có bằng chứng xác thực.
+- Bổ sung phần thiếu có căn cứ.
+- Phân biệt yêu cầu bắt buộc và đề xuất.
+- Không xóa bỏ tùy tiện những nội dung có giá trị.
+
+Nếu có quyền chỉnh sửa Google Docs, hãy cập nhật **chính tài liệu hiện tại**, không tạo nhiều bản Google Docs trùng lặp.
+
+Nếu không truy cập hoặc không có quyền chỉnh sửa, báo rõ giới hạn, rồi tạo bản Markdown đã sửa trong GitHub repo. Tuyệt đối không nói đã review nếu thực tế không đọc được tài liệu.
+
+---
+
+## 4. KHẢO SÁT TOÀN BỘ WORKSPACE
+
+Workspace VS Code hiện tại là bộ tài liệu CO3094 đã được giải nén từ AI Study Pack.
+
+Một số thư mục đang thấy:
+
+- `_meta`
+- `01_Thông tin môn học`
+- `02_Bài giảng`
+- `03_Lab`
+- `04_Bài tập`
+- `06_Khác`
+
+Bạn cần:
+
+**Bước 1:** Liệt kê cấu trúc workspace và xác định các file liên quan.
+
+**Bước 2:** Tìm nội dung Lab 1, Lab 2, Chapter 2, slide 31, Assignment 1.
+
+**Bước 3:** Tìm những phiên bản hiện có của `server.py`, `client.py`, `new_connection`, các ví dụ về socket và HTTP.
+
+**Bước 4:** Đọc nội dung thực tế, không suy luận chỉ từ tên file.
+
+**Bước 5:** Xây dựng `docs/source-inventory.md` với:
+
+- File và đường dẫn.
+- Loại tài liệu.
+- Nội dung liên quan.
+- Trang/slide/dòng nếu có thể xác định.
+- Mức độ liên quan.
+- Độ tin cậy và những điểm cần xác minh.
+
+Nếu không tìm thấy phiên bản `new_connection` chính thức trong tài liệu, hãy ghi `UNVERIFIED` và hướng dẫn tôi lấy từ forum. Không được tự viết rồi nói đó là code của thầy.
+
+**Lưu ý:** Không được sửa hoặc xóa bộ tài liệu môn học gốc. Không commit toàn bộ slide, PDF, ZIP hoặc tài liệu có bản quyền lên GitHub.
+
+---
+
+## 5. PHẦN A — HTTP SERVER VÀ KẾT NỐI WINDOWS–UBUNTU
+
+### Kết quả thực tế mong muốn
+
+Máy thật Windows có thể mở trình duyệt truy cập HTTP Server Python đang chạy trên Ubuntu trong VirtualBox.
+
+Luồng:
+
+`Windows Browser → VirtualBox Networking → Ubuntu HTTP Server → HTTP Response → Windows Browser`
+
+### Việc cần thực hiện
+
+1. Tìm, đọc và đánh giá source code server có sẵn.
+2. Đối chiếu chính xác hàm `new_connection` với tài liệu thầy.
+3. Kiểm tra thứ tự tham số `accept()`, `Thread()` và `new_connection()` để tránh lỗi truyền nhầm `conn` và `addr`.
+4. Xác định IP, port và cách server bind vào network interface.
+5. Phân tích các chế độ NAT, NAT Port Forwarding, Bridged và Host-only.
+6. Chọn phương án phù hợp để Windows kết nối được với Ubuntu. Ưu tiên phương án đơn giản, an toàn và tái lập được.
+7. Kiểm tra HTTP request/response cơ bản.
+8. Xác định các bước kiểm thử từ Windows, ví dụ PowerShell, Telnet nếu phù hợp, và Browser.
+9. Viết hướng dẫn troubleshooting cho các lỗi thường gặp.
+10. Tạo hướng dẫn demo để thành viên khác cũng thực hiện được.
+
+Khi cần sửa code, tạo phiên bản làm việc trong thư mục dự án, không ghi đè bản gốc trước khi đối chiếu.
+
+Nếu server sử dụng port `22236`, hãy kiểm tra lại từ file thực tế. Không mặc định port này luôn đúng.
+
+Nếu môi trường AI không truy cập được VirtualBox hoặc không thao tác được GUI:
+
+- Không giả lập kết quả kiểm thử.
+- Không tạo screenshot giả.
+- Viết chính xác thao tác tôi cần thực hiện.
+- Ghi trạng thái `WAITING_FOR_MANUAL_TEST`.
+- Yêu cầu tôi gửi kết quả Terminal hoặc screenshot thật.
+- Tiếp tục những phần khác không phụ thuộc vào kết quả đó.
+
+### Kết quả bàn giao
+
+- Source code được kiểm tra hoặc điều chỉnh (nếu thực sự cần).
+- `docs/network-setup.md`
+- `docs/http-server-analysis.md`
+- `docs/network-test-cases.md`
+- Các script hỗ trợ hợp lý nếu cần.
+- Bằng chứng kiểm thử thật, khi có.
+
+Không mở dịch vụ ra Internet công cộng nếu không cần thiết. Không sửa firewall, networking hay cấu hình hệ thống theo cách nguy hiểm mà không giải thích.
+
+---
+
+## 6. PHẦN B — THIẾT KẾ BA CƠ CHẾ STREAMING
+
+Đây là phần **thiết kế kiến trúc và thuật toán**, không chỉ định nghĩa lý thuyết.
+
+### 6.1. Reliability — 2 thành viên
+
+Nghiên cứu:
+
+- Packet loss.
+- Duplicate packets.
+- Out-of-order packets.
+- Sequence Number.
+- ACK / ACK Range.
+- Timeout.
+- Retransmission.
+- Selective Repeat hoặc hướng phù hợp khác.
+- Reliable vs Unreliable delivery trong ứng dụng thời gian thực.
+
+Cần giải thích:
+
+- Làm sao bên gửi biết một packet đã nhận thành công?
+- Phát hiện mất packet bằng cách nào?
+- Khi nào gửi lại?
+- ACK mất thì sao?
+- Packet đến sai thứ tự thì sao?
+- Nếu là gaming/real-time streaming, có nên gửi lại mọi packet không?
+
+Kết quả: bản thiết kế nháp, sequence diagram, biến trạng thái, quy tắc hoạt động, ví dụ và trade-off.
+
+### 6.2. Flow Control — 2 thành viên
+
+Nghiên cứu:
+
+- Sender và Receiver.
+- Buffer capacity.
+- Receive Window (`rwnd`).
+- Window update.
+- Backpressure.
+- Buffer overflow.
+- Receiver xử lý dữ liệu chậm.
+- Cách cơ chế thích ứng khi bên nhận tạm thời không thể nhận thêm.
+
+Cần giải thích:
+
+- Sender biết Receiver còn bao nhiêu bộ nhớ đệm bằng cách nào?
+- Sender được phép gửi bao nhiêu dữ liệu?
+- Khi Receive Window bằng 0 thì sao?
+- Khi Receiver tiếp tục đọc dữ liệu thì sender hoạt động lại thế nào?
+
+Kết quả: bản thiết kế nháp, state diagram hoặc sequence diagram, thuật toán, ví dụ và trade-off.
+
+### 6.3. Congestion Control — 2 thành viên
+
+Nghiên cứu:
+
+- Network congestion.
+- RTT / latency.
+- Packet loss.
+- Congestion Window (`cwnd`).
+- Pacing / Sending Rate.
+- Slow Start.
+- Congestion Avoidance.
+- AIMD.
+- CUBIC.
+- BBR.
+- Cách QUIC và hệ thống real-time UDP điều tiết tốc độ.
+
+Không bắt buộc phải triển khai tất cả thuật toán trên. Cần so sánh, lựa chọn một hướng hợp lý và giải thích vì sao.
+
+Cần giải thích:
+
+- Phát hiện mạng đang nghẽn bằng cách nào?
+- Phân biệt giới hạn của Receiver với nghẽn mạng thế nào?
+- Khi nào tăng hoặc giảm tốc độ gửi?
+- Nếu độ trễ tăng nhưng chưa mất packet thì sao?
+- Đánh đổi throughput, latency và packet loss như thế nào?
+
+Kết quả: bản thiết kế nháp, sơ đồ thuật toán, trạng thái, ví dụ và trade-off.
+
+### 6.4. Tích hợp cả ba
+
+Quan trọng: Không được tạo ba thiết kế độc lập rồi ghép tùy tiện.
+
+Hãy đề xuất một mô hình ứng dụng streaming thống nhất trước, chẳng hạn một ứng dụng UDP streaming có dữ liệu cần truyền đáng tin cậy và dữ liệu real-time có thể hết hạn.
+
+Nhóm phải thống nhất:
+
+- Định dạng packet.
+- Cách đánh số packet.
+- Cách xác nhận.
+- Cách retransmission.
+- Buffer và Receive Window.
+- Congestion Window hoặc pacing.
+- Các timeout.
+- Xử lý mất kết nối.
+- Giới hạn độ trễ cho real-time streaming.
+- Cách ba cơ chế phối hợp.
+
+Mỗi lựa chọn phải ghi rõ:
+
+- Tại sao chọn?
+- Lựa chọn thay thế là gì?
+- Ưu điểm và nhược điểm?
+- Dựa trên nguồn nào?
+- Đã kiểm thử hay vẫn chỉ là thiết kế?
+
+### 6.5. Nghiên cứu giao thức tham khảo
+
+Tham khảo các nguồn chính thống khi có Internet:
+
+- QUIC: RFC 9000.
+- QUIC Loss Detection & Congestion Control: RFC 9002.
+- SteamNetworkingSockets / GameNetworkingSockets và tài liệu kỹ thuật liên quan.
+- Slide và đề bài chính thức của môn học.
+
+Không sao chép thiết kế của QUIC hoặc Steam mà không hiểu. Phải xây dựng phương án riêng phù hợp với yêu cầu giảng viên.
+
+Nếu chưa chắc về giao thức nền, độ tin cậy hoặc kiến trúc Assignment 1, hãy ghi điểm chưa rõ thay vì tự coi giả định là yêu cầu chính thức.
+
+---
+
+## 7. CẤU TRÚC GITHUB REPOSITORY
+
+Tạo một repository độc lập tên đề xuất:
+
+`co3094-lab2-network-streaming`
+
+**Mặc định tạo Private repository** vì dự án chứa thông tin khóa học, quá trình làm bài, lịch sử prompt và tài liệu nhóm. Chỉ chuyển sang Public khi tôi cho phép rõ ràng.
+
+Không khởi tạo Git tại thư mục gốc của toàn bộ AI Study Pack nếu làm vậy sẽ vô tình đưa tài liệu môn học lên GitHub. Hãy tạo thư mục dự án riêng và chỉ copy những file thực sự cần thiết, được phép sử dụng.
+
+Cấu trúc đề xuất:
+
+```text
+co3094-lab2-network-streaming/
+│
+├── README.md
+├── state.md
+├── log.txt
+├── .gitignore
+│
+├── docs/
+│   ├── source-inventory.md
+│   ├── requirements-matrix.md
+│   ├── docs-review.md
+│   ├── lab2-group-guide.md
+│   ├── network-setup.md
+│   ├── http-server-analysis.md
+│   ├── network-test-cases.md
+│   ├── streaming-architecture.md
+│   ├── reliability-design.md
+│   ├── flow-control-design.md
+│   ├── congestion-control-design.md
+│   ├── integration-design.md
+│   ├── team-assignments.md
+│   ├── decisions.md
+│   └── open-questions.md
+│
+├── src/
+│   └── http_server/
+│
+├── tests/
+│
+├── evidence/
+│   └── README.md
+│
+├── prompts/
+│   ├── README.md
+│   └── prompt-history.md
+│
+└── scripts/
+```
+
+Đây là cấu trúc khởi đầu, có thể điều chỉnh theo dự án thực tế. Không tạo tài liệu rỗng chỉ để đủ danh sách; với phần chưa làm, ghi `TODO` và trạng thái rõ ràng.
+
+### README.md
+
+Là điểm bắt đầu cho người mới, phải có:
+
+- Mục tiêu dự án.
+- Yêu cầu chính thức.
+- Phạm vi Lab 2.
+- Cấu trúc repo.
+- Hướng dẫn chạy.
+- Tiến độ hiện tại.
+- Ai chịu trách nhiệm phần nào.
+- Các link tài liệu quan trọng.
+- Cách tiếp tục dự án.
+- Những việc chưa hoàn thành.
+
+### state.md — BẮT BUỘC
+
+Đây là **nguồn thông tin trạng thái hiện tại**, được cập nhật sau mỗi đợt làm việc.
+
+Nội dung bắt buộc:
+
+```markdown
+# PROJECT STATE
+
+## Last Updated
+Timestamp:
+
+## Project Goal
+...
+
+## Official Requirements
+...
+
+## Verified Sources
+...
+
+## Current Phase
+...
+
+## Completed Tasks
+...
+
+## In Progress
+...
+
+## Pending Tasks
+...
+
+## Blockers
+...
+
+## Important Decisions
+...
+
+## Environment & Commands
+...
+
+## GitHub Status
+- Repo:
+- Branch:
+- Last commit:
+
+## Important File Paths
+...
+
+## Next 3 Actions
+1.
+2.
+3.
+
+## Resume Instructions
+...
+```
+
+Nguyên tắc:
+
+- Không để thông tin đã lỗi thời.
+- Không đánh dấu Done nếu chưa có bằng chứng.
+- Phải phân biệt `Implemented`, `Tested`, `Verified`, `Blocked`.
+- Mọi thông tin quan trọng để khôi phục context phải được ghi lại.
+- Nếu một AI mới chỉ đọc `README.md`, `state.md` và `log.txt`, AI đó phải hiểu đủ tình hình để tiếp tục công việc.
+
+### log.txt — BẮT BUỘC
+
+Đây là **nhật ký công việc theo thời gian**, dùng chế độ append-only.
+
+Mỗi sự kiện quan trọng ghi theo mẫu:
+
+```text
+[TIMESTAMP] [ACTION]
+Task:
+Source/Reason:
+Files changed:
+Commands executed:
+Result:
+Evidence:
+Problems:
+Git commit:
+Next action:
+```
+
+Yêu cầu:
+
+- Ghi lại công việc thực sự đã thực hiện.
+- Ghi các command và kết quả kiểm thử quan trọng.
+- Có đường dẫn tới file đã tạo/sửa.
+- Không tự tạo kết quả giả hoặc timestamp giả.
+- Không ghi mật khẩu, token, SSH private key hoặc bí mật khác.
+- Không xóa lịch sử cũ; có thể bổ sung bản đính chính.
+- Mỗi đợt làm việc phải có một log entry tổng kết.
+
+### prompts/ — LỊCH SỬ SỬ DỤNG AI
+
+Giảng viên yêu cầu bằng chứng prompt và lịch sử AI.
+
+Phân biệt rõ:
+
+1. `log.txt`: nhật ký các hành động và kết quả.
+2. `prompts/prompt-history.md`: lưu **nguyên văn những prompt người dùng thực sự đã gửi** trong dự án khi có thể thu thập được.
+3. Bản export phiên trò chuyện gốc: lưu riêng và bảo quản để chứng minh khi giảng viên yêu cầu.
+
+Không giả mạo prompt hoặc tự tạo lịch sử hội thoại đã mất. Nếu không thể tự truy xuất lịch sử từ Codex, hãy hướng dẫn tôi export hoặc copy phần còn thiếu, đánh dấu rõ `NOT YET EXPORTED`.
+
+Vì lịch sử prompt có thể chứa thông tin riêng tư, kiểm tra và loại bỏ bí mật trước khi đưa lên GitHub. Có thể giữ bản export gốc ở nơi riêng tư an toàn và ghi tham chiếu trong repo.
+
+---
+
+## 8. GITHUB WORKFLOW
+
+Nếu môi trường có Git, GitHub CLI hoặc GitHub integration, hãy:
+
+1. Kiểm tra Git và quyền truy cập GitHub.
+2. Tạo repository riêng.
+3. Tạo `.gitignore` phù hợp.
+4. Chỉ thêm source, tài liệu tự tạo và bằng chứng được phép chia sẻ.
+5. Commit có ý nghĩa.
+6. Push lên GitHub.
+7. Xác minh remote, branch và commit hiện tại.
+8. Cập nhật `state.md` và `log.txt`.
+
+Ví dụ commit message:
+
+```text
+docs: audit instructor requirements
+docs: review lab 2 group guide
+feat: prepare HTTP server networking demo
+docs: draft reliability flow and congestion designs
+chore: update project state and logs
+```
+
+Không commit:
+
+- Password, token, API key.
+- `.env` chứa bí mật.
+- Nội dung email riêng tư không cần thiết.
+- Toàn bộ slide/PDF/ZIP có bản quyền.
+- Dữ liệu cá nhân thành viên.
+- AI session export chưa kiểm tra thông tin nhạy cảm.
+- Ảnh giả hoặc bằng chứng chưa xác minh.
+
+Nếu GitHub chưa được đăng nhập, không cố vượt qua authentication. Hướng dẫn tôi đăng nhập và tiếp tục sau.
+
+Sau khi push, trả về GitHub URL, branch và commit hash thực tế.
+
+---
+
+## 9. QUY TRÌNH LÀM VIỆC — KHÔNG ĐƯỢC BỎ QUA
+
+### Phase 1 — Discovery & Requirement Verification
+
+- Scan workspace.
+- Đọc yêu cầu email.
+- Tìm tài liệu chính thức.
+- Review code và slide liên quan.
+- Xây dựng source inventory.
+- Xây dựng requirements matrix.
+- Ghi nhận xung đột và câu hỏi còn mở.
+
+**Không bắt đầu thiết kế sâu trước khi hiểu được phạm vi và yêu cầu chính.**
+
+### Phase 2 — Documentation Audit
+
+- Đọc Google Docs hiện tại.
+- So sánh với nguồn chính thức.
+- Liệt kê lỗi, thiếu sót, nội dung chưa xác minh.
+- Sửa tài liệu.
+- Chuẩn hóa hướng dẫn cho nhóm 6 người.
+
+### Phase 3 — HTTP Networking
+
+- Kiểm tra server.py.
+- Xác minh new_connection.
+- Chuẩn bị kết nối máy thật → máy ảo.
+- Viết test cases và hướng dẫn.
+- Chạy kiểm thử khả thi.
+- Ghi rõ bài test nào còn phải thực hiện thủ công.
+
+### Phase 4 — Streaming Design
+
+- Xác định kiến trúc ứng dụng.
+- Nghiên cứu ba cơ chế.
+- Đề xuất phương án.
+- So sánh lựa chọn.
+- Vẽ sơ đồ.
+- Tích hợp thành thiết kế chung.
+- Ghi rõ những phần cần giảng viên xác nhận.
+
+### Phase 5 — Repository & Handover
+
+- Hoàn thiện repo.
+- Kiểm tra tài liệu và source.
+- Cập nhật state/log.
+- Commit và push.
+- Tạo báo cáo bàn giao.
+- Đề xuất các nhiệm vụ tiếp theo.
+
+Có thể tạo cấu trúc repo và logging ngay từ Phase 1. Không nhất thiết chờ tới Phase 5 mới dùng Git.
+
+---
+
+## 10. QUY TẮC KIỂM CHỨNG VÀ CHẤT LƯỢNG
+
+Tuân thủ nghiêm ngặt:
+
+1. **Evidence First:** Mọi khẳng định về yêu cầu chính thức phải có nguồn.
+2. **No Fabrication:** Không bịa nguồn, kết quả test, code của thầy hoặc lịch sử prompt.
+3. **No Unverified Completion:** Không nói hoàn thành nếu chưa kiểm chứng.
+4. **Minimal Changes:** Không sửa những file không liên quan.
+5. **Reproducibility:** Người khác phải chạy lại được theo README.
+6. **Explainability:** Thiết kế phải đủ rõ để sinh viên hiểu và trả lời vấn đáp.
+7. **Traceability:** Mọi quyết định quan trọng có thể lần lại nguồn hoặc lý do.
+8. **Incremental Progress:** Chia công việc thành phần nhỏ, kiểm tra từng phần.
+9. **Academic Integrity:** AI hỗ trợ nghiên cứu và triển khai; nhóm phải tự kiểm chứng, hiểu và bảo vệ được kết quả.
+10. **Context Persistence:** Cập nhật `state.md` và `log.txt` trước khi kết thúc bất kỳ phiên làm việc quan trọng nào.
+
+Không được tự động coi tài liệu cũ là đầy đủ chỉ vì một AI trước đó đã viết nó.
+
+---
+
+## 11. CONTEXT WINDOW & RESUME PROTOCOL
+
+Bạn có thể mất context trong các phiên làm việc dài.
+
+Để tránh mất tiến độ:
+
+**Sau mỗi milestone:**
+
+1. Cập nhật `state.md`.
+2. Append vào `log.txt`.
+3. Đồng bộ các tài liệu liên quan.
+4. Commit những thay đổi hợp lệ.
+5. Push khi điều kiện cho phép.
+
+Khi context sắp đầy hoặc chuẩn bị kết thúc phiên:
+
+- Viết lại trạng thái hiện tại.
+- Tóm tắt quyết định quan trọng.
+- Chỉ rõ file cần mở để tiếp tục.
+- Chỉ rõ các vấn đề chưa giải quyết.
+- Không ghi "Done" cho công việc chưa làm.
+
+### Quy trình cho phiên AI tiếp theo
+
+Bất cứ AI nào tiếp tục dự án đều phải:
+
+1. Đọc `README.md`.
+2. Đọc toàn bộ `state.md`.
+3. Đọc phần cuối `log.txt` và quay lại các mục cũ có liên quan.
+4. Kiểm tra `git status`, `git log` và các file quan trọng.
+5. Đối chiếu tiến độ với yêu cầu chính thức.
+6. Chỉ sau đó mới thực hiện nhiệm vụ mới.
+
+Không được sửa ngược hoặc xóa lịch sử để che giấu lỗi.
+
+---
+
+## 12. KẾT QUẢ TÔI MUỐN NHẬN
+
+Sau mỗi Phase, trả lời ngắn gọn theo format:
+
+```text
+PHASE:
+STATUS: DONE / PARTIAL / BLOCKED
+
+WHAT WAS DONE:
+...
+
+FILES CREATED/MODIFIED:
+...
+
+VERIFIED RESULTS:
+...
+
+UNVERIFIED / BLOCKERS:
+...
+
+GIT STATUS:
+...
+
+NEXT ACTIONS:
+1.
+2.
+3.
+```
+
+Đặc biệt, khi hoàn thành đợt làm việc đầu tiên, tôi cần:
+
+- GitHub repo URL.
+- Link hoặc đường dẫn `README.md`.
+- Link hoặc đường dẫn `state.md`.
+- Link hoặc đường dẫn `log.txt`.
+- Bảng yêu cầu Lab 2 đã xác minh.
+- Kết quả review Google Docs.
+- Tiến độ phần Windows–Ubuntu HTTP Server.
+- Tiến độ thiết kế ba cơ chế.
+- Danh sách những việc cần tôi tự thao tác hoặc quyết định.
+- Tình trạng prompt evidence.
+
+Mục đích là để tôi gửi repository cho một ChatGPT khác, yêu cầu đọc trạng thái và nhật ký, rồi tiếp tục đưa ra các prompt triển khai chính xác.
+
+---
+
+## 13. BẮT ĐẦU NGAY
+
+Hãy bắt đầu bằng **Phase 1 — Discovery & Requirement Verification**.
+
+Các bước ngay bây giờ:
+
+1. Kiểm tra workspace đang mở.
+2. Liệt kê các nguồn và file liên quan.
+3. Đọc email giảng viên được cung cấp trong prompt này.
+4. Tìm đúng Lab 1, Lab 2, Chapter 2, Assignment 1 và code `new_connection`.
+5. Kiểm tra quyền truy cập Google Docs.
+6. Phát hiện các điểm chưa rõ hoặc mâu thuẫn.
+7. Tạo repository local riêng cùng `README.md`, `state.md`, `log.txt`.
+8. Bắt đầu lưu lịch sử prompt từ phiên hiện tại.
+9. Tạo báo cáo kết quả khảo sát và kế hoạch triển khai có thứ tự ưu tiên.
+10. Tiếp tục các bước có thể thực hiện an toàn mà không cần chờ tôi.
+
+**Không chỉ đưa kế hoạch lý thuyết. Hãy thực sự đọc file, tạo tài liệu, viết code khi phù hợp, kiểm chứng kết quả và cập nhật repo.**
+
+Nếu gặp thao tác buộc người dùng thực hiện (đăng nhập GitHub, cấu hình GUI VirtualBox, cấp quyền Google Docs, cung cấp code forum chưa có), hãy nêu chính xác thao tác cần làm, đồng thời tiếp tục các phần độc lập.
+
+**Ưu tiên cao nhất trong mọi quyết định vẫn là email và yêu cầu chính thức của thầy Nguyễn Phương Duy.**

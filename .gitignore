@@ -1,0 +1,28 @@
+# Credentials and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local/private evidence and raw session exports
+evidence/private/
+prompts/session-exports/
+*.har
+*.pcap
+*.pcapng
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
