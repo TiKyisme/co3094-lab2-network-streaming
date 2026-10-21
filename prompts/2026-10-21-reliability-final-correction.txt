@@ -1,0 +1,55 @@
+Continue CO3094 Lab 2 Reliability Draft PR #1.
+
+Repository: `TiKyisme/co3094-lab2-network-streaming`
+
+Branch: `feat/reliability-lab2-draft`
+
+**Goal:** Perform a final technical correction pass on the existing Reliability draft before student review tomorrow.
+
+Read `state.md`, `log.txt`, and the existing Reliability documents before editing.
+
+A reviewer identified three items:
+
+**1. Loss detection threshold**
+
+Verify the proposed rule of three later ACKed ack-eliciting packets against RFC 9002 Section 6.1.1.
+
+Clearly distinguish our custom rule from the standard QUIC packet-number-distance rule. Explain the rationale involving ACK-only packet numbers and provide a worked example demonstrating their difference.
+
+Do not claim they are equivalent.
+
+**2. Loss time timer**
+
+Review the loss detection pseudocode.
+
+Ensure packets that have not yet reached the time threshold when a later ACK arrives are re-evaluated when their scheduled `loss_time` expires, even if no further ACK arrives.
+
+Add or clarify `on_loss_time_expiry()` and its interaction with PTO. Ensure that PTO expiration alone does not constitute packet loss.
+
+**3. Lab presentation diagrams**
+
+Update `docs/reliability-lab2-presentation.md` so the presentation prominently includes:
+
+- Sender sends a reliable packet.
+- That packet is lost.
+- Sender detects loss according to the proposed threshold.
+- Sender retransmits the outstanding reliable data under a new packet number.
+- Receiver acknowledges it and delivers the data once.
+
+Keep the presentation approximately two pages. Prefer replacing a less important diagram instead of making it unnecessarily long.
+
+After the changes:
+
+- Verify Mermaid rendering.
+- Regenerate the presentation PDF.
+- Check diagram legibility and page layout.
+- Cross-check presentation and detailed design for consistency.
+- Preserve all existing student-review checkboxes as unchecked.
+- Do not change unrelated documents.
+- Update state/log and actual prompt evidence.
+- Commit and push to the existing feature branch.
+- Do NOT merge PR #1 or mark it student-approved.
+
+Finally report the exact files changed, technical corrections, commit SHA, and what Gia Đạo and Thiên Kỳ must personally review.
+
+Respond in Vietnamese.

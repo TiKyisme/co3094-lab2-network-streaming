@@ -21,8 +21,8 @@ Lab 2 source emails require draft designs for Reliability, Flow Control, and Con
 |---|---|---|
 | Packet identity | Monotonic packet number per sending direction; a fresh number for every transmitted packet | Separates packet receipt/loss from the identity of the carried data |
 | Reliable data identity | Channel ID plus byte stream offset and length; frame boundaries identify complete messages | A retransmission can move the same byte range into a new packet |
-| ACK | ACK ranges for received ack-eliciting packet numbers | Reports packet receipt and lets the sender see gaps without treating every gap as loss |
-| Loss | Declare an earlier outstanding packet lost only after a later ACK and either a packet threshold or time threshold | Allows ordinary reordering; starting thresholds are borrowed from RFC 9002 as teaching references |
+| ACK | ACK ranges for received packet numbers, including ACK-only packets when an ACK is sent | Reports packet receipt; only ack-eliciting packets trigger ACK feedback or count toward this draft's custom packet threshold |
+| Loss | Declare an earlier outstanding ack-eliciting packet lost after later ACK evidence and either this draft's custom packet-count threshold or a time threshold | Allows ordinary reordering; RFC 9002 values are references, not a claim of QUIC equivalence |
 | Timeout | PTO sends a fresh probe; a PTO by itself does not mark earlier packets lost | Recovers tail loss and lost ACKs without treating silence as proof of loss |
 | Retransmission | Retransmit only outstanding reliable byte ranges in a new packet number | Avoids replaying an entire old packet or sending already-confirmed bytes |
 | Duplicate handling | Packet-number duplicate filter plus per-channel range reassembly | Distinguishes a duplicate packet from the same content carried in a new packet |
@@ -59,9 +59,9 @@ Each direction has its own PN counter; an ACK range always refers to the peer's 
 
 ### ACK range policy
 
-An ACK frame contains the largest received ack-eliciting PN and zero or more older inclusive ranges, newest first. For example, ranges [105,106] and [101,102] report that 101, 102, 105, and 106 were received; the missing values 103 and 104 are not thereby declared lost. The receiver keeps a bounded set of recent ranges and a monotonic minimum acceptable PN. If old ranges must be discarded to cap memory or packet size, later retransmission may be needed; packets below the minimum acceptable PN are rejected rather than re-accepted.
+An ACK frame contains the largest reported received PN and zero or more older inclusive ranges, newest first. The receive history records every successfully processed PN, including ACK-only PNs. For example, ranges [105,106] and [101,102] report that 101, 102, 105, and 106 were received; the missing values 103 and 104 are not thereby declared lost. The receiver keeps a bounded set of recent ranges and a monotonic minimum acceptable PN. If old ranges must be discarded to cap memory or packet size, later retransmission may be needed; packets below the minimum acceptable PN are rejected rather than re-accepted.
 
-The receiver sends an ACK promptly when a new packet reveals a PN gap or arrives out of order. Otherwise, the baseline sends an ACK after two ack-eliciting packets or after the configured maximum ACK delay, whichever comes first. The two-packet trigger is a simple reference to RFC 9000 guidance; the actual delay must be agreed and measured. Pure ACK packets do not elicit more ACKs. A later ACK can repeat older ranges, so loss of an ACK does not erase the receiver's record.
+The receiver sends an ACK promptly when a new ack-eliciting packet reveals a PN gap or arrives out of order. Otherwise, the baseline sends an ACK after two ack-eliciting packets or after the configured maximum ACK delay, whichever comes first. The two-packet trigger is a simple reference to RFC 9000 guidance; the actual delay must be agreed and measured. Pure ACK packets do not elicit more ACKs, but their PNs can appear in the next ACK range sent for other traffic. A later ACK can repeat older ranges, so loss of an ACK does not erase the receiver's record.
 
 ## 5. Sender and receiver state
 
@@ -75,14 +75,14 @@ The receiver sends an ACK promptly when a new packet reveals a PN gap or arrives
 | `latest_rtt`, `smoothed_rtt`, `rttvar` | RTT sampling and loss/PTO timers | Update from eligible ACK samples; initial estimator is a configurable reference value |
 | `largest_acked` | Highest valid packet number acknowledged by the peer | Monotonically increase |
 | `bytes_in_flight` | Congestion-controlled packets not yet ACKed or declared lost | Add/subtract each packet's accounted bytes once |
-| `pto_count`, `loss_time` | Probe backoff and next time-threshold check | Reset the PTO backoff on new ACK progress; recompute after send/ACK/loss |
+| `time_of_last_ack_eliciting_packet`, `pto_count`, `loss_time` | Absolute PTO base, probe backoff, and next time-threshold check | Update the PTO base on each ack-eliciting send; reset backoff on new ACK progress; recompute after send/ACK/loss |
 | `update_queue` | Fresh, unsent real-time snapshots with sequence and local usefulness limit | Drop expired or superseded items |
 
 ### Receiver state
 
 | State | Kept for | Exit / bound |
 |---|---|---|
-| `received_packet_ranges` | Recently accepted ack-eliciting PNs for ACK generation | Bounded by ACK size policy and minimum acceptable PN |
+| `received_packet_ranges` | Recently accepted PNs, including ACK-only PNs, for ACK generation | Bounded by ACK size policy and minimum acceptable PN |
 | `seen_packet_numbers` | Duplicate suppression for accepted packets | Bounded by the same recent-PN window |
 | `next_delivery_offset[channel]` | First byte not yet delivered on each ordered reliable channel | Advance only when all prior bytes and a complete message frame are present |
 | `reorder_ranges[channel]` | Received reliable bytes above the first missing offset | Count against receive credit and local buffer cap |
@@ -101,7 +101,7 @@ PN history, stream ranges, and application side effects are different state. The
 5. The receiver validates the connection and PN. An already-seen PN is not processed again, but an ACK for it may be repeated.
 6. The receiver buffers in-credit reliable ranges, removes already-held overlaps, and delivers only complete messages beginning at the next contiguous offset for that channel. Out-of-order bytes use receive credit.
 7. The receiver accepts only a fresh real-time sequence. It drops an older sequence or an update expired under the agreed freshness rule.
-8. The receiver sends an ACK range for received ack-eliciting PNs, immediately on a gap or according to the ACK policy above.
+8. The receiver records each accepted PN, including ACK-only PNs, in its bounded receive history. It sends ACK ranges promptly for ack-eliciting traffic when a gap is visible or according to the ACK policy above.
 9. The sender validates ACK ranges, updates packet state, RTT, bytes-in-flight, and reliable byte-range status, then runs loss detection.
 10. If useful reliable ranges remain, the sender retransmits only those ranges in a fresh PN. A real-time update is not retransmitted after loss. Repeated PTO with no ACK progress eventually reports connection failure.
 
@@ -109,12 +109,20 @@ PN history, stream ranges, and application side effects are different state. The
 
 ### A later packet is evidence, not proof by itself
 
-The sender examines only earlier ack-eliciting packets still outstanding when a newly received ACK advances `largest_acked`. The proposed starting rules are:
+The sender examines only earlier ack-eliciting packets still outstanding after a later PN has been acknowledged. The draft uses two loss tests:
 
-1. **Packet threshold:** declare the earlier packet lost after ACK ranges confirm three distinct higher-numbered ack-eliciting packets. Count ACKed packet entries, not raw PN distance.
-2. **Time threshold:** once a later packet is acknowledged, declare the earlier packet lost when its age reaches `max(9/8 * max(smoothed_rtt, latest_rtt), 1 ms)`.
+1. **Custom packet-count threshold:** declare an earlier packet lost after ACK ranges confirm three distinct higher-numbered packets whose sent-packet records are marked ack-eliciting. This draft counts confirmed packet entries, not raw PN distance.
+2. **Time threshold:** once any later PN is acknowledged, declare the earlier packet lost when its age reaches `max(9/8 * max(smoothed_rtt, latest_rtt), 1 ms)`. If it is not old enough when the ACK arrives, schedule its deadline in `loss_time` and check again when that timer expires.
 
-RFC 9002 recommends 3 as its initial packet reordering threshold, along with a 9/8 time multiplier and 1 ms timer granularity. This draft borrows those starting values but adapts the packet trigger: it counts three later ACKed ack-eliciting packets instead of using raw PN distance. RFC 9002 packet-number-distance detection assumes no sender-induced gaps; this draft assigns PNs to ACK-only packets that do not elicit ACKs, so counting ACKed packets avoids treating those numbers as loss evidence. These are technical references for a teaching baseline, not CO3094 requirements or proof of QUIC compatibility. A reordering-heavy path can still cause spurious loss; a later ACK for a packet already marked lost is accepted as a late ACK and can cancel a queued retransmission.
+#### The custom count is different from QUIC's packet-number distance
+
+RFC 9002 Section 6.1.1 recommends an initial threshold of 3. Its Appendix A.10 pseudocode applies that threshold to raw packet-number distance: an outstanding PN is packet-threshold lost when `largest_acked >= packet.PN + 3`. The pseudocode explicitly assumes there are no sender-induced gaps in the packet-number space. That is not this draft's rule.
+
+This design assigns PNs to pure ACK-only packets, which do not ask the peer to ACK them. Its custom rule filters later ACKed PNs using each sent packet's `ack_eliciting` flag. The count helper counts each higher PN once only when its sent-packet record is acknowledged (ACKED or LATE_ACKED) and marked ack-eliciting. The receiver still records ACK-only PNs in its bounded receive history, so those PNs may appear in an ACK range sent for other traffic. The PNs are sent, not skipped; the design intentionally counts only ack-eliciting packets as the custom evidence. This choice can delay detection when ACK-only PNs fall between a lost packet and later data.
+
+**Worked comparison:** PN 100 carries reliable bytes 0-99 and is lost. The sender then transmits pure ACK-only PNs 101 and 102, followed by ack-eliciting PN 103. The receiver gets 101-103 and returns ACK range [101,103]. No PN is skipped: the numeric distance spans two ACK-only sends, while the custom count measures later ack-eliciting evidence. Assume the time threshold has not expired. Under RFC 9002's raw-distance test, `103 >= 100 + 3`, so the packet threshold can mark PN 100 lost. Under this draft's custom count, only PN 103 is a later ACKed ack-eliciting packet; PNs 101 and 102 are ACK-only, so the count is 1 and the packet-count threshold does not mark PN 100 lost yet. The sender waits for two more distinct later ack-eliciting ACKs or for `loss_time`. These rules are deliberately different and are not equivalent.
+
+RFC 9002 also recommends the 9/8 time multiplier and 1 ms timer granularity. Those values are technical references for this teaching baseline, not CO3094 requirements or proof of QUIC compatibility. A reordering-heavy path can still cause spurious loss; a later ACK for a packet already marked lost is accepted as a late ACK and can cancel a queued retransmission.
 
 In this baseline, assigned reliable control ranges stay useful until ACK or connection failure. The sender cannot silently abandon an assigned byte offset because that would leave an ordered-stream gap. Application cancellation after assigning an offset needs an explicit reset/cancel rule, which is outside this draft.
 
@@ -131,6 +139,8 @@ PTO = smoothed_rtt + max(4 * rttvar, timer_granularity) + max_ack_delay
 For startup, the draft uses the RFC 9002 initial RTT reference of 333 ms and initializes `rttvar` to half of that until a sample arrives. The draft uses a 1 ms timer granularity and the RFC 9000 default `max_ack_delay` of 25 ms unless the peers negotiate another value. These are borrowed reference defaults, not instructor requirements. If an illustrative measured RTT is `smoothed_rtt = 80 ms`, `rttvar = 10 ms`, and `max_ack_delay = 25 ms`, then `PTO = 80 + max(40, 1) + 25 = 145 ms`. This arithmetic is an example, not a claim about the course VM or expected network.
 
 On each consecutive PTO expiry, double the wait period. Send one congestion-controlled, ack-eliciting probe under a new PN. It can carry the oldest still-useful reliable range; if there is no such data, send a small PING/probe. A PTO alone does not mark earlier packets lost and does not itself constitute a Congestion Control loss event. Reset the backoff when a newly ACKed ack-eliciting packet provides progress.
+
+Use one loss-detection timer. If `loss_time` is set, arm the timer for its earliest deadline and do not arm a competing PTO timer. When that timer expires, run `on_loss_time_expiry(now)` and re-arm from the recomputed state. Only when no time-loss deadline exists does the timer use the PTO deadline. If the time-loss check removes the last scheduled deadline and an ACK-eliciting packet is still outstanding, the newly armed PTO may already be due and can fire immediately. A PTO expiry sends a probe only; it never declares existing packets lost.
 
 For a bounded teaching example, this draft proposes at most **five PTO probe attempts without ACK progress**. If all five probes fail to produce progress by the following PTO expiry, report connection failure. Five is an application-policy assumption for discussion, not an RFC recommendation or a CO3094 value. The pair must choose or replace it based on application tolerance and tests. The implementation would also cap the total no-progress duration to avoid waiting forever if timer behavior changes.
 
@@ -177,23 +187,66 @@ on_ack(ack, now):
     sample_RTT_from_one_eligible_newly_acked_packet(ack.ack_delay, now)
     largest_acked = max(largest_acked, ack.largest_acked)
 
-    for packet in older_in_flight_packets_below(largest_acked):
-        if count_later_acked_ack_eliciting_packets(packet.PN) >= 3
-           or age(packet, now) >= max(9/8 * max(smoothed_rtt, latest_rtt), 1 ms):
-            packet.state = LOST
-            subtract_its_congestion_bytes_once(packet)
-            report_confirmed_loss(packet)
-            for range in packet.reliable_ranges:
-                if range_is_not_confirmed(range) and range_is_still_useful(range):
-                    queue_range_for_retransmission(range)
-            discard_lost_expiring_updates_without_retransmitting_them(packet)
+    recompute_loss_time_and_detect_due_packets(now)
 
     if newly_acked contains ACK-eliciting progress:
         pto_count = 0
-    recompute_loss_time_PTO_and_send_eligibility()
+    set_loss_detection_timer(now)
 ```
 
-The time threshold is evaluated only after a later packet has been acknowledged. A PN gap alone is not a loss declaration.
+`recompute_loss_time_and_detect_due_packets(now)` uses the current time threshold and scans outstanding ack-eliciting packets below `largest_acked`:
+
+    recompute_loss_time_and_detect_due_packets(now):
+        loss_time = NONE
+        loss_delay = max(9/8 * max(smoothed_rtt, latest_rtt), 1 ms)
+        for packet in older_in_flight_packets_below(largest_acked):
+            if count_later_acked_ack_eliciting_packets(packet.PN) >= 3:
+                declare_packet_lost(packet, reason="custom packet-count threshold")
+            else if now >= packet.sent_time + loss_delay:
+                declare_packet_lost(packet, reason="time threshold")
+            else:
+                loss_time = min_or_set(loss_time, packet.sent_time + loss_delay)
+
+    declare_packet_lost(packet, reason):
+        packet.state = LOST
+        subtract_its_congestion_bytes_once(packet)
+        report_confirmed_loss(packet, reason)
+        for range in packet.reliable_ranges:
+            if range_is_not_confirmed(range) and range_is_still_useful(range):
+                queue_range_for_retransmission(range)
+        discard_lost_expiring_updates_without_retransmitting_them(packet)
+
+If there is no acknowledged later PN, the sender has no time-threshold candidate yet. A PN gap alone is not a loss declaration.
+
+### Sender: loss-time and PTO timer events
+
+    on_loss_time_expiry(now):
+        if loss_time is NONE or loss_time > now:
+            set_loss_detection_timer(now)  // stale or early wakeup
+            return
+
+        // A later ACK already exists; do not wait for another one.
+        recompute_loss_time_and_detect_due_packets(now)
+        set_loss_detection_timer(now)
+
+    set_loss_detection_timer(now):
+        if loss_time is not NONE:
+            arm_single_timer(loss_time, mode=LOSS_TIME)
+            return
+        if any_ack_eliciting_packet_is_outstanding:
+            base_PTO_period = smoothed_rtt + max(4 * rttvar, 1 ms) + max_ack_delay
+            arm_single_timer(time_of_last_ack_eliciting_packet + base_PTO_period * 2^pto_count, mode=PTO)
+        else:
+            cancel_single_timer()
+
+    on_loss_detection_timer_expiry(now):
+        if timer_mode == LOSS_TIME:
+            on_loss_time_expiry(now)
+        else if timer_mode == PTO:
+            on_PTO_expiry()
+            set_loss_detection_timer(now)
+
+When a time-loss deadline and PTO could otherwise be due, the loss-time mode takes precedence. After that pass, the timer is recomputed; PTO is armed only if no loss-time deadline remains.
 
 ### Sender: PTO and retransmission
 
@@ -213,7 +266,7 @@ on_PTO_expiry():
         send_small_PING(fresh_packet_number, congestion_controlled=true)
 
     probes_without_ack_progress += 1
-    next_PTO_period *= 2
+    pto_count += 1
     do_not_mark_previous_packets_lost()
 ```
 
@@ -233,8 +286,7 @@ on_packet(packet):
         return
 
     record_packet_number(packet.PN)
-    if packet.is_ack_eliciting:
-        add_packet_to_received_ACK_ranges(packet.PN)
+    add_packet_to_received_ACK_ranges(packet.PN)
 
     for frame in packet.frames:
         if frame is reliable data:
@@ -252,7 +304,7 @@ on_packet(packet):
         else:
             process_control_frame_idempotently(frame)
 
-    if packet_is_gap_or_out_of_order(packet.PN):
+    if packet.is_ack_eliciting and packet_is_gap_or_out_of_order(packet.PN):
         send_ACK_promptly()
     else if ack_eliciting_packet_count >= 2 or ACK_delay_timer_expired:
         send_ACK_with_bounded_recent_ranges()
@@ -284,16 +336,16 @@ sequenceDiagram
     participant S as Sender
     participant N as Network
     participant R as Receiver
-    S->>N: PN 14 carries reliable offset 0..99
-    N->>N: Drop PN 14
-    S->>N: PN 15 carries reliable offset 100..199
-    N->>R: Deliver PN 15
-    R-->>S: ACK range [15,15]
-    S->>S: Wait for packet/time threshold
-    S->>N: PN 18 retransmits only offset 0..99
-    N->>R: Deliver PN 18
-    R->>R: Fill gap and deliver in order
-    R-->>S: ACK ranges [18,18] and [15,15]
+    S->>N: Reliable data PN 100, bytes 0-99
+    N->>N: Drop PN 100
+    S->>N: Send later PNs 101-105
+    Note over S,N: PNs 101-102 ACK-only, 103-105 ack-eliciting
+    R-->>S: ACK range [101,105], PN 100 missing
+    Note over S,N: Custom ACKed count = 3 (103-105), ACK-only excluded
+    S->>S: Threshold reached, mark PN 100 lost
+    S->>N: Retransmit bytes 0-99 as PN 106
+    N->>R: PN 106 fills the gap, deliver data once
+    R-->>S: ACK range [101,106]
 ```
 
 ### Diagram 3: ACK lost after data arrived
@@ -376,6 +428,10 @@ The sender declares PN 80 lost after the configured threshold and queues its rel
 
 The application queues update sequence 22, then sequence 23. If 22 expires locally before send, it is dropped. If 23 is already delivered and 22 later arrives, the receiver drops sequence 22 as older. No reliable retransmission is scheduled for either real-time packet. Exact end-to-end age checking depends on the clock/freshness contract in the open questions below.
 
+### Example F: custom packet count versus QUIC packet-number distance
+
+PN 100 carries reliable bytes 0-99 and is lost. PNs 101 and 102 are pure ACK-only packets, and PN 103 is a later ack-eliciting packet. The receiver gets PNs 101-103 and returns ACK range [101,103]. Assume the time threshold has not expired. RFC 9002's raw-distance condition is satisfied because `103 >= 100 + 3`, so its packet threshold can mark PN 100 lost. This draft counts only one later ACKed ack-eliciting packet, PN 103, so its custom count threshold has not fired; it waits for two more such ACKs or the scheduled time threshold. ACK ranges can report the ACK-only PNs, but those PNs do not count toward this draft's custom rule.
+
 ## 11. Required scenario table
 
 | Scenario | What happens | Sender action | Receiver action | Outcome |
@@ -416,6 +472,7 @@ This table identifies proposed messages across component boundaries. It does not
 | To Flow Control | Channel ID, reliable stream offset, new-byte length, out-of-order stored ranges, next contiguous delivery offset, current absolute credit | New offsets consume credit; retransmitting an already-authorized offset does not consume new application credit again; out-of-order storage does consume receiver memory |
 | From Flow Control | Connection and per-channel absolute max offsets; buffer capacity freed by application consumption | Accept only increasing limits; do not infer freed application memory from a packet ACK |
 | To Congestion Control | Newly ACKed PN/range, confirmed loss with reason, RTT sample and ACK delay, PTO probe event, retransmission relation old-data-range/new-PN, wire bytes, bytes-in-flight add/remove | Count each packet's in-flight bytes once; a PTO is not a confirmed loss; retransmissions use the same path budget |
+| To Congestion Control (timer) | Loss-time deadline and timer mode; any packets newly declared lost at expiry | A loss-time expiry rechecks packets without a new ACK; PTO is armed only when no loss-time deadline exists and sends a probe without declaring loss |
 | From Congestion Control | Current send budget, pacing permission, recovery state, and policy for ACK-only packets | Reliability must defer rather than send around congestion control; expired updates can be dropped |
 
 See [Reliability interface review](reliability-interface-review.md) for decisions that the three pairs should make together.
@@ -426,15 +483,16 @@ These are proposed tests, not completed tests:
 
 1. Drop one reliable packet, ACK three later ack-eliciting packets, and confirm only the missing useful byte range is scheduled with a new PN.
 2. ACK only two later ack-eliciting packets and confirm packet-threshold loss is not declared yet.
-3. Send ACK-only packets between data PNs and confirm those non-ack-eliciting numbers do not satisfy the packet threshold.
-3. Delay a lower PN and confirm an ACK for later traffic triggers the prompt ACK policy and avoids immediate spurious retransmission.
-4. Drop an ACK after a command is delivered; use a PTO probe and verify the command is delivered once.
-5. Deliver the same PN twice; verify the second copy does not repeat frame processing.
-6. Retransmit the same reliable offset in a new PN; verify the application sees one complete message.
-7. Make a later reliable range arrive first; verify it is buffered only within flow credit and same-channel delivery waits for the gap.
-8. Send an update with an older sequence after a newer one; verify the old update is dropped and never retransmitted.
-9. Deliver a late ACK after loss declaration; verify bytes-in-flight is not decremented twice and an unsent retry is canceled.
-10. Suppress all ACK progress; verify PTO backoff and the configured no-progress failure cap.
+3. Place ACK-only PNs between a lost PN and a later ack-eliciting PN; verify raw PN distance and this draft's custom count produce different results.
+4. ACK a later PN before the time threshold, provide no further ACK, and confirm the scheduled loss-time expiry rechecks and declares the packet lost.
+5. Delay a lower PN and confirm an ACK for later traffic triggers the prompt ACK policy and avoids immediate spurious retransmission.
+6. Drop an ACK after a command is delivered; use a PTO probe and verify the command is delivered once.
+7. Deliver the same PN twice; verify the second copy does not repeat frame processing.
+8. Retransmit the same reliable offset in a new PN; verify the application sees one complete message.
+9. Make a later reliable range arrive first; verify it is buffered only within flow credit and same-channel delivery waits for the gap.
+10. Send an update with an older sequence after a newer one; verify the old update is dropped and never retransmitted.
+11. Deliver a late ACK after loss declaration; verify bytes-in-flight is not decremented twice and an unsent retry is canceled.
+12. Suppress all ACK progress; verify PTO backoff and the configured no-progress failure cap.
 
 No transport code was written or run for this draft.
 
@@ -446,6 +504,7 @@ No transport code was written or run for this draft.
 - What initial RTT, maximum ACK delay, buffer sizes, update freshness rule, and no-progress cap suit the intended application and test network?
 - What clock model makes a real-time update deadline meaningful across hosts? Until agreed, this draft guarantees sender-side queue expiry and sequence freshness, not shared-clock deadline accuracy.
 - How many ACK ranges may be retained, and what packet-number floor makes older packet handling safe?
+- Should the custom packet-count threshold remain at three later ACKed ack-eliciting packets, knowing it differs from QUIC's raw PN-distance test?
 - Should pure ACK-only packets count toward Congestion Control's bytes-in-flight or pacing budget? The ACK loop is suppressed either way.
 - Does Flow Control want connection credit only, per-channel credit only, or both?
 - Does Congestion Control agree to receive PTO as a probe event distinct from confirmed loss?
@@ -467,7 +526,7 @@ No transport code was written or run for this draft.
 | [RFC 9000, Sections 13.2, 18.2, and 19.3](https://www.rfc-editor.org/rfc/rfc9000.html#section-13.2) | ACK ranges, delayed ACK behavior, default maximum ACK delay, bounded ACK history | ACK ranges here are only a proposed conceptual frame |
 | [RFC 9000, Section 13.3](https://www.rfc-editor.org/rfc/rfc9000.html#section-13.3) | Retransmit information in new frames/packets rather than replaying an old packet | This draft uses simpler application-level stream ranges |
 | [RFC 9000, Section 4](https://www.rfc-editor.org/rfc/rfc9000.html#section-4) | Receiver credit as absolute limits and bounded flow-controlled streams | The Flow Control pair still owns this design decision |
-| [RFC 9002, Sections 5 and 6](https://www.rfc-editor.org/rfc/rfc9002.html#section-6), [Appendix A.2](https://www.rfc-editor.org/rfc/rfc9002.html#appendix-A.2) | RTT estimation, packet/time loss thresholds, PTO, initial RTT reference, and recommended starting constants | Borrowed teaching references do not make this design QUIC-compliant |
+| [RFC 9002, Sections 5, 6.1.1-6.2, and Appendices A.2, A.8-A.10](https://www.rfc-editor.org/rfc/rfc9002.html#section-6.1.1) | RTT estimation, QUIC's raw packet-number-distance test, time-threshold deadline, single loss-detection timer, PTO, initial RTT reference, and recommended starting constants | The custom count is deliberately different; borrowed teaching references do not make this design QUIC-compliant |
 | [RFC 9002, Section 7](https://www.rfc-editor.org/rfc/rfc9002.html#section-7) | Congestion signals, in-flight accounting, and recovery boundaries | Congestion window policy remains with the Congestion Control pair |
 | [RFC 9221, Sections 5.2-5.4](https://www.rfc-editor.org/rfc/rfc9221.html#section-5) | QUIC DATAGRAM frames are not retransmitted, may be ACK-eliciting, and remain subject to congestion control | The proposed real-time frame is not a QUIC DATAGRAM frame |
 | [Valve GameNetworkingSockets packet wire format](https://github.com/ValveSoftware/GameNetworkingSockets/blob/master/src/steamnetworkingsockets/clientlib/SNP_WIRE_FORMAT.md) | Example of reliable message segments, sequence positions, ACK blocks, and fresh packet numbers for retransmission | This group draft does not claim protocol or wire-format compatibility |
@@ -477,7 +536,7 @@ No transport code was written or run for this draft.
 ### REL-01 - Nguyễn Đăng Gia Đạo, tentative
 
 1. **Why are packet number and stream offset separate?** A PN identifies this transmission attempt; a stream offset identifies the reliable bytes. The same bytes can be retransmitted under a new PN.
-2. **What does an ACK range prove?** It proves which ack-eliciting packets reached the receiver's transport processing. It does not prove that the application committed a command.
+2. **What does an ACK range prove?** It reports which received packet numbers reached transport processing, including ACK-only PNs when they are reported in a later range. It does not prove that the application committed a command.
 3. **How does a lost ACK recover?** The receiver retains recent ranges; later traffic or a PTO probe can cause those ranges to be sent again. Duplicate suppression protects the application if a retry was already sent.
 
 ### REL-02 - Nguyễn Đổng Thiên Kỳ, tentative

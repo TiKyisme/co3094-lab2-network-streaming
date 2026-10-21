@@ -82,13 +82,13 @@ Transport duplicate suppression có thể ngăn một command đang còn trong c
 
 ### 5. Khi nào gap trở thành loss trong baseline?
 
-**Trả lời ngắn:** khi có ba packet ack-eliciting mới hơn được ACK hoặc time threshold được đáp ứng. Packet number của ACK-only không được tính vào ngưỡng này. Một PN bị thiếu riêng lẻ chưa đủ.
+**Trả lời ngắn:** theo rule tùy chỉnh của draft, cần ba packet PN cao hơn, đã ACK, và có cờ ack-eliciting; hoặc phải tới time threshold đã lên lịch. PN của ACK-only không được tính vào packet-count rule.
 
-**Vì sao:** chờ thêm bằng chứng giảm spurious retransmission do reordering. Các ngưỡng là technical reference từ RFC 9002, không phải yêu cầu môn học.
+**So với QUIC:** RFC 9002 dùng khoảng cách PN thô: nếu PN 100 mất và PN 103 được ACK, điều kiện `103 >= 100 + 3` có thể đạt. Draft đếm packet ack-eliciting được ACK; nếu PN 101-102 là ACK-only thì chúng không tính và count mới là 1. Hai rule khác nhau, không tương đương. Các giá trị 3, 9/8 và 1 ms là tham khảo kỹ thuật từ RFC 9002, không phải yêu cầu môn học.
 
 ### 6. PTO hết hạn có nghĩa packet bị mất không?
 
-**Trả lời ngắn:** không. Sender gửi probe để lấy ACK progress. Packet chỉ được mark lost theo loss-detection thresholds.
+**Trả lời ngắn:** không. PTO gửi probe để tìm ACK progress; nó không tự mark packet cũ lost. Nếu `loss_time` tới hạn, loss-time handler mới kiểm tra và mark các packet đã đủ time threshold.
 
 **Vì sao:** PTO còn khắc phục được ACK bị mất hoặc tail loss; nó không chứng minh packet trước đó không tới.
 
@@ -140,6 +140,7 @@ Transport duplicate suppression có thể ngăn một command đang còn trong c
 Đọc trong [reliability-design.md](reliability-design.md):
 
 - Mục 3-5: phân biệt PN, stream offset, ACK semantics và state tables.
+- Mục 7 và Example F: tự giải thích ACK-only PN nào xuất hiện trong ACK range và vì sao custom packet count khác QUIC raw PN distance.
 - Mục 8: pseudocode xử lý ACK và receiver ACK generation.
 - Mục 9, diagrams 1 và 3: normal ACK và lost ACK.
 - Mục 16: chốt packet/message semantics, ACK policy, ACK range cap.
@@ -156,7 +157,7 @@ Review checklist cá nhân:
 
 Đọc trong [reliability-design.md](reliability-design.md):
 
-- Mục 7-8: loss thresholds, PTO, backoff, retry cap, pseudocode.
+- Mục 7-8: tự giải thích custom threshold so với RFC 9002, `loss_time` re-evaluation khi không có ACK mới, PTO timer precedence, backoff, retry cap và pseudocode.
 - Mục 9, diagrams 2, 4 và loss/recovery state diagram.
 - Mục 10-13: ví dụ, scenario table và phạm vi HoL.
 - Mục 15-16: test cases dự kiến và quyết định còn mở.

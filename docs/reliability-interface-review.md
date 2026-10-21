@@ -24,13 +24,14 @@ Reliability reports packet and recovery events. Congestion Control owns the path
 |---|---|---|
 | Packet ACK | PN/range, newly ACKed wire bytes, ACK delay | ACK growth and bytes-in-flight removal |
 | RTT | Send time, ACK arrival time, bounded peer ACK delay | RTT smoothing and pacing update |
-| Confirmed loss | PN, size, reason (packet threshold or time threshold), any late-ACK signal | Recovery epoch and congestion-window response |
-| PTO | Expiration count, probe PN, whether probe carries retry data | Probe budget and whether probe sends while near congestion limit |
+| Confirmed loss | PN, size, reason (custom packet-count threshold or time threshold), any late-ACK signal | Recovery epoch and congestion-window response |
+| Loss-time expiry | Scheduled deadline and packets newly declared lost by re-evaluation | Process time-threshold loss without waiting for another ACK |
+| PTO | Expiration count, probe PN, whether probe carries retry data; expiry alone is not loss | Probe budget and whether probe sends while near congestion limit |
 | Retransmission | Old reliable range and fresh PN/wire bytes for the new packet | Count retransmission as a new in-flight transmission |
 | Real-time packet | PN, update sequence, size, no-retransmit flag | Whether it can be delayed or dropped under congestion |
-| Pure ACK-only packet | Rate-limited ACK packet and size; it is non-ack-eliciting in this draft | Whether ACK bytes count toward pacing or bytes-in-flight |
+| Pure ACK-only packet | Rate-limited ACK packet and size; its PN can be reported in a later ACK range but is excluded from the custom later-ack-eliciting count | Whether ACK bytes count toward pacing or bytes-in-flight |
 
-Draft agreement: PTO expiry is not itself a confirmed loss event; retransmission uses the same congestion budget; ACK-only traffic must not create an ACK loop. Do not change the Congestion Control document until its owners accept these boundaries.
+Draft agreement: ACK ranges record received PNs, including ACK-only PNs, while the custom packet-count threshold counts only later ACKed packets marked ack-eliciting in sent-packet state. PTO expiry is not itself a confirmed loss event; loss-time expiry rechecks time-threshold candidates. Retransmission uses the same congestion budget, and ACK-only traffic must not create an ACK loop. Do not change the Congestion Control document until its owners accept these boundaries.
 
 ## Reliability <-> application framing
 
@@ -44,7 +45,7 @@ Draft agreement: PTO expiry is not itself a confirmed loss event; retransmission
 ## Joint review agenda
 
 1. Confirm each component's units: packet counts, bytes, offsets, milliseconds.
-2. Agree whether ACK ranges include only ack-eliciting packets and how many ranges are retained.
+2. Agree how many ACK ranges are retained and the PN floor; the draft records all received PNs but filters the custom packet threshold by ack-eliciting state.
 3. Verify that bytes-in-flight is incremented/decremented once per packet transmission, including retransmission packets.
 4. Confirm that receive credit covers both in-order and out-of-order reliable data.
 5. Agree how a zero-credit probe is distinguished from a PTO probe.

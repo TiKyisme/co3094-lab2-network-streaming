@@ -37,3 +37,9 @@ Exact prompt: [2026-10-21-execution-documentation-handover.txt](2026-10-21-execu
 Source: C:\Users\TiKy\.codex\attachments\ef74c1f9-126a-447c-8bcd-e5d4ecdb733b\Pasted text.txt.
 
 Exact prompt: [2026-10-21-reliability-design-draft.txt](2026-10-21-reliability-design-draft.txt). Source and saved copy are byte-identical (16,438 bytes; SHA-256 adb66bf54f8964b9233ee1f63a6adf4c5b9a70d9eaaf5cd942e44410e80dadd4). This is the master task prompt, not a student prompt or full session export. The two owners' actual prompt evidence remains pending.
+
+## 2026-10-21 — Reliability final technical correction
+
+Source: User message in the current Codex conversation; no separate attachment was supplied.
+
+Exact prompt: [2026-10-21-reliability-final-correction.txt](2026-10-21-reliability-final-correction.txt). Saved verbatim (2,235 bytes; SHA-256 3530ec029a0939f57d6c8604f7aeb74ed200b548bc232031e61a358416995620). This is task prompt evidence, not either student's actual prompt or a full session export.
