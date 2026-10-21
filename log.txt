@@ -263,3 +263,8 @@ Status:
 - HTTP_DEMO_STATUS=WAITING_FOR_MANUAL_TEST; STREAMING_DESIGN_STATUS=PROPOSED_NOT_REVIEWED_BY_PAIRS; roster remains partial.
 - Original course PDF/ZIP/pack/handoff and user skeleton remain untracked and were not staged. Only the new group reconstruction and authored handover files are candidates for Git.
 - Git commit/push and remote verification are recorded after the final staged review.
+
+Post-push verification:
+- Commit `10087e85a7c8d0e57995156df2f1044077cd5f94` was pushed to `origin/main`; `git ls-remote origin refs/heads/main` matched the same hash.
+- GitHub API readback confirmed the main guide, short handover, assignments, announcement, review checklist, prompt instructions and Word fallback paths.
+- `git ls-files "*.pdf" "*.zip"` returned no tracked source PDFs or ZIPs. The provided course assets and old server skeleton remain untracked and were left untouched.

@@ -118,6 +118,7 @@ NEXT_ACTION: start the intended Ubuntu VM and provide `ip -4 addr` output
 - Branch: main, tracking origin/main
 - Remote: `https://github.com/TiKyisme/co3094-lab2-network-streaming.git`
 - Last commit: HEAD; verify with `rtk git rev-parse HEAD`
+- Handover package commit `10087e85a7c8d0e57995156df2f1044077cd5f94` was pushed to `origin/main`; `git ls-remote` matched at the post-push check. GitHub API readback confirmed the guide, handover, assignments, announcement, review checklist, prompt instructions and DOCX paths.
 - The user-provided forum PDF, source ZIP, extracted pack and handoff are present as untracked repo-root copies. The PDF, ZIP and handoff byte-match the copies in the external course folder. They were left unchanged, unstaged and uncommitted; `git ls-files` contains no PDF or ZIP.
 - `server_skeleton_previous_upload.py` remains an untracked user file. The reconstructed example and handover docs are separate files; the original skeleton is not staged.
 
