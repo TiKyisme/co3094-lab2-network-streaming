@@ -24,6 +24,7 @@ The user supplied `CO3094_L07_source_handoff.md` and the actual source package i
 | General LMS announcement note | `src_2f001836c9a5`; `documents/00_course/announcements_ghi_chu__src_2f001836c9a5.md` | Document | General policy says practical classes submit reports; major assignments are evaluated with reports/presentations. It does not define Lab 2 evidence format |
 | CO3094 Lab 1 — Network infrastructure and Network applications | `src_bb5408286b99`; `sources/src_bb5408286b99__Lab1 Network infrastructure and Network applications - CO3094 -Lab1-Network Device.pdf` | PDF pp. 1–8 | p. 1 includes PC-to-HTTP-server work and network-programming outcome; pp. 5–6 show a separate GNS3/lighttpd static-IP HTTP exercise; p. 8 says sample `server.py`/`client.py` and a VM template are provided |
 | Sample network application — Sample NetApp | `src_b850d73292a7`; `sources/src_b850d73292a7__Sample network application - Sample_NetApp.pdf` | PDF pp. 7–8 | Embedded code images visually inspected. p. 7 shows a sample TCP accept/print server; p. 8 shows a client. Not the forum-overwritten HTTP handler |
+| LMS forum export — “Lab 1 - Network device and Network application” | User-supplied local PDF, outside Git | PDF pp. 1–3 | p. 1 gives listener `hostip = "0.0.0.0"`, port `22236`; p. 2 contains `new_connection(conn, addr)` and links `sample_code_http_server_process.txt`; p. 3 shows a historical `200 OK` and browser result. The linked file requires LMS login and was not retrieved |
 | Sample source index entries | `src_098d45bf7b43` client; `src_86ccb3bac15a` server | `03_SOURCE_INDEX.md` lines 500–507 and 548–555 | Original `.py` entries are marked unsupported/skipped; standalone files are not present in the ZIP |
 
 ## Sample server details — do not confuse with forum override
@@ -36,7 +37,13 @@ Sample_NetApp PDF p. 7 visually shows:
 - `server_program(host, port)` binds/listens; sample port is `22236`
 - `get_host_default_interface_ip()` probes a UDP route to `8.8.8.8:1`, then falls back to `127.0.0.1`
 
-Thus the printed sample demonstrates argument order and a sample port, but does not parse an HTTP request or send an HTTP response. The handoff's text-search claim that the exact name was absent from extracted text is accurate; visual PDF inspection found this different sample function. The exact LMS forum overwrite and matching current `server.py` are still missing.
+Thus the printed sample demonstrates its own argument order and port, but does not parse an HTTP request or send an HTTP response. The forum export separately confirms an overwritten handler with signature `new_connection(conn, addr)` and port `22236`; its linked complete server-process attachment remains unavailable. Reusing the sample's `(addr, conn)` thread arguments with the forum handler would reverse the expected arguments.
+
+## Lab 1 forum handler and demonstration
+
+The user-provided forum PDF was visually inspected on all three pages. The reply on p. 1 specifies listener IP `0.0.0.0` and port `22236`. Page 2 contains the HTTP response construction, `receive_http_header(conn)`, and `new_connection(conn, addr)`. Its attachment link is named `sample_code_http_server_process.txt`; an unauthenticated request redirects to BK-LMS login, and no matching `.py` or `.txt` source was found in the inspected local folders.
+
+Page 3 shows historical instructor-posted output with `HTTP/1.1 200 OK`, a 174-byte body, and a browser-rendered welcome page. The screenshot URL is `192.168.56.103:22236`, while the text above it says `192.168.56.100:22236`. This supports a past course demonstration only; current local VM settings and results remain unverified.
 
 ## Assignment 1 conflict evidence
 
@@ -51,7 +58,7 @@ See [requirements-matrix.md](requirements-matrix.md) for classification and [ope
 
 ## Runtime source still needed
 
-The CO3094 forum “Lab 1 - Network device and Network application” is not in the ZIP. The required overwritten `new_connection`, matching server source, actual HTTP request/response behavior, and final forum port are **UNVERIFIED**. No source ZIP/PDF/VM image was committed.
+The forum-overwritten function, its handler signature, HTTP response behavior, and listener settings are now verified from the user-supplied forum export. The complete linked server-process source, including the accept loop and thread argument order, remains **UNAVAILABLE** pending an authenticated LMS download or user-provided copy. No source ZIP/PDF/VM image was committed.
 
 
 ## External technical references (background, not course requirements)

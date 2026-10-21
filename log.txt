@@ -211,5 +211,27 @@ Git commit:
 - Previous verified HEAD: f7bec94d1598a19d3d39784676b579eade33b817.
 - This milestone's documentation/prompt-history update is pending commit and push.
 
+Correction recorded on 2026-10-21:
+- The prior source-recovery milestone was committed and pushed as `4d1a38f` before this follow-up. The pending line above describes its pre-commit state and was superseded.
+
 Next action:
 - User provides the exact forum post containing overwritten new_connection and its matching server.py; then perform guided VM configuration/test.
+
+[2026-10-21] [LAB 1 FORUM SOURCE RECOVERY]
+Task:
+- Inspect the Lab 1 LMS forum PDF supplied by the user after clarifying that the HTTP work was already completed in Lab 1.
+
+Verified source:
+- The three-page forum PDF was read and visually inspected. Page 1 contains the instructor's HTTP handler reply and says to set `hostip = "0.0.0.0"` and `port = 22236`.
+- Page 2 contains `receive_http_header(conn)` and the overwritten `new_connection(conn, addr)` handler. It prepares a static HTTP/1.1 200 response for GET and closes the connection.
+- Page 3 contains historical instructor-posted command-prompt output showing HTTP/1.1 200 OK and a browser-rendered page. The text above the image says 192.168.56.100:22236; the image address bar shows 192.168.56.103:22236. This is prior course-demo evidence, not a current test of the local VM.
+- The Sample NetApp PDF's separate server signature is `new_connection(addr, conn)` and its thread args use `(addr, conn)`, opposite the forum handler's expected positional order.
+
+Attachment/source limitation:
+- The forum links `sample_code_http_server_process.txt` (LMS file ID 84252). An unauthenticated request redirects to BK-LMS login. No credentials were used, and no matching `server.py` or attachment file was found in the inspected local folders.
+- The complete accept loop/thread call is still needed before running code. No course PDF or source attachment was copied into Git.
+
+Execution/state:
+- No VM settings changed. The local Ubuntu VM remains powered off; no current TCP, curl, browser, or server-log test was run.
+- Updated README, source inventory, requirements matrix, HTTP analysis, network setup/test cases, open questions, state, prompt history, and this log. Saved the user's exact PDF-path reply under prompts/.
+- This evidence update is included in the current repository milestone; remote status is verified after pushing.

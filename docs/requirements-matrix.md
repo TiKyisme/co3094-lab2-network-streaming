@@ -11,8 +11,9 @@ The two email excerpts were supplied by the user; the original mailbox and curre
 | Six-person team, approximately two students per feature | REQUIRED / SUPPORTED | Email B | The six-person Lab 2 design group is stated; this does not by itself settle Assignment 1 project grouping |
 | Preserve AI prompt history | REQUIRED | Email A and Email B | Preserve exact prompts and a private session export; no unreviewed export is committed |
 | Steam UDP gaming and Google QUIC | SUPPORTED examples | Email A | Reference examples, not a mandate to reproduce either full protocol |
+| Forum HTTP listener settings | SUPPORTED, instructor-provided implementation settings | User-supplied Lab 1 LMS forum export, pp. 1–2 | Specifies `hostip = "0.0.0.0"`, port `22236`, and handler signature `new_connection(conn, addr)`; complete linked server source is still unavailable |
 | Assignment 1 oral evaluation in the week containing 2026-11-17 | REQUIRED for Assignment 1 | Email B excerpt | This is an evaluation-week statement, not a Lab 2 deadline |
-| Lab 2 must use UDP, use port 22236, submit screenshots/report/code, or implement the three mechanisms | UNVERIFIED | Not stated in Email A/B | Do not infer from Assignment 1 or Lab 1 requirements |
+| Lab 2 must use UDP, submit screenshots/report/code, or implement the three mechanisms | UNVERIFIED | Not stated in Email A/B | Do not infer from Assignment 1 or Lab 1 requirements. The forum port applies to its HTTP server task, not the streaming design |
 | Generic LMS note says practical classes submit reports; major assignments have reports and presentations | SUPPORTED general course policy | `Announcements - Ghi chú`, source ID `src_2f001836c9a5` | Does not specify a Lab 2 screenshot, file format, or exact report content |
 
 ## Assignment 1 statements in the CO3094 source pack
@@ -34,7 +35,7 @@ These statements are relevant to later Assignment 1 implementation and to whethe
 | “Suggested Deadline: Sunday, November 17, 2026, at 11:59 PM” | Same PDF, p. 4 | Date/weekday conflict; the calendar date 2026-11-17 is Tuesday |
 | “Deadline: 17 Nov 2026” | Assignment 1 socket-programming LMS note, `src_4c5a77dffaa2`, document | Packaged LMS note has no weekday/time; live page not opened |
 | Oral exam in week 47 / week containing Nov 17 | Email B | Separate oral-evaluation statement; does not resolve the PDF's suggested hand-in timestamp |
-| Sample `server.py` port 22236 | Sample NetApp PDF, `src_b850d73292a7`, p. 7 (embedded code image) | SUPPORTED for that sample only; not verified for the forum-overwritten Lab 2 server |
+| Sample server uses port 22236 | Sample NetApp PDF, `src_b850d73292a7`, p. 7 (embedded code image) | SUPPORTED for that sample; the forum independently specifies the same port for its handler, but uses a different `new_connection` argument order |
 
 ## Reported conflicts — preserve, do not resolve by assumption
 
@@ -48,4 +49,4 @@ These statements are relevant to later Assignment 1 implementation and to whethe
 
 ## Proposal status
 
-Current files under `docs/*-design.md` are **PROPOSED Lab 2 drafts**. They are not a final Assignment 1 architecture, do not select a winner among C-01 through C-05, and are not implementations. The Sample NetApp page 7 port/function is a course reference sample only; the exact overwritten forum code remains unverified.
+Current files under `docs/*-design.md` are **PROPOSED Lab 2 drafts**. They are not a final Assignment 1 architecture, do not select a winner among C-01 through C-05, and are not implementations. The forum handler and port are verified, but the complete linked server source and its compatibility with the handler remain unverified.

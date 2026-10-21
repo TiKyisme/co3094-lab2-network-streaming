@@ -19,3 +19,8 @@ Exact attachment: [2026-10-21-phase1b-phase3.txt](2026-10-21-phase1b-phase3.txt)
 Exact user reply: `"D:\\01. Dai_Hoc_Dai_Dai_Di\\05. HKI_NAM3\\Mạng máy tính (TN) (CO3094)_NGUYỄN PHƯƠNG DUY (CQ_HK261) [L07]\\CO3094_L07_source_handoff.md"`
 
 The sibling ZIP was found beside this file. This path clarification is recorded as user input, not generated prompt text.
+
+
+## 2026-10-21 — User supplied Lab 1 forum export
+
+The exact user reply identifying the LMS PDF and noting that the Lab 1 work was already completed is preserved in [2026-10-21-lab1-forum-source-reply.txt](2026-10-21-lab1-forum-source-reply.txt). The forum PDF is outside Git; only source findings are summarized in the project documents.

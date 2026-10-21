@@ -1,6 +1,6 @@
 # Windows host ↔ Ubuntu guest HTTP setup
 
-**Status:** Environment discovered; **WAITING_FOR_FORUM_SOURCE_AND_MANUAL_TEST**. No VM settings were changed and no connection test was run.
+**Status:** Environment discovered; forum handler/settings verified; **WAITING_FOR_MATCHING_SERVER_SOURCE_AND_MANUAL_TEST**. No VM settings were changed and no current connection test was run.
 
 ## Read-only environment discovery (2026-10-21)
 
@@ -18,11 +18,15 @@
 
 The ZIP contains no OVA, so the registered `ubuntu` VM's identity as the instructor's intended VM is not established.
 
+## Instructor forum source and historical result
+
+The supplied Lab 1 forum export specifies listener `hostip = "0.0.0.0"` and port `22236`; the handler signature is `new_connection(conn, addr)`. The forum's linked `sample_code_http_server_process.txt` attachment is still needed to confirm the server loop and thread arguments. A historical instructor screenshot shows HTTP 200 and browser rendering at `192.168.56.103:22236`; the text above that image says `.100`. Neither address is confirmed for the local VM.
+
 ## Topology decision
 
-**PROPOSED:** Host-only is preferred for isolated host↔guest access; add NAT only if Ubuntu needs Internet. The local `ubuntu` VM is currently Bridged over Wi-Fi; no settings have been changed.
+**PROPOSED:** Host-only is preferred for isolated host↔guest access; add NAT only if Ubuntu needs Internet. The local `ubuntu` VM is currently Bridged over Wi-Fi; no settings have been changed. The forum's `0.0.0.0` is a wildcard listener address, while Windows must connect to the guest's actual IPv4 address. The historical `.103` screenshot does not establish the current VM's address or adapter mode.
 
-There is a source-specific caveat: the Sample NetApp page 7 code discovers the outgoing-interface address by attempting a UDP route to `8.8.8.8:1` and falls back to loopback. With Host-only alone, that helper may fall back to `127.0.0.1`; with NAT + Host-only, it may select the NAT-side guest address. This is an inference from the sample code, not a test result. The forum-overwritten version may change the bind logic. Verify its actual listening address before choosing the final adapter combination.
+The separate Sample NetApp page 7 helper discovers an outgoing-interface address through a UDP route attempt and falls back to loopback; that behavior belongs to the sample only. The forum specifies `0.0.0.0`, but the linked server file is needed to confirm how it applies that setting. Verify the actual listener with `ss -lntp` before choosing or changing the adapter combination.
 
 ## Guided manual sequence after source confirmation
 
