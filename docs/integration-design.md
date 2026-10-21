@@ -48,3 +48,8 @@ Receiver buffer is nearly full and advertises 20 KiB additional reliable credit.
 - Can an unreliable update expire without blocking the reliable stream?
 - Can a lost ACK/credit update recover without duplicate delivery or deadlock?
 - Are resource caps and deadlines explicit?
+
+
+## Assignment 1 compatibility note
+
+The current integration assumes one UDP-oriented transport with reliable and expiring classes. Assignment 1 PDF pp. 1–3 also describes TCP reliable transfer/handshake and UDP file reassembly. Keep this design as the Lab 2 draft; do not declare it the final Assignment 1 architecture until those conflicting transport statements are resolved. File chunking, reassembly, integrity checks, and any TCP path remain out of scope here.

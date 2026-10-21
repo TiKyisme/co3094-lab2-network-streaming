@@ -1,17 +1,17 @@
-# Team assignments — placeholders
+# Team assignments — tentative
 
-**Status:** PROPOSED until all six members confirm their names and workload.
+The pre-existing Google Doc names the Reliability pair below. Per the user's instruction, retain those names as **TENTATIVE** until the roster is confirmed.
 
-| Pair | Feature | Placeholder owners | Deliverable to group |
+| Pair | Feature | Owners | Status / deliverable |
 |---|---|---|---|
-| A | Reliability | Member A, Member B | Packet/message numbering, ACK/loss/retry rules, ordering and expiry examples |
-| B | Flow Control | Member C, Member D | Buffer model, advertised credit, zero-credit and slow-receiver behavior |
-| C | Congestion Control | Member E, Member F | Signals, cwnd/pacing algorithm, RTT-without-loss behavior, trade-offs |
+| A | Reliability | Nguyễn Đăng Gia Đạo; Nguyễn Đổng Thiên Kỳ | **TENTATIVE** from the earlier guide; confirm both remain in the team |
+| B | Flow Control | Member C, Member D | Placeholder; names not confirmed |
+| C | Congestion Control | Member E, Member F | Placeholder; names not confirmed |
 
 ## Shared responsibilities
 
-- All six agree on the application workload and packet fields.
-- All six review how reliability, flow credit, and congestion budget interact.
-- The group assigns one primary and one backup operator for the Windows↔Ubuntu demo; everyone should be able to explain it.
-- Each pair preserves its real prompts and identifies AI-generated suggestions versus group-verified decisions.
-- Names from the older guide are not carried forward because the roster was not confirmed and only one pair was named there.
+- All six agree on workload, packet fields, and how the three mechanisms interact.
+- All six review Assignment 1 conflicts before selecting a final architecture.
+- The group assigns a primary and backup operator for the Windows↔Ubuntu demo; everyone should be able to explain the test.
+- Each pair preserves its real prompts and distinguishes suggestions from group-verified decisions.
+- The Lab 2 email's six-person feature split does not by itself settle Assignment 1 project grouping.

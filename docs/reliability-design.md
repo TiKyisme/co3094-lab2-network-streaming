@@ -55,3 +55,8 @@ Selective retransmission reduces repeated data compared with stop-and-wait. Orde
 - Delay a real-time update past its deadline and verify no stale retransmission.
 
 These are planned scenarios, not test results. See also [RFC 9002](https://www.rfc-editor.org/rfc/rfc9002.html) and the [Valve packet wire format](https://github.com/ValveSoftware/GameNetworkingSockets/blob/master/src/steamnetworkingsockets/clientlib/SNP_WIRE_FORMAT.md) as references.
+
+
+## Assignment 1 implementation gap
+
+The current draft does not yet specify file IDs, chunk offsets, file size, per-chunk integrity checks, final-file verification, or a resume policy. Assignment 1 PDF p. 3 explicitly asks for file chunking/reassembly over UDP, while p. 2 also says TCP handles reliable files/messages. Do not claim this draft satisfies that milestone until the transport conflict is resolved and file-transfer semantics are added.

@@ -1,38 +1,34 @@
 # HTTP server source analysis
 
-## Status: WAITING_FOR_SOURCE
+## Source status
 
-The accessible filesystem does not contain the stated CO3094/L07 directory. The nearest available `MMT` tree is CO3093 and has no Python files. Its Lab 1/2 PDFs contain no `new_connection` or `22236` match. Therefore no local `server.py`, `client.py`, or teacher function was reviewed.
+The CO3094/L07 package includes a Sample NetApp PDF and a CO3094 Lab 1 PDF, but no standalone `.py` files in the ZIP. The Sample NetApp PDF page 7 contains the sample `server.py` as an image; page 8 contains `client.py` as an image. The exact LMS forum-overwritten `new_connection` is still missing.
 
-## What can be verified generally
+## Verified sample from Sample_NetApp.pdf, page 7
 
-Official Python documentation states:
-- `socket.accept()` returns a pair `(conn, address)`.
-- `threading.Thread(args=...)` passes the tuple/list elements as positional arguments to its target.
+Visual inspection of the embedded code shows:
 
-A conventional call may therefore look like:
+- `server_program(host, port)` creates a default TCP socket, binds it, calls `listen(10)`, then loops over `accept()`.
+- Python `accept()` supplies `(conn, addr)`.
+- The sample calls the worker with `Thread(target=new_connection, args=(addr, conn))`.
+- Its worker signature is `new_connection(addr, conn)`, and its body only prints the connection object.
+- The sample sets port **22236**.
+- It derives `host` with `get_host_default_interface_ip()`, which uses a UDP socket attempt to `8.8.8.8:1` and falls back to `127.0.0.1` on exception.
 
-```python
-conn, addr = listener.accept()
-thread = Thread(target=new_connection, args=(conn, addr))
-thread.start()
-```
+This verifies argument order and port for this printed **sample only**. The handler does not parse an HTTP request or send an HTTP response. The exact forum overwrite may change the signature, body, bind logic or port; inspect that post before running the required Lab 2 server.
 
-This is only an illustration of Python's API. It is **not** the teacher's code or a verified call for the CO3094 server. The forum function may use a different signature; inspect it and the call site together before editing.
+## Lab 1 evidence
 
-## Required source review when provided
+The CO3094 Lab 1 PDF (source ID `src_bb5408286b99`) says on page 8 that sample `server.py`/`client.py` and a VM template are provided. Pages 5–6 describe a separate GNS3 PC-to-HTTP-server exercise using `lighttpd`, static IPs and a browser GET. That exercise does not identify the forum-overwritten Python handler required by Email A.
 
-1. Record the exact `new_connection` definition and parameters.
-2. Trace values from `accept()` through the thread's `args` to the function body.
-3. Record the listener's bind IP and port from the file; do not assume 22236.
-4. Check whether the server binds to loopback, a single interface, or all interfaces.
-5. Check how the HTTP request is read and how the status line, headers, body, and connection close are sent.
-6. Preserve the course code in the original source copy; make any experiments in this repository.
-7. Run tests only after the source is understood, then record actual output.
+## HTTP implementation status
 
-## Not established
+- No verified HTTP request parsing, status line, headers, response body or browser response handler was found in the page 7 sample code.
+- The ZIP has no standalone Python source file; the visible sample is embedded in the PDF.
+- The forum post and its matching current `server.py` remain **MISSING**.
+- Port 22236 is **SUPPORTED for the page 7 sample**, but **UNVERIFIED for the forum-overwritten server**.
+- Do not rename the page 7 sample or claim it satisfies the HTTP requirement.
 
-- Whether the official function expects `(conn, addr)` or another order.
-- The current port and bind address.
-- Whether the server code handles HTTP/1.0 or HTTP/1.1, multiple requests, or multiple clients.
-- Whether a local source file matches the forum's overwritten version.
+## Current execution status
+
+No server was started. The local `ubuntu` VM is powered off, and no running VirtualBox guests were found. No Windows TCP, curl, browser, or server-log result exists yet. Continue with [network setup](network-setup.md) after the forum code is supplied.

@@ -1,25 +1,51 @@
-# Ma trận yêu cầu
+# Requirements and source-conflict matrix
 
-Nguồn chính là hai đoạn email do người dùng cung cấp trong prompt. Email gốc và LMS chưa được mở độc lập; các dòng về yêu cầu chính thức vì vậy truy xuất được tới bản trích dẫn trong prompt, chưa xác minh bằng hộp thư/LMS.
+## Lab 2 requirements from the instructor emails
 
-| Yêu cầu / nhận định | Phân loại | Nguồn | Diễn giải / giới hạn |
+The two email excerpts were supplied by the user; the original mailbox and current LMS forum have not been opened. Email A/B remain the highest available authority for Lab 2.
+
+| Requirement / claim | Classification | Source | Boundary |
 |---|---|---|---|
-| Máy thật truy cập HTTP server chạy trong VM | REQUIRED | Email A, 08/10/2026 (trích trong prompt) | Mục tiêu kết nối host → VM. Chưa biết IP, port, VM network mode, hay định dạng nộp. |
-| Dùng `new_connection` đã được thầy ghi đè trên forum | REQUIRED | Email A | Cần lấy nguyên văn code từ đúng forum; hiện UNVERIFIED vì LMS/forum không truy cập được. |
-| Chuẩn bị draft design cho reliability, flow control, congestion control | REQUIRED | Email A và Email B | Bản nháp là mức được nêu; chưa có yêu cầu implement cả ba cơ chế. |
-| Ví dụ Steam UDP gaming và Google QUIC | SUPPORTED | Email A (“ví dụ”) | Ví dụ tham khảo; không phải yêu cầu sao chép hay tương thích toàn bộ giao thức. |
-| Nhóm 6 người, khoảng 2 người/cơ chế | REQUIRED / SUPPORTED | Email B | Cơ cấu tương đối; danh tính và phân công thật do nhóm xác nhận. |
-| Lưu lịch sử prompt/chat AI | REQUIRED | Email A và Email B | Cần giữ prompt nguyên văn và export gốc. Không commit bí mật; repo dự kiến private. |
-| Vấn đáp Assignment 1 trong tuần có 17/11/2026 | REQUIRED cho Assignment 1 | Email B như được người dùng diễn giải | Không phải deadline Lab 2. Không suy ra ngày cụ thể. |
-| Lab 2 bắt buộc Telnet, hai ảnh, một báo cáo hay một loại file cụ thể | UNVERIFIED | Không có trong email A/B | Không trình bày thành yêu cầu. Có thể giữ ảnh/log để nhóm tự kiểm tra nội bộ. |
-| Lab 2 bắt buộc UDP hoặc QUIC/Steam | UNVERIFIED | Email chỉ nêu ví dụ | Hỏi giảng viên trước khi chốt protocol nền. |
-| Lab 2 bắt buộc code/prototype cho ba cơ chế | UNVERIFIED | Email B nói “draft design” | Hiện hiểu là thiết kế nháp; cần hỏi nếu code ảnh hưởng phân công/thời gian. |
-| Port 22236 | UNVERIFIED | Chỉ xuất hiện trong Google Doc cũ | Không sử dụng nếu source thật không xác nhận. |
-| Dùng Host-only để Windows↔Ubuntu | PROPOSED kỹ thuật | Oracle VirtualBox manual 7.2 | Hợp với host↔guest và không nối VM ra LAN/Internet; không phải yêu cầu của thầy. |
-| Assignment 1 là ứng dụng mạng | SUPPORTED | CO3093 adjacent bundle only | Không dùng làm bằng chứng yêu cầu CO3094; email B cung cấp bối cảnh riêng cho CO3094. |
+| Physical Windows host accesses an HTTP server running in a VM using the teacher-overwritten `new_connection` | REQUIRED | Email A, 2026-10-08 | The exact forum function and matching server are still missing |
+| Draft design for Reliability, Flow Control, Congestion Control | REQUIRED | Email A and Email B | “Draft design” does not itself require implementation |
+| Six-person team, approximately two students per feature | REQUIRED / SUPPORTED | Email B | The six-person Lab 2 design group is stated; this does not by itself settle Assignment 1 project grouping |
+| Preserve AI prompt history | REQUIRED | Email A and Email B | Preserve exact prompts and a private session export; no unreviewed export is committed |
+| Steam UDP gaming and Google QUIC | SUPPORTED examples | Email A | Reference examples, not a mandate to reproduce either full protocol |
+| Assignment 1 oral evaluation in the week containing 2026-11-17 | REQUIRED for Assignment 1 | Email B excerpt | This is an evaluation-week statement, not a Lab 2 deadline |
+| Lab 2 must use UDP, use port 22236, submit screenshots/report/code, or implement the three mechanisms | UNVERIFIED | Not stated in Email A/B | Do not infer from Assignment 1 or Lab 1 requirements |
+| Generic LMS note says practical classes submit reports; major assignments have reports and presentations | SUPPORTED general course policy | `Announcements - Ghi chú`, source ID `src_2f001836c9a5` | Does not specify a Lab 2 screenshot, file format, or exact report content |
 
-## Nguyên tắc
-- `REQUIRED` chỉ dành cho câu nói trực tiếp trong email được cung cấp.
-- `SUPPORTED` là diễn giải có căn cứ rõ nhưng không thêm nghĩa vụ mới.
-- `PROPOSED` là quyết định kỹ thuật của nhóm, cần được nhóm/thầy rà soát.
-- `UNVERIFIED` là điều chưa có nguồn đủ thẩm quyền.
+## Assignment 1 statements in the CO3094 source pack
+
+These statements are relevant to later Assignment 1 implementation and to whether the current design draft will transfer. They do **not** override the Lab 2 email.
+
+| Statement | Source locator | Classification |
+|---|---|---|
+| Goal: custom application-layer protocol over “UDP STREAMING”; reliable messaging and file transfer | Assignment 1 PDF, `src_076bd2c18b0d`, p. 1 | REQUIRED for the project as written; conflicts with later transport details |
+| TCP for reliable file/message transfer; UDP for heartbeat/discovery | Same PDF, p. 2 | REQUIRED for the project as written; conflicts with UDP-only language elsewhere |
+| Monotonic sequence number and sliding window for flow control and in-order delivery; retransmit missing segments | Same PDF, p. 2 | REQUIRED for the project as written |
+| Time-sensitive UDP stream should eliminate head-of-line blocking | Same PDF, p. 2 | REQUIRED for the project as written; exact scope of “eliminate” is unspecified |
+| Raw sockets; no high-level network libraries; Flask/Django and WebSockets prohibited | Same PDF, p. 3 | REQUIRED for Assignment 1; do not assume a framework is allowed |
+| Basic client-server handshake over TCP | Same PDF, p. 3, milestone 2 | REQUIRED for Assignment 1 as written; transport conflict remains |
+| Reliable file transfer chunks/reassembly over UDP without corruption | Same PDF, p. 3, milestone 6 | REQUIRED for Assignment 1 as written; conflicts with TCP reliable-transfer text |
+| HTTP-based UI with client-side JavaScript | Same PDF, p. 4, milestone 9 | REQUIRED for Assignment 1 as written; may be possible with raw sockets, but implementation boundary needs clarification |
+| Submit source code, README and technical explanation PDF | Same PDF, p. 4 | Assignment 1 submission requirement; not confirmed for Lab 2 |
+| “Individual / Pair Project” | Same PDF, p. 1 | Project grouping stated in PDF; potential conflict with Email B group registration |
+| “Suggested Deadline: Sunday, November 17, 2026, at 11:59 PM” | Same PDF, p. 4 | Date/weekday conflict; the calendar date 2026-11-17 is Tuesday |
+| “Deadline: 17 Nov 2026” | Assignment 1 socket-programming LMS note, `src_4c5a77dffaa2`, document | Packaged LMS note has no weekday/time; live page not opened |
+| Oral exam in week 47 / week containing Nov 17 | Email B | Separate oral-evaluation statement; does not resolve the PDF's suggested hand-in timestamp |
+| Sample `server.py` port 22236 | Sample NetApp PDF, `src_b850d73292a7`, p. 7 (embedded code image) | SUPPORTED for that sample only; not verified for the forum-overwritten Lab 2 server |
+
+## Reported conflicts — preserve, do not resolve by assumption
+
+| ID | Conflict | Evidence | Status / action |
+|---|---|---|---|
+| C-01 | UDP streaming goal vs TCP reliable file/message transfer; milestone 2 uses TCP while milestone 6 requires UDP file reassembly | Assignment 1 PDF pp. 1–3 | **CONFLICT.** Keep both statements. Ask the instructor which transport applies to which channel/file operation before final architecture |
+| C-02 | “Individual / Pair Project” vs Email B's six-person assignment group and six-person Lab 2 design team | Assignment 1 PDF p. 1; Email B | **CONFLICT / scope ambiguous.** Could refer to different scopes or revisions; confirm current Assignment 1 team size |
+| C-03 | Suggested Sunday 2026-11-17 vs the calendar date being Tuesday; packaged LMS note says 17 Nov without weekday/time; Email B names an evaluation week | Assignment 1 PDF p. 4; LMS note; Email B | **CONFLICT.** Do not publish an exact hand-in deadline until the instructor/LMS calendar confirms it |
+| C-04 | “Eliminate” HoL blocking vs reliable in-order delivery and sliding-window sequencing | Assignment 1 PDF p. 2 | **TECHNICAL AMBIGUITY.** Independent channels can confine blocking, but the PDF does not define which ordering guarantees may be relaxed |
+| C-05 | HTTP UI milestone vs prohibition on HTTP frameworks/WebSockets | Assignment 1 PDF pp. 3–4 | **AMBIGUITY, not proven contradiction.** A raw-socket HTTP server may be intended; clarify whether the prohibition is on frameworks only or HTTP itself |
+
+## Proposal status
+
+Current files under `docs/*-design.md` are **PROPOSED Lab 2 drafts**. They are not a final Assignment 1 architecture, do not select a winner among C-01 through C-05, and are not implementations. The Sample NetApp page 7 port/function is a course reference sample only; the exact overwritten forum code remains unverified.

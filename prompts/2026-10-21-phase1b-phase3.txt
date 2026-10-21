@@ -1,0 +1,224 @@
+# CONTINUATION PROMPT — CO3094 LAB 2 / PHASE 1B & PHASE 3
+
+Bạn đang tiếp tục một dự án đã tồn tại, KHÔNG được bắt đầu lại từ đầu.
+
+Repository: `TiKyisme/co3094-lab2-network-streaming`
+
+Branch: `main`
+
+Last reported commit: `f7bec94d1598a19d3d39784676b579eade33b817`
+
+## 1. RESUME PROJECT CONTEXT
+
+Trước khi thực hiện, bắt buộc:
+
+1. Mở đúng local repository.
+2. Đọc `README.md`, `state.md`, `log.txt`.
+3. Đọc `docs/requirements-matrix.md`, `docs/source-inventory.md`, `docs/open-questions.md`.
+4. Kiểm tra `git status`, `git log`, remote và HEAD hiện tại.
+5. Xác định các nhiệm vụ đã hoàn thành để KHÔNG làm lại.
+6. Khắc phục những mục trạng thái không còn chính xác; ví dụ `state.md` vẫn có thể ghi commit/push đang chờ dù repository đã được push.
+
+Mọi yêu cầu trực tiếp từ email thầy Nguyễn Phương Duy phải tiếp tục được ưu tiên cao nhất.
+
+## 2. NEW EVIDENCE — CORRECT CO3094 SOURCE
+
+Một AI reviewer độc lập đã kiểm tra bộ tài liệu:
+
+`CO3094_L07_AI_Study_Pack.zip`
+
+Và tạo tài liệu:
+
+`CO3094_L07_source_handoff.md`
+
+Tôi sẽ cung cấp hai file này trong máy Windows. Nếu không tìm thấy chúng, hãy yêu cầu tôi chọn đường dẫn chính xác; KHÔNG được quay lại dùng thư mục `MMT` của CO3093 để thay thế.
+
+Hãy đọc toàn bộ `CO3094_L07_source_handoff.md`, sau đó kiểm chứng phát hiện bằng cách đọc chính các tài liệu bên trong ZIP.
+
+Kiểm tra đầu tiên:
+
+- `00_START_HERE.md` phải xác nhận CO3094/L07.
+- `03_SOURCE_INDEX.md` dùng để định vị nguồn.
+- Tài liệu Assignment 1 và CO3094 Lab 1 là nguồn quan trọng.
+- Ghi lại đúng đường dẫn, tiêu đề, số trang và bằng chứng.
+
+Bổ sung kết quả vào `docs/source-inventory.md`.
+
+### Chú ý xung đột cần phân tích
+
+Tài liệu Assignment 1 có các mô tả chưa thống nhất:
+
+- UDP streaming được đề cập trong mục tiêu dự án.
+- TCP lại xuất hiện trong phần công nghệ và milestone.
+- Truyền file đáng tin cậy qua UDP cũng được đề cập.
+- Thông tin Individual/Pair trong PDF khác với nhóm 6 người ở email giảng viên.
+- Có sự chưa thống nhất về thứ/ngày của mốc 17/11/2026.
+
+Không tự chọn một phương án rồi kết luận đó là yêu cầu chính thức.
+
+Tạo bảng so sánh nguồn trong `docs/requirements-matrix.md`, đánh dấu `CONFLICT` khi cần.
+
+**Không được commit bản gốc course ZIP/PDF/slides lên GitHub.**
+
+## 3. PRIORITY TASK — WINDOWS TO UBUNTU HTTP SERVER
+
+Mục tiêu kỹ thuật quan trọng nhất:
+
+Máy Windows vật lý truy cập thành công HTTP Server chạy trên máy ảo Ubuntu VirtualBox.
+
+### Stage A — Source Verification
+
+Tìm đúng:
+
+- `server.py` do thầy cung cấp.
+- Phiên bản `new_connection` được thầy overwritten trong forum `Lab 1 - Network device and Network application`.
+- Cấu hình host, port và luồng xử lý HTTP request/response.
+
+Nếu các file đó chưa có, hãy xác định rõ đang thiếu gì và yêu cầu tôi cung cấp. Không được tự nhận bản HTTP Server minh họa là bản chính thức.
+
+Có thể chuẩn bị công cụ kiểm thử độc lập, nhưng phải phân loại là `DEMO_ONLY`.
+
+### Stage B — Environment Discovery
+
+Kiểm tra thực tế:
+
+- Windows version.
+- Python installation.
+- VirtualBox installation.
+- Ubuntu VM.
+- VirtualBox networking modes.
+- Host IPv4.
+- Guest IPv4.
+- Guest firewall.
+- Server listening address và port.
+
+Lưu ý: `VBoxManage` không nằm trong PATH không đồng nghĩa VirtualBox chưa được cài. Kiểm tra cả vị trí cài đặt thông thường và GUI.
+
+### Stage C — Guided Execution
+
+Hướng dẫn tôi từng bước và chờ output thật khi cần thao tác thủ công.
+
+Ưu tiên topology Host-only cho kết nối host ↔ guest; thêm NAT nếu Ubuntu cần Internet.
+
+Các kiểm tra cần thực hiện:
+
+- Ubuntu: `ip -4 addr`
+- Ubuntu: `ss -lntp`
+- Windows: `ipconfig`
+- Windows: `Test-NetConnection <VM_IP> -Port <PORT>`
+- Windows: `curl.exe -v http://<VM_IP>:<PORT>/`
+- Trình duyệt Windows truy cập HTTP Server trên Ubuntu.
+
+Phân biệt:
+
+- TCP connectivity success.
+- HTTP response success.
+- Browser rendering success.
+
+Không coi một bài test là PASS nếu chưa thấy kết quả.
+
+### Stage D — Evidence
+
+Sau khi tôi chạy test:
+
+- Phân tích terminal output.
+- Xác nhận HTTP status/response.
+- Kiểm tra server log.
+- Hướng dẫn lưu screenshot thật.
+- Ghi rõ cấu hình mạng đã được kiểm thử.
+- Cập nhật kết quả trong repo.
+
+Nếu chưa test được, giữ trạng thái `WAITING_FOR_MANUAL_TEST`.
+
+## 4. STREAMING DESIGN REVIEW
+
+Không viết lại từ đầu ba thiết kế đã có.
+
+Đọc:
+
+- `docs/streaming-architecture.md`
+- `docs/reliability-design.md`
+- `docs/flow-control-design.md`
+- `docs/congestion-control-design.md`
+- `docs/integration-design.md`
+
+Đối chiếu với Assignment 1 vừa xác minh.
+
+Chỉ chỉnh những điểm thực sự cần thay đổi, đặc biệt là:
+
+- UDP streaming và yêu cầu reliable transfer.
+- Head-of-line blocking.
+- Packet/message semantics.
+- Cách ba cơ chế phối hợp.
+- Những ràng buộc về raw socket.
+- Những chỗ thiết kế nháp có thể chưa đáp ứng đề Assignment 1.
+
+Phân biệt rõ thiết kế cần chuẩn bị cho Lab 2 và những phần phải triển khai sau này cho Assignment 1.
+
+Chưa tự ý lập trình toàn bộ Assignment 1 trong phase này.
+
+## 5. GOOGLE DOCS RECONCILIATION
+
+Google Docs gốc vẫn tồn tại và đã được một AI reviewer khác đọc thành công:
+
+https://docs.google.com/document/d/1hxqLAD0eRfdBhDJJyopSY0i0vFqJUDhFCy7lOGO2CxQ/edit
+
+Nếu Codex không truy cập được, hãy tiếp tục sử dụng bản Markdown trong repository, không lặp lại hàng loạt thao tác 404.
+
+Một lưu ý: bản Google Doc có thể chứa tên thành viên cho một cặp Reliability. Không xóa thông tin đó chỉ vì thiếu xác nhận roster; hãy giữ dưới trạng thái `TENTATIVE` đến khi người dùng xác nhận.
+
+Phần giải thích đơn giản `min(rwnd, cwnd)` cần được diễn giải chính xác theo receive credit và congestion budget, có tính đến bytes in flight.
+
+## 6. LOGGING & GITHUB REQUIREMENTS
+
+Sau mỗi milestone:
+
+1. Cập nhật `state.md`.
+2. Append thông tin thực tế vào `log.txt`.
+3. Lưu nguyên văn prompt hiện tại vào prompt history.
+4. Ghi rõ kết quả kiểm thử, phần chưa kiểm thử và blocker.
+5. Commit và push các file hợp lệ.
+6. Xác minh trạng thái remote sau khi push.
+
+Không giả mạo bằng chứng hoặc tự ghi kết quả kiểm thử chưa thực hiện.
+
+Không commit thông tin riêng tư, credentials, tài liệu giảng viên có bản quyền hoặc bản export chat chưa được kiểm tra.
+
+## 7. EXPECTED OUTPUT
+
+Bắt đầu bằng Source Recovery và HTTP Environment Discovery.
+
+Sau đó báo cáo theo format:
+
+**SOURCE VERIFICATION**
+- Confirmed CO3094 files:
+- Missing instructor files:
+- Contradictions:
+
+**HTTP ENVIRONMENT**
+- Windows:
+- VirtualBox:
+- Ubuntu VM:
+- Network configuration:
+- Server status:
+
+**EXECUTION**
+- Completed:
+- Tests passed:
+- Tests blocked:
+- Evidence:
+
+**REPOSITORY**
+- Files changed:
+- Git commit:
+- Push status:
+- State/log updated:
+
+**NEXT MANUAL ACTION**
+- Chính xác một bước tôi cần thực hiện tiếp theo, nếu cần.
+
+Hãy ưu tiên làm việc thực tế và đối chiếu nguồn, không chỉ tạo thêm tài liệu lý thuyết.
+
+Nếu cần tôi gửi code của giảng viên hoặc ảnh VirtualBox, hãy yêu cầu rõ ràng và hướng dẫn cách lấy.
+
+**START NOW.**

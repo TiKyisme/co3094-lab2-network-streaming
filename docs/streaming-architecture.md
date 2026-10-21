@@ -67,3 +67,8 @@ ACKing a packet and acknowledging application delivery are separate concepts: AC
 ## Unresolved design choices
 
 Confirm whether the instructor expects a custom UDP design or a protocol-level design using QUIC; choose exact ordering, timeout and buffer parameters; decide whether channel-level ACKs are required; and have all six members explain the final choices.
+
+
+## Assignment 1 source-compatibility status
+
+The Assignment 1 PDF p. 1 describes custom UDP streaming; p. 2 also assigns reliable file/message transfer to TCP; p. 3 repeats a TCP handshake milestone but requires file reassembly over UDP. This draft currently assumes a UDP-oriented transport with reliable and expiring classes. It is therefore a **Lab 2 discussion proposal only**, not a claim of Assignment 1 compliance. Keep both source directions visible until the instructor clarifies transport per feature.

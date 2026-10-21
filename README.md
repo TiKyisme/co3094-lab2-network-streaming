@@ -1,44 +1,40 @@
 # CO3094 Lab 2 — HTTP Networking & Streaming Design
 
-Tài liệu làm việc riêng để chuẩn bị Lab 2 và ghi lại bằng chứng nghiên cứu. Repository được tạo tách khỏi course bundle và đã được tạo **private** trên GitHub.
+Private working repository for evidence-grounded Lab 2 preparation and future Assignment 1 comparison. Original course ZIP/PDF/OVA files are not in Git.
 
-## Phạm vi từ email thầy do người dùng cung cấp
+## Confirmed Lab 2 scope from instructor emails
 
-- Máy thật truy cập HTTP server chạy trong VM bằng phiên bản `new_connection` thầy ghi đè trên forum.
-- Nhóm chuẩn bị draft design cho Reliability, Flow Control và Congestion Control.
-- Nhóm có sáu thành viên, khoảng hai người cho mỗi cơ chế.
-- Lưu lịch sử prompt/AI để trình bày khi được yêu cầu.
-- Tuần có ngày 17/11/2026 là mốc vấn đáp Assignment 1, không phải deadline Lab 2.
+- Physical host accesses the VM's HTTP server using the forum-overwritten `new_connection`.
+- Draft designs are needed for Reliability, Flow Control and Congestion Control.
+- The Lab 2 design team has six members, approximately two per feature.
+- AI prompt/history evidence must be preserved.
+- Assignment 1 oral evaluation is in the week containing 17 November 2026; it is not a Lab 2 deadline.
 
-Giao thức, mã nguồn, port, deliverables và ảnh minh chứng chưa được email xác nhận. Xem [ma trận yêu cầu](docs/requirements-matrix.md).
+The exact forum function remains missing. Assignment 1 source conflicts are recorded separately and do not replace Lab 2 email requirements.
 
-## Trạng thái
+## Current status
 
-- Phase 1: khảo sát một phần; đường dẫn CO3094/L07 trong môi trường không tồn tại. Bộ tài liệu lân cận là CO3093 và được gắn nhãn riêng.
-- Phase 2: đã review nội dung chữ Google Doc từ Drive Search; chưa thể xác minh cấu trúc native hoặc sửa bản gốc do Docs API trả 404. Xem [review](docs/docs-review.md) và [bản Markdown hiệu chỉnh](docs/lab2-group-guide.md).
-- Phase 3: chưa xác minh code của thầy; `new_connection` UNVERIFIED. Cần code forum và kiểm thử thật trên Windows–Ubuntu.
-- Phase 4: tài liệu streaming là PROPOSED; chưa triển khai hay kiểm thử.
-- Phase 5: local repository đã push lên [GitHub private](https://github.com/TiKyisme/co3094-lab2-network-streaming), branch `main`.
+- Phase 1B: CO3094/L07 package identity, Assignment 1 PDF and CO3094 Lab 1 sources verified. Assignment 1's transport/group/deadline inconsistencies remain unresolved.
+- Phase 2: Google Doc text review and Markdown replacement are complete; native Docs edit remains unavailable through the connected API.
+- Phase 3: Windows/VirtualBox discovered. The Ubuntu VM is off and bridged; no guest IP, server listener or connection test has been observed.
+- Phase 4: streaming design remains a Lab 2 proposal. Assignment 1 compliance is not claimed.
+- Phase 5: repository is private at [GitHub](https://github.com/TiKyisme/co3094-lab2-network-streaming), branch `main`.
 
-## Đọc theo thứ tự
+## Key documents
 
-1. [state.md](state.md)
-2. [log.txt](log.txt)
-3. [requirements matrix](docs/requirements-matrix.md)
-4. [source inventory](docs/source-inventory.md)
-5. [Google Docs review](docs/docs-review.md)
-6. [network setup](docs/network-setup.md) và [HTTP source analysis](docs/http-server-analysis.md)
-7. [streaming architecture](docs/streaming-architecture.md), [reliability](docs/reliability-design.md), [flow control](docs/flow-control-design.md), [congestion control](docs/congestion-control-design.md), [integration](docs/integration-design.md)
-8. [team assignments](docs/team-assignments.md) và [open questions](docs/open-questions.md)
+- [Project state](state.md) and [append-only log](log.txt)
+- [Requirements and conflict matrix](docs/requirements-matrix.md)
+- [Source inventory](docs/source-inventory.md)
+- [Guide review](docs/docs-review.md) and [corrected Lab 2 guide](docs/lab2-group-guide.md)
+- [HTTP source analysis](docs/http-server-analysis.md), [network setup](docs/network-setup.md), [test cases](docs/network-test-cases.md)
+- [Streaming architecture](docs/streaming-architecture.md) and component design docs
+- [Tentative team assignments](docs/team-assignments.md), [open questions](docs/open-questions.md)
+- [Prompt history](prompts/prompt-history.md)
 
-## Cấu trúc và chạy demo
+## Running the HTTP demo
 
-- `docs/`: yêu cầu, nguồn, review, hướng dẫn mạng và thiết kế nháp.
-- `prompts/`: prompt người dùng thực tế; full session export vẫn cần được bảo quản riêng.
-- `evidence/`: chỉ chứa bằng chứng thật sau khi nhóm kiểm thử.
-- Chưa có `src/`: code server gốc của lớp chưa được cung cấp/định vị; không thay bằng code tự viết rồi gọi là code của thầy.
-- Chưa có lệnh chạy chính xác. Khi có source sẽ ghi đúng interpreter, port và tham số. Không dùng port 22236 nếu source không xác nhận.
+No run command is approved yet. Sample_NetApp PDF page 7 is a TCP accept/print skeleton, not an HTTP responder; the forum-overwritten function and matching server are required first. The sample page's port 22236 is not confirmed for the forum version.
 
-## Tiếp tục
+## Resume
 
-Đọc state và cuối log trước; kiểm tra Git status; lấy đúng CO3094/L07 folder và forum code; sau đó chạy test thủ công theo network setup. Thành viên tự xác nhận roster. Mọi đề xuất vẫn phải được nhóm kiểm tra và giải thích.
+Read README, state, and the end of log; verify Git status/HEAD. Then inspect the exact forum post and matching server source before guiding any VM changes. Keep each Assignment 1 contradiction unresolved until an authoritative clarification arrives.

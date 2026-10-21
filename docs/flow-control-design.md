@@ -39,3 +39,8 @@ The receiver has 64 KiB assigned to the reliable channel and has consumed 48 KiB
 - Full real-time queue: older update is dropped; reliable credit accounting remains intact.
 
 This credit says what the receiver can buffer. The separate congestion window says what the network path can carry in flight. See [RFC 9000, Data Flow Control](https://www.rfc-editor.org/rfc/rfc9000.html#section-4).
+
+
+## Assignment 1 compatibility note
+
+Assignment 1 PDF p. 2 calls for a window-based sliding window. The absolute max-offset credit here is a proposal inspired by QUIC. Before claiming Assignment 1 alignment, define how this credit advances relative to the expected sliding-window model and confirm the instructor accepts it.

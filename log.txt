@@ -129,3 +129,87 @@ Result:
 
 Git commit:
 - Included in the pending status/log bookkeeping commit.
+
+[2026-10-21] [PHASE 1B SOURCE RECOVERY AND PHASE 3 ENVIRONMENT DISCOVERY]
+Task:
+- Recover the CO3094/L07 sources, compare Assignment 1 against Lab 2 scope, inspect existing streaming drafts, and discover the actual Windows/VirtualBox state.
+
+Sources read:
+- `CO3094_L07_source_handoff.md`, `00_START_HERE.md`, `03_SOURCE_INDEX.md`.
+- Assignment 1 PDF source `src_076bd2c18b0d`, pp. 1-4; Assignment 1 LMS note `src_4c5a77dffaa2`.
+- CO3094 Lab 1 PDF `src_bb5408286b99`, pp. 1, 5-8.
+- Sample NetApp PDF `src_b850d73292a7`, pp. 7-8, including visual review of embedded code images.
+- Existing streaming architecture, reliability, flow, congestion, and integration drafts.
+
+Commands/actions:
+- Found handoff and ZIP beside the supplied CO3094/L07 path; read-only inspected ZIP entries (325 total; no `.py` or `.ova` members) and verified ZIP integrity (no bad member).
+- Compared SHA-256 for the three relevant PDFs inside the ZIP against the extracted copies; all matched.
+- Visually rendered Sample NetApp PDF pages 7-8. Page 7 shows sample `accept()` values passed as `(addr, conn)` to `new_connection(addr, conn)`, port 22236, and a handler that only prints the socket. This is not the forum-overwritten HTTP handler.
+- Assignment 1 PDF page findings and unresolved contradictions are recorded in docs/requirements-matrix.md.
+- Read-only environment checks: Windows 11 build 10.0.26200; Python 3.14.4; VirtualBox 7.2.20r175154; VM `ubuntu` powered off with Adapter 1 Bridged to Wi-Fi; `NetApp-EndHost` also off; Host-only interface 192.168.56.1/24 with DHCP server enabled.
+- No VM settings were changed; no guest IP/firewall/server status or connection test was observed.
+- Copied the exact continuation prompt to `prompts/2026-10-21-phase1b-phase3.txt`; verified source/destination are both 8208 bytes and byte-identical.
+
+Result:
+- CO3094/L07 course identity and Assignment 1/Lab 1 sources are now confirmed.
+- The source ZIP contains the Sample NetApp PDF but no standalone Python source or OVA.
+- Exact LMS forum overwrite and matching server remain missing.
+- Assignment 1 transport, group-size, HoL, and date conflicts are documented without choosing a resolution.
+- Existing Lab 2 drafts remain proposals; A1 compatibility is explicitly unresolved.
+
+Evidence:
+- Source pages and stable IDs are listed in docs/source-inventory.md.
+- No HTTP/TCP/browser test was run. Guest state remains unavailable while VMs are powered off.
+
+Git commit:
+- Previous verified remote HEAD: f7bec94d1598a19d3d39784676b579eade33b817.
+- This entry and the accompanying documentation updates are pending commit/push.
+
+Next action:
+- Provide the exact LMS forum post containing the overwritten `new_connection` and its matching `server.py`; then continue with the guided VM checks.
+
+[2026-10-21] [CO3094 SOURCE RECOVERY AND HTTP ENVIRONMENT DISCOVERY]
+Task:
+- Continue Phase 1B/Phase 3 from the user's continuation prompt without repeating earlier work.
+
+Source/Reason:
+- User supplied the exact handoff path. The sibling CO3094/L07 ZIP and extracted package were found and validated against the handoff.
+- Instructor emails remain the highest source for Lab 2; Assignment 1 source is used only for Assignment 1 requirements/conflict analysis.
+
+Files changed:
+- docs/source-inventory.md, requirements-matrix.md, docs-review.md, open-questions.md.
+- docs/http-server-analysis.md, network-setup.md, network-test-cases.md, lab2-group-guide.md, team-assignments.md.
+- Added Assignment 1 compatibility notes to the existing streaming designs.
+- Updated README.md, state.md, and prompts; copied the continuation prompt verbatim.
+
+Commands/actions:
+- Read CO3094_L07_source_handoff.md, 00_START_HERE.md, 03_SOURCE_INDEX.md, Assignment 1 PDF source src_076bd2c18b0d, CO3094 Lab 1 PDF src_bb5408286b99, Sample NetApp PDF src_b850d73292a7, and packaged Assignment 1/LMS notes.
+- ZIP inspection: 325 entries, no bad member, no .py or .ova entries. SHA-256 of each of the three relevant PDFs inside the ZIP matched the extracted copy.
+- Rendered Sample NetApp PDF pages 7–8 and inspected the code images. Page 7 shows accept() -> (conn, addr), Thread args=(addr, conn), new_connection(addr, conn), port 22236, and a handler that only prints the socket. This is not the forum-overwritten function and is not an HTTP responder.
+- Read-only Windows/VirtualBox checks: Windows 11 build 10.0.26200; Python 3.14.4; VirtualBox 7.2.20r175154; both registered VMs off; ubuntu Adapter 1 bridged to Wi-Fi; Host-only adapter 192.168.56.1/24 with DHCP enabled.
+- Verified the continuation-prompt copy: 8208 bytes at source and destination, identical.
+- Updated requirements matrix with transport, team-size, HoL, raw-socket/UI, and deadline conflicts; no resolution was invented.
+
+Result:
+- CO3094/L07 course identity and primary source PDFs are confirmed.
+- Sample server code and sample port are verified only for that PDF image.
+- Exact LMS forum-overwritten new_connection and matching server.py remain missing.
+- Assignment 1 conflicts remain open; current Lab 2 designs are proposals only.
+- No VM settings were changed and no connection test was run.
+
+Evidence:
+- Source IDs and PDF pages are in docs/source-inventory.md.
+- Current environment and blocked tests are in docs/network-setup.md and state.md.
+- Original course ZIP/PDF files were not added to Git.
+
+Problems:
+- Forum post and current HTTP server source unavailable.
+- VMs are powered off; guest IP/firewall/listener cannot be inspected.
+- Full session export remains NOT YET EXPORTED.
+
+Git commit:
+- Previous verified HEAD: f7bec94d1598a19d3d39784676b579eade33b817.
+- This milestone's documentation/prompt-history update is pending commit and push.
+
+Next action:
+- User provides the exact forum post containing overwritten new_connection and its matching server.py; then perform guided VM configuration/test.

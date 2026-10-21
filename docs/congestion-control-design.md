@@ -41,3 +41,8 @@ AIMD/NewReno is explainable and responds to loss, but can react after queues for
 - Queue an expired real-time update behind pacing: discard rather than send stale data.
 
 Not tested. Reference: [RFC 9002](https://www.rfc-editor.org/rfc/rfc9002.html), including congestion window, recovery and pacing.
+
+
+## Assignment 1 compatibility note
+
+Assignment 1 PDF p. 2 mentions BBR/CUBIC. This draft's NewReno-like AIMD baseline is an explainable **Lab 2 proposal**, not a verified Assignment 1 selection. Compare the requested BBR/CUBIC direction and clarify whether one must be implemented before claiming A1 compliance.

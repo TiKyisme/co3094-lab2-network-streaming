@@ -5,7 +5,7 @@
 | ID | Test | Procedure | Expected result | Status |
 |---|---|---|---|---|
 | NET-01 | Guest interface | In Ubuntu run `ip -4 addr`; record the Host-only NIC and IPv4 | A real address on the selected Host-only subnet | NOT RUN |
-| NET-02 | Server listener | Run the exact instructor `server.py`; inspect its startup/log and bind/port | Listener is active on the Host-only reachable address and actual source port | BLOCKED: SOURCE MISSING |
+| NET-02 | Server listener | Run the exact forum-overwritten `server.py`; inspect startup/log and bind/port | Listener is active on the reachable interface and actual source port | BLOCKED: FORUM OVERWRITE/MATCHING HTTP SOURCE MISSING; PDF sample only prints socket |
 | NET-03 | TCP reachability | Windows: `Test-NetConnection <VM_IP> -Port <PORT>` | `TcpTestSucceeded : True` | NOT RUN |
 | NET-04 | HTTP response | Browser: `http://<VM_IP>:<PORT>/`; optionally `curl.exe -v` | Valid HTTP status/headers/body; server logs the request | NOT RUN |
 | NET-05 | Refresh/repeat | Reload browser or repeat GET | A second request is logged and response remains valid | NOT RUN |

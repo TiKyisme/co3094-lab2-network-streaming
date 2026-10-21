@@ -1,43 +1,50 @@
 # Windows host ↔ Ubuntu guest HTTP setup
 
-**Status:** instructions drafted; **WAITING_FOR_MANUAL_TEST**. No VirtualBox GUI/VM was available in this environment, and `VBoxManage` was not found in PATH.
+**Status:** Environment discovered; **WAITING_FOR_FORUM_SOURCE_AND_MANUAL_TEST**. No VM settings were changed and no connection test was run.
 
-## Recommended mode
+## Read-only environment discovery (2026-10-21)
 
-**PROPOSED:** Use **Host-only** when only Windows host ↔ Ubuntu guest access is needed. Oracle's [VirtualBox 7.2 networking manual](https://docs.oracle.com/en/virtualization/virtualbox/7.2/user/networkingdetails.html) describes Host-only as connectivity among host and VMs without a physical/external network. Add a separate NAT adapter only if Ubuntu needs Internet during preparation.
+| Item | Observed |
+|---|---|
+| Windows | Windows 11, build 10.0.26200 |
+| Python | 3.14.4 x64 at `C:\Python314\python.exe` |
+| VirtualBox | Installed at `C:\Program Files\Oracle\VirtualBox`; `VBoxManage` version 7.2.20r175154 |
+| VirtualBox GUI | Installed; no `VirtualBox.exe` or `VirtualBoxVM.exe` process was running during discovery |
+| Registered VMs | `ubuntu` (Ubuntu 64-bit, powered off) and `NetApp-EndHost` (Linux 64-bit, powered off); no VM was running |
+| `ubuntu` adapter config | Adapter 1 is Bridged to Intel Wi-Fi 6 AX203; adapters 2–8 disabled |
+| Host-only interface | VirtualBox Host-Only Ethernet Adapter, Up; host IPv4 192.168.56.1/24 |
+| Host-only DHCP server | Enabled; guest lease range 192.168.56.101–192.168.56.254 |
+| Guest IPv4/firewall/server | NOT AVAILABLE: guests are powered off |
 
-- **Host-only:** host and guest can reach each other; no external network route.
-- **NAT:** guest can initiate outbound connections; inbound guest server is not reachable without port forwarding.
-- **NAT + Host-only:** host-only path for the demo; NAT path for guest Internet.
-- **Bridged:** guest joins the physical LAN. Use only if permitted and needed; it exposes the guest to LAN peers.
+The ZIP contains no OVA, so the registered `ubuntu` VM's identity as the instructor's intended VM is not established.
 
-The exact GUI labels can vary by VirtualBox release.
+## Topology decision
 
-## Setup sequence
+**PROPOSED:** Host-only is preferred for isolated host↔guest access; add NAT only if Ubuntu needs Internet. The local `ubuntu` VM is currently Bridged over Wi-Fi; no settings have been changed.
 
-1. In VirtualBox Manager, open the VM's **Settings → Network**. Enable a Host-only adapter and select/create a host-only network. Confirm its host-side interface and DHCP settings in Network Manager.
-2. If the VM requires Internet, enable a second adapter as NAT. Do not route the HTTP demo through NAT unless port forwarding is explicitly configured.
-3. Boot Ubuntu and run `ip -4 addr`. Identify the IPv4 address assigned to the Host-only interface; do not copy an example address.
-4. Get the instructor's exact `server.py` and overwritten `new_connection` from the forum. Inspect actual port, bind address, and function signature before running it.
-5. Ensure the server binds to the Host-only guest IP or otherwise listens on the interface Windows can reach. A bind to `127.0.0.1` accepts only guest-local connections. `0.0.0.0` listens on all guest interfaces and should be used only with the intended exposure understood.
-6. Start the server using the exact command in the course source.
-7. On Windows, run `Test-NetConnection <HOST_ONLY_VM_IP> -Port <PORT>`. If `TcpTestSucceeded` is true, open `http://<HOST_ONLY_VM_IP>:<PORT>/` in the browser or use `curl.exe -v`.
-8. Save real terminal output, browser result, adapter mode, guest interface/IP and source hash/version for the group.
+There is a source-specific caveat: the Sample NetApp page 7 code discovers the outgoing-interface address by attempting a UDP route to `8.8.8.8:1` and falls back to loopback. With Host-only alone, that helper may fall back to `127.0.0.1`; with NAT + Host-only, it may select the NAT-side guest address. This is an inference from the sample code, not a test result. The forum-overwritten version may change the bind logic. Verify its actual listening address before choosing the final adapter combination.
 
-## NAT port forwarding alternative
+## Guided manual sequence after source confirmation
 
-If Host-only cannot be used, VirtualBox NAT can forward a selected host port to the guest service port. The manual says the NAT engine listens on the host side and relays to the guest. Choose an unused host port and map it to the actual guest port. Then test through the host address/forwarded port (often `127.0.0.1:<host-port>` on the same machine). Do not publish a rule to all host interfaces unless required. The exact rule must match the installed VirtualBox version.
+1. In VirtualBox Manager, select the intended Ubuntu VM and inspect **Settings → Network**. Record all enabled adapters. Do not assume the local `ubuntu` VM is the course VM.
+2. Select Host-only for host↔guest traffic if the instructor code can bind that interface. Add NAT only if Ubuntu needs Internet; avoid Bridged unless required and allowed.
+3. Start the VM and run Ubuntu `ip -4 addr`. Record the guest IPv4 and interface.
+4. Run the confirmed server source and `ss -lntp`. Record the exact listening IP/port from output.
+5. On Windows run `ipconfig`, then `Test-NetConnection <VM_IP> -Port <PORT>`.
+6. If TCP succeeds, run `curl.exe -v http://<VM_IP>:<PORT>/`; then open the same URL in a Windows browser.
+7. Save real output and server log. Do not mark a test PASS until its output is observed.
+
+Microsoft documents `Test-NetConnection -Port` as a TCP connectivity test; it does not prove a valid HTTP response. Browser rendering is a separate check.
 
 ## Troubleshooting
 
 | Symptom | Check |
 |---|---|
-| No Host-only IP in Ubuntu | Adapter is enabled; selected host-only network exists; DHCP is enabled or static addresses are in the same subnet |
-| Windows TCP test fails immediately | Server process, actual port, bind address, guest firewall rule, and adapter selection |
-| Windows test times out | Host-only interface/subnet on both systems, VM state, routing, and firewall; do not disable a firewall globally |
-| TCP test succeeds, browser fails | Correct `http://` scheme/path, HTTP response/parser, server log; TCP success alone is not HTTP success |
-| Ubuntu browser works at `127.0.0.1`, Windows cannot connect | Likely loopback-only bind or wrong VM interface/IP |
-| Bridged mode has no address | Network/Wi-Fi policy may restrict bridging; use Host-only or a permitted alternative |
-| NAT IP is not reachable from Windows | Expected unless a NAT forwarding rule exists |
+| Guest IP missing | VM adapter, host-only network/DHCP, guest NIC state |
+| Listener only at `127.0.0.1` | Windows cannot reach that guest-local listener; verify the forum code's bind address |
+| Listener on NAT IP with Host-only enabled | Check which interface the server helper selected; bind behavior may be in the forum overwrite |
+| TCP test fails | VM/guest IP, actual listener/port, adapter reachability and guest firewall |
+| TCP succeeds, curl fails | HTTP request/response behavior; TCP success is not HTTP success |
+| Curl succeeds, browser fails | URL/scheme/path and browser-visible response |
 
-Do not open the service to the public Internet for this local demo. Do not alter system firewall/network settings broadly.
+Do not disable the firewall globally or open the service to the public Internet.
