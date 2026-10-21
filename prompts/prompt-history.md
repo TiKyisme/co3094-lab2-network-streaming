@@ -43,3 +43,15 @@ Exact prompt: [2026-10-21-reliability-design-draft.txt](2026-10-21-reliability-d
 Source: User message in the current Codex conversation; no separate attachment was supplied.
 
 Exact prompt: [2026-10-21-reliability-final-correction.txt](2026-10-21-reliability-final-correction.txt). Saved verbatim (2,235 bytes; SHA-256 3530ec029a0939f57d6c8604f7aeb74ed200b548bc232031e61a358416995620). This is task prompt evidence, not either student's actual prompt or a full session export.
+
+## 2026-10-22 — Reliability slide-only simplification
+
+Source: User message in the current Codex conversation; no separate attachment was supplied.
+
+Exact prompt: [2026-10-22-reliability-slide-only.txt](2026-10-22-reliability-slide-only.txt). Saved verbatim (6,176 bytes; SHA-256 8a1becfaf94abe12afc0f11f2ddab2ebecf86f8b110a01e32c6829ef1464b749). This is task prompt evidence, not either student's actual prompt or a full session export.
+
+## 2026-10-22 — Reliability slide-only simplification
+
+Source: User message in the current Codex conversation; no separate attachment was supplied.
+
+Exact prompt: [2026-10-22-reliability-slide-only.txt](2026-10-22-reliability-slide-only.txt). Saved verbatim (6,176 bytes; SHA-256 8a1becfaf94abe12afc0f11f2ddab2ebecf86f8b110a01e32c6829ef1464b749). This is task prompt evidence, not either student's actual prompt or a full session export.

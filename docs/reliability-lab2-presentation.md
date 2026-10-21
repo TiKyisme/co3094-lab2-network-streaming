@@ -1,113 +1,61 @@
 # Reliability Design - Lab 2
 
-**Bản trình bày ngắn để nhóm phản biện.**  
-**Trạng thái:** AI_DRAFT_COMPLETE; TECHNICAL_REVIEW_PENDING; TEAM_DECISION_PENDING.  
-**Owner dự kiến:** REL-01 Nguyễn Đăng Gia Đạo và REL-02 Nguyễn Đổng Thiên Kỳ, cả hai vẫn TENTATIVE.
+**Bản trình bày slide-only để nhóm phản biện.**
+**Cơ chế nhóm đề xuất:** RDT 3.0 stop-and-wait từ bài giảng CO3093. Đây là draft thiết kế, chưa phải quyết định cuối cùng hay yêu cầu phải lập trình.
+**Owner dự kiến:** REL-01 Nguyễn Đăng Gia Đạo và REL-02 Nguyễn Đổng Thiên Kỳ; cả hai vẫn TENTATIVE.
 
-## 1. Problem Statement
+## 1. Reliability là gì?
 
-Một phiên streaming có dữ liệu cần giao đủ và đúng thứ tự, như cấu hình hoặc lệnh điều khiển. Cũng có dữ liệu thời gian thực, như trạng thái game/media, mà bản mới thường có ích hơn việc gửi lại bản cũ.
+Kênh truyền có thể làm packet bị hỏng hoặc bị mất. Reliability là cách sender và receiver phát hiện tình huống đó, xác nhận packet nhận đúng và gửi lại khi chưa có ACK. Nhóm chọn cơ chế RDT 3.0 stop-and-wait làm bản draft dễ trình bày; bài giảng cho biết cách này đơn giản nhưng có thể làm hiệu năng kênh thấp.
 
-Nếu mất một gói, sender cần biết lúc nào có đủ bằng chứng để phục hồi. Nếu ACK bị mất, sender không được khiến ứng dụng xử lý cùng lệnh hai lần. Nếu gói đến sai thứ tự, receiver cần giữ dữ liệu trong giới hạn bộ nhớ và chỉ giao đúng thứ tự trong kênh yêu cầu ordered delivery.
+## 2. Sender và Receiver làm gì?
 
-Đây là draft do nhóm thảo luận. Email môn học yêu cầu thiết kế nháp Reliability, Flow Control và Congestion Control; không xác nhận rằng Lab 2 bắt buộc dùng QUIC hoặc implement đủ thuật toán.
+1. Sender gắn sequence number 0 hoặc 1 và checksum vào packet, gửi một packet rồi bật timer.
+2. Receiver kiểm tra checksum và sequence number đang chờ. Nếu hợp lệ, receiver giao data một lần và gửi ACK mang đúng sequence number.
+3. ACK hợp lệ tới sender thì sender dừng timer, đổi 0/1 và mới gửi packet kế tiếp.
+4. Nếu packet hoặc ACK mất/trễ, timer hết hạn và sender gửi lại chính packet đang lưu với cùng sequence number.
+5. Nếu receiver gặp packet trùng, receiver không giao data lần hai và gửi lại ACK của packet nhận đúng gần nhất.
 
-## 2. Proposed Solution
+Slide gọi timeout là khoảng chờ “hợp lý” nhưng không cho một giá trị mili-giây; draft không tự đặt con số.
 
-Đề xuất một cơ chế kiểu Selective Repeat ở mức ứng dụng:
+## 3. Sơ đồ nhóm vẽ lại từ RDT 3.0
 
-- Mỗi packet có một packet number mới theo từng chiều gửi.
-- Reliable data có channel và byte offset riêng; offset giữ nguyên khi retransmit.
-- Receiver báo các PN đã nhận bằng ACK ranges; range có thể chứa PN của ACK-only packet khi ACK được gửi vì traffic khác.
-- Sender chỉ retransmit reliable byte range còn outstanding, trong packet number mới.
-- Real-time update dùng sequence mới; update cũ hoặc đã mất không được retransmit.
-- Ordered delivery chỉ áp dụng trong từng reliable channel. Một gap chặn channel đó, không mặc định chặn mọi channel khác.
-
-Packet number và byte offset trả lời hai câu hỏi khác nhau. Packet number nhận diện một lần gửi. Offset nhận diện dữ liệu. ACK một packet cho biết transport đã nhận packet, không chứng minh ứng dụng đã commit lệnh. Nếu cần xác nhận nghiệp vụ, ứng dụng phải có response hoặc command ID/idempotency riêng.
-
-## 3. Packet / ACK Design
-
-| Trường | Vai trò |
-|---|---|
-| connection_id, packet_number, type/flags | Nhận diện phiên, lần gửi và loại packet |
-| ACK frame | Largest acknowledged PN, các range nhận được, ACK delay |
-| Reliable frame | channel_id, stream_offset, length, message boundary, payload |
-| Real-time frame | channel_id, update_sequence, freshness metadata, payload |
-| Receive-credit frame | Giới hạn absolute offset mà receiver còn cho phép |
-
-ACK ranges có thể là [105,106] và [101,102]. Khoảng trống 103-104 cho thấy sender chưa thấy ACK cho chúng, nhưng chưa đủ để kết luận mất. ACK-only packet không yêu cầu ACK ngược lại để tránh vòng lặp. Receiver gửi ACK nhanh khi packet ack-eliciting mới làm lộ gap; trường hợp bình thường, gửi sau hai packet ack-eliciting hoặc khi hết ACK delay đã thống nhất.
-
-## 4. Sender / Receiver Algorithm
-
-1. Sender đóng gói dữ liệu với offset hoặc update sequence; kiểm tra receive credit, congestion budget và pacing.
-2. Sender gán packet number mới và lưu thời gian gửi, bytes in flight, cùng byte ranges trong packet.
-3. Receiver lọc packet trùng theo packet number. Với packet mới, receiver buffer reliable range trong receive credit và giao message hoàn chỉnh từ offset liên tục tiếp theo.
-4. Receiver ghi nhận mọi PN đã xử lý, kể cả ACK-only; gửi ACK cho ack-eliciting traffic theo policy đã chọn.
-5. Sender cập nhật ACK/RTT rồi mới chạy loss detection. Packet-count rule riêng của draft là 3 later ACKed ack-eliciting packets, không phải raw PN distance của QUIC.
-6. Nếu later ACK đến trước time threshold, sender đặt `loss_time` và re-check khi timer hết, dù không có ACK mới. Dùng `max(9/8 * max(smoothed_rtt, latest_rtt), 1 ms)`.
-7. Loss-time timer được ưu tiên. Chỉ khi không có `loss_time` mới chạy PTO; PTO gửi probe nhưng không tự đánh dấu packet cũ lost.
-8. Khi loss đã được xác nhận, sender chỉ gửi lại reliable range còn cần. Real-time update đã cũ thì bỏ.
-
-## 5. Hai sơ đồ chính
+Sơ đồ dùng ví dụ ACK bị mất để cho thấy timer và duplicate sequence number hoạt động ra sao. Đây là hình nhóm rút gọn từ slide, không phải hình nguyên bản của giảng viên.
 
 ```mermaid
 sequenceDiagram
-    participant S as Sender
-    participant N as Network
-    participant R as Receiver
-    S->>N: DATA PN 40, offset 0
-    N->>R: DATA PN 40
-    R->>R: Store and deliver once
-    R-->>S: ACK range [40,40]
-    S->>S: Retire packet and reliable range
+    participant S as Bên gửi
+    participant R as Bên nhận
+    S->>R: gửi pkt(seq 0), dữ liệu và checksum
+    R->>R: kiểm tra checksum/seq, giao data một lần
+    R-->>S: ACK(0)
+    Note over S: Nếu ACK mất, timer hết hạn
+    S->>R: gửi lại pkt(seq 0) đã lưu
+    R->>R: seq 0 trùng, không giao data lần hai
+    R-->>S: gửi lại ACK(0)
 ```
 
-```mermaid
-sequenceDiagram
-    participant S as Sender
-    participant N as Network
-    participant R as Receiver
-    S->>N: Reliable data PN 100, bytes 0-99
-    N->>N: Drop PN 100
-    S->>N: Send later PNs 101-105
-    Note over S,N: PNs 101-102 ACK-only, 103-105 ack-eliciting
-    R-->>S: ACK range [101,105], PN 100 missing
-    Note over S,N: Custom ACKed count = 3 (103-105), ACK-only excluded
-    S->>S: Threshold reached, mark PN 100 lost
-    S->>N: Retransmit bytes 0-99 as PN 106
-    N->>R: PN 106 fills the gap, deliver data once
-    R-->>S: ACK range [101,106]
-```
+## 4. Hai ví dụ trong slide
 
-## 6. Worked Examples
+- **Hoạt động bình thường - slide 63(a):** sender gửi pkt0 và nhận ACK0, rồi gửi pkt1 và nhận ACK1.
+- **Có lỗi - slide 63(b), 64(c):** khi pkt1 mất, timer làm sender gửi lại pkt1; khi ACK1 mất, sender cũng gửi lại pkt1. Receiver nhận ra sequence number trùng và không giao data lần hai, rồi gửi ACK1 lại.
 
-**Threshold comparison.** PN 100 is lost; later ACK-only PNs 101 and 102 arrive before ack-eliciting PN 103. If ACK [101,103] arrives before the time deadline, QUIC's raw-distance test can meet `103 >= 100 + 3`; the numeric distance includes two sent ACK-only PNs, while this draft counts only one later ACKed ack-eliciting packet. Its custom count is 1, so the rules differ and are not equivalent. Two more later ack-eliciting ACKs would reach this draft's count of 3.
+## 5. Ưu điểm và hạn chế
 
-**Lost ACK example.** Receiver gets PN 60, stores and delivers its command once, then its ACK is lost. On PTO, sender sends a probe; PTO alone does not mark PN 60 lost. Receiver's next ACK can report both PNs. Offset deduplication prevents a second delivery if a retry was already sent.
+**Ưu điểm theo slide:** checksum giúp phát hiện lỗi, timer giúp xử lý packet mất, sequence number giúp nhận ra packet gửi trùng. (Slide 47-48, 53, 56, 59-62.)
 
-## 7. Advantages / Limitations
+**ĐỀ XUẤT của nhóm:** chọn stop-and-wait vì ít bước, dễ trình bày.
 
-**Advantages:** one lost packet does not require replaying every later packet; ACK ranges communicate reordering; independent channels can progress; stale real-time data is not forced through a reliable retry queue.
+**Hạn chế theo slide:** sender chờ ACK trước khi gửi packet tiếp theo nên hiệu năng thấp; timeout quá sớm có thể gây gửi trùng khi packet/ACK chỉ bị trễ. (Slide 60, 64(d), 67.)
 
-**Limitations:** sender and receiver keep packet, ACK-range, and stream-range state; a time threshold can still misclassify heavy reordering; ordered delivery still blocks within the affected channel; clock-based expiry needs an agreed clock model; exactly-once side effects across crashes require application support. Authentication, encryption, handshake security, and interoperable wire encoding are outside this draft.
+## 6. Phân công và phần chờ xác nhận
 
-## 8. Integration Notes
+- **Gia Đạo - Part 1:** checksum, sequence number 0/1, ACK xác nhận packet nào và cách receiver loại packet trùng.
+- **Thiên Kỳ - Part 2:** timer, retransmission cùng sequence number, mất packet/ACK và ví dụ timeout.
+- **Cả hai:** xác nhận stop-and-wait có phù hợp dù phải chờ ACK (slide 67), chọn timeout hợp lý vì slide không cho số mili-giây (slide 60), và quyết định có cần data hai chiều. Dùng cặp sender/receiver riêng cho chiều ngược là **ĐỀ XUẤT**. Phân công và cơ chế vẫn chờ sinh viên tự review.
 
-- **Flow Control:** Reliability supplies channel offsets, newly received ranges, and next contiguous delivery offset. Out-of-order bytes consume receiver buffer and credit. A retransmission reuses an already-authorized offset.
-- **Congestion Control:** Reliability reports packet ACKs, confirmed loss, loss-time expiry, RTT samples, PTO probes, retransmission mapping, packet sizes, and bytes-in-flight changes. A PTO is not a loss event. Retransmissions use the same path budget.
-- The two existing component designs remain unchanged; the pairs must confirm these interfaces together.
+## 7. Nguồn
 
-## 9. Pending Team Decisions
-
-- Confirm the tentative REL-01/REL-02 owners and the per-channel ordering model.
-- Confirm whether command IDs or application-level acknowledgments are needed.
-- Agree on ACK delay, buffer/range caps, update expiry clock, and the no-progress retry cap. The five-PTO example in the detailed draft is an assumption, not a standard.
-- Ask Congestion Control whether ACK-only packets count toward its path budget.
-- Ask Flow Control whether connection-level and per-channel limits both apply.
-- Keep the Assignment 1 TCP/UDP, group-size, and HoL conflicts open; they do not settle Lab 2 scope.
-
-## 10. References and presentation plan
-
-[RFC 9000 sections 12.3 and 13.2-13.3](https://www.rfc-editor.org/rfc/rfc9000.html) informs packet numbering, ACK ranges, and retransmission of information in new packets. [RFC 9002 sections 5, 6.1.1-6.2, and Appendix A.8-A.10](https://www.rfc-editor.org/rfc/rfc9002.html) informs RTT, the QUIC raw-distance threshold, time-loss timer, and PTO. [RFC 9221 section 5](https://www.rfc-editor.org/rfc/rfc9221.html) provides an example of unreliable datagrams that are not retransmitted but remain within congestion control. [Valve GameNetworkingSockets](https://github.com/ValveSoftware/GameNetworkingSockets/blob/master/src/steamnetworkingsockets/clientlib/SNP_WIRE_FORMAT.md) documents reliable message segments and ACK blocks. These are technical references; none means the instructor required QUIC or Valve's wire format.
-
-**Gợi ý nói trong 3-5 phút:** (1) nêu hai loại dữ liệu; (2) phân biệt packet number và stream offset; (3) giải thích ví dụ ACK-only cho thấy packet-count rule khác QUIC raw distance; (4) đi theo sơ đồ loss → threshold → PN mới → giao một lần; (5) nêu giới hạn HoL và quyết định cần nhóm chốt.
+- **Slide giảng viên:** `Chapter 3_ Transport Layer - Chapter_3_v9.0.pptx`, Chapter 3: slides 45, 47-48, 53, 56-64, 66-67 (footer ghi `Transport Layer: 3-n`). PDF cùng bài giảng có các trang tương ứng.
+- **Email Lab 2:** Email A/B trích trong `docs/requirements-matrix.md`, mục 1, rows 10-13: cần draft Reliability/Flow Control/Congestion Control; Steam và QUIC là ví dụ, không phải yêu cầu implement.
+- Các ví dụ và thuật toán ở trên theo nội dung slide. RDT 3.0 là cơ chế nhóm đề xuất để đáp ứng yêu cầu draft.
