@@ -6,8 +6,8 @@
 
 Keep separate state for receiver capacity and path capacity:
 
-- `flow_credit`: new reliable bytes still allowed by the receiver's advertised absolute limit.
-- `congestion_budget = cwnd - bytes_in_flight`: current path budget in bytes.
+- `flow_credit = max(0, peer_max_data - next_new_data_offset)`: new reliable byte offsets still allowed by the receiver's absolute limit. If both connection and channel limits apply, take the minimum remaining byte credit across those scopes.
+- `congestion_budget = max(0, cwnd - bytes_in_flight)`: current path budget in bytes. `bytes_in_flight` counts sent congestion-controlled packet bytes not yet acknowledged or declared lost, including a retransmission while that new packet is in flight.
 
 For new reliable data, send no more than:
 
@@ -15,7 +15,7 @@ For new reliable data, send no more than:
 min(flow_credit, congestion_budget)
 ```
 
-For an unreliable real-time update, receiver flow credit does not apply in this proposal; it still consumes the congestion budget and pacing allowance. A full local update queue drops the oldest/expired state instead of blocking the receiver indefinitely. A retransmission uses a new packet number and consumes path congestion budget; it does not count as new application bytes against flow credit if it refers to already-authorized reliable stream offsets.
+For new reliable data, `next_new_data_offset` advances by the number of new bytes sent; it is not advanced again for retransmitted bytes. For an unreliable real-time update, receiver flow credit does not apply in this proposal; it still consumes the congestion budget and pacing allowance. A full local update queue drops the oldest/expired state instead of blocking the receiver indefinitely. A retransmission uses a new packet number and consumes path congestion budget; it does not count as new application bytes against flow credit if it refers to already-authorized reliable offsets.
 
 ## Example scheduler
 

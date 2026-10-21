@@ -1,41 +1,67 @@
-# HTTP server source analysis
+# Phân tích nguồn HTTP server Lab 2
 
-## Source status
+## Nguồn đã kiểm chứng
 
-The user supplied a three-page PDF export of the LMS thread “Lab 1 - Network device and Network application.” Visual and text inspection confirms the instructor's forum reply, HTTP handler, listener settings, and a historical demonstration result. The PDF is outside this repository. The linked attachment `sample_code_http_server_process.txt` is not present in the repo, the course-source folder, Downloads, `D:\download`, `D:\TiKy`, or the inspected Codex attachments.
+Forum PDF “Lab 1 - Network device and Network application” được người dùng cung cấp; cả ba trang đã được đọc và xem trực quan. Bài trả lời trên p. 1 yêu cầu `hostip = "0.0.0.0"` và `port = 22236`. Code p. 2 có `receive_http_header(conn)` và handler `new_connection(conn, addr)`. Handler đọc tới `\r\n\r\n`, nhận theo chunk 1024 byte, tìm dòng request bắt đầu bằng `GET`, gửi HTTP/1.1 200 với trang HTML tĩnh, rồi đóng connection.
 
-The attachment link on PDF p. 2 points to LMS file ID `84252`. An unauthenticated request redirects to the BK-LMS login page, so the complete attached server source could not be retrieved. No credentials were used. The forum handler is now confirmed, but its matching server loop remains unavailable.
+`MAX_HEADER_SIZE = 1024` chỉ giới hạn kích thước mỗi lần `recv`, không phải tổng kích thước header. Handler không parse path hay trả HTTP error status cho non-GET; branch đó chỉ in log rồi đóng. Đây là ghi nhận hành vi, không phải phần đã sửa trong source của thầy.
 
-## Confirmed forum settings and handler
+## Bộ khung cũ do người dùng cung cấp
 
-The instructor's reply on PDF p. 1 says to set `hostip = "0.0.0.0"` and `port = 22236`. The code on p. 2 defines `new_connection(conn, addr)` and a `receive_http_header(conn)` helper. The handler:
+`server_skeleton_previous_upload.py` hiện có trong worktree dưới dạng file người dùng cung cấp, chưa được thêm vào Git. Nội dung cho thấy:
 
-- reads until the HTTP header terminator `\r\n\r\n` or the peer closes the connection, receiving in chunks of up to 1024 bytes;
-- decodes the request as UTF-8, checks whether the first line starts with `GET`, and sends the prepared HTTP response for that case;
-- returns a static “HTTP Welcome” HTML page with status `HTTP/1.1 200 OK`, a content length, `Connection: close`, and UTF-8 HTML content;
-- closes the connection in `finally`.
+- `accept()` trả `(conn, addr)`.
+- Thread gọi `Thread(target=new_connection, args=(conn, addr))`.
+- Signature cũ cũng là `new_connection(conn, addr)`, nên **thứ tự đối số khớp** với forum handler.
+- Body cũ chỉ `print(addr)`, nên chưa phải HTTP responder.
+- `hostip` cũ lấy từ UDP route tới `8.8.8.8:1` rồi fallback `127.0.0.1`; forum lại yêu cầu bind `0.0.0.0`.
+- Port của khung là `22236`, trùng port trong forum.
 
-The `MAX_HEADER_SIZE` constant controls each `recv` chunk, not the total accumulated header size. The code does not parse a path or produce an HTTP error response for non-GET requests; that branch only prints a message before the connection is closed. These are observations about the supplied handler, not changes to instructor code.
+Syntax của bộ khung đã parse thành công bằng Python AST. Điều đó chỉ kiểm tra syntax; không chứng minh server chạy hoặc truy cập được.
 
-## Matching server source still required
+## Mã tích hợp local
 
-The forum handler's positional signature is `new_connection(conn, addr)`. The separate Sample NetApp PDF p. 7 calls `Thread(..., args=(addr, conn))` for a different signature, `new_connection(addr, conn)`. Reusing that sample call unchanged would reverse the forum handler's arguments. The linked full server-process attachment is needed to confirm the actual `accept()` loop, thread arguments, startup command, and how the forum's `hostip` and `port` settings are applied.
+`examples/http_server_reconstructed_demo.py` là **GROUP RECONSTRUCTION**, kết hợp thứ tự `accept()`/Thread từ bộ khung người dùng với handler nhìn thấy trong forum PDF. Bản này đặt bind address `0.0.0.0`, port `22236`, và giữ nguyên đặc tính handler GET/non-GET quan sát được. Syntax đã parse thành công.
 
-## Historical Lab 1 demonstration in the forum export
+Đây không phải file server đầy đủ chính thức của thầy. Tệp `sample_code_http_server_process.txt` được liên kết trong forum chưa có trong thư mục repo, course source, Downloads hay Codex attachments; truy cập không có phiên LMS chuyển hướng tới trang đăng nhập. Không dùng mã reconstruction như bằng chứng nguồn chính thức.
 
-PDF p. 3 contains an instructor-posted result image showing a command prompt response with `HTTP/1.1 200 OK`, `Content-Length: 174`, and the HTML body, followed by a Chrome rendering of the welcome page. The browser address bar in the image shows `192.168.56.103:22236`; the text immediately above the image says `http://192.168.56.100:22236`. The displayed command output is dated 10 September 2026. This is evidence that the course demonstration worked at that time, not a current test of the local `ubuntu` VM or proof of its adapter configuration. The `.100`/`.103` difference is unresolved.
+### Lệnh ứng viên
 
-## Separate Sample NetApp PDF, page 7
+Trên Ubuntu, sau khi copy file reconstruction sang guest:
 
-Visual inspection of the embedded code shows a TCP accept/print skeleton:
+```bash
+python3 --version
+python3 http_server_reconstructed_demo.py
+```
 
-- `server_program(host, port)` creates a default TCP socket, binds it, calls `listen(10)`, then loops over `accept()`.
-- `accept()` supplies `(conn, addr)`; the sample passes `(addr, conn)` to `new_connection(addr, conn)`.
-- Its worker body only prints the socket object. It does not parse an HTTP request or send a response.
-- The sample sets port `22236` and derives `host` using a UDP route attempt to `8.8.8.8:1`, with a `127.0.0.1` fallback.
+Trong terminal Ubuntu khác, xem listener:
 
-The forum independently confirms port `22236`, but its handler signature differs from the sample's. Do not treat the sample server loop as the matching forum server.
+```bash
+ip -4 addr
+ss -lntp | grep 22236
+```
 
-## Current execution status
+Trên Windows, thay `<GUEST_IP>` bằng địa chỉ thật vừa thấy:
 
-No server was started in this session. The local `ubuntu` VM is powered off; its guest IP, firewall, and listening state remain unknown. No current Windows TCP, `curl.exe`, browser, or server-log test was run. Continue with [network setup](network-setup.md) after the linked server source is provided.
+```powershell
+ipconfig
+Test-NetConnection <GUEST_IP> -Port 22236
+curl.exe -v http://<GUEST_IP>:22236/
+```
+
+Sau đó mở `http://<GUEST_IP>:22236/` trong Chrome. `0.0.0.0` là địa chỉ bind, không phải URL client.
+
+## Khác biệt với Sample NetApp PDF
+
+Sample_NetApp p. 7 là server TCP accept/print khác: `new_connection(addr, conn)` và Thread args `(addr, conn)`. Thứ tự này **không khớp** forum handler `(conn, addr)`. Sample này không parse HTTP và không gửi response. Không thay bộ khung người dùng bằng sample này.
+
+## Demo lịch sử trong forum
+
+P. 3 có ảnh terminal với `HTTP/1.1 200 OK`, Content-Length 174 và ảnh Chrome. Text ngay trên ảnh ghi `192.168.56.100:22236`, còn thanh địa chỉ ảnh cho thấy `192.168.56.103:22236`. Đây là evidence demo lịch sử của lớp, không phải test VM hiện tại; chưa xác định IP nào đúng cho máy đang dùng.
+
+## Trạng thái chạy hiện tại
+
+- Syntax check: bộ khung và reconstruction đều **PASS (syntax only)**.
+- VM `ubuntu`: **tắt**, adapter đang Bridged; guest IP/firewall/listener chưa biết.
+- Không chạy server, không chạy TCP, curl hoặc browser từ Windows trong phiên này.
+- `HTTP_DEMO_STATUS = WAITING_FOR_MANUAL_TEST`.

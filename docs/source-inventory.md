@@ -25,6 +25,8 @@ The user supplied `CO3094_L07_source_handoff.md` and the actual source package i
 | CO3094 Lab 1 — Network infrastructure and Network applications | `src_bb5408286b99`; `sources/src_bb5408286b99__Lab1 Network infrastructure and Network applications - CO3094 -Lab1-Network Device.pdf` | PDF pp. 1–8 | p. 1 includes PC-to-HTTP-server work and network-programming outcome; pp. 5–6 show a separate GNS3/lighttpd static-IP HTTP exercise; p. 8 says sample `server.py`/`client.py` and a VM template are provided |
 | Sample network application — Sample NetApp | `src_b850d73292a7`; `sources/src_b850d73292a7__Sample network application - Sample_NetApp.pdf` | PDF pp. 7–8 | Embedded code images visually inspected. p. 7 shows a sample TCP accept/print server; p. 8 shows a client. Not the forum-overwritten HTTP handler |
 | LMS forum export — “Lab 1 - Network device and Network application” | User-supplied local PDF, outside Git | PDF pp. 1–3 | p. 1 gives listener `hostip = "0.0.0.0"`, port `22236`; p. 2 contains `new_connection(conn, addr)` and links `sample_code_http_server_process.txt`; p. 3 shows a historical `200 OK` and browser result. The linked file requires LMS login and was not retrieved |
+| Previous server skeleton | `server_skeleton_previous_upload.py`, user-provided untracked worktree file | Whole file | `accept()` and Thread args use `(conn, addr)`, matching the forum signature; the old handler only prints the address and the host helper selects a route IP. Not the complete instructor HTTP source |
+| Local HTTP test reconstruction | `examples/http_server_reconstructed_demo.py` | Whole file | Group-created candidate combining the visible forum handler with the user skeleton flow. Syntax checked only; explicitly not the instructor's complete server source and not run on a VM |
 | Sample source index entries | `src_098d45bf7b43` client; `src_86ccb3bac15a` server | `03_SOURCE_INDEX.md` lines 500–507 and 548–555 | Original `.py` entries are marked unsupported/skipped; standalone files are not present in the ZIP |
 
 ## Sample server details — do not confuse with forum override
@@ -58,7 +60,7 @@ See [requirements-matrix.md](requirements-matrix.md) for classification and [ope
 
 ## Runtime source still needed
 
-The forum-overwritten function, its handler signature, HTTP response behavior, and listener settings are now verified from the user-supplied forum export. The complete linked server-process source, including the accept loop and thread argument order, remains **UNAVAILABLE** pending an authenticated LMS download or user-provided copy. No source ZIP/PDF/VM image was committed.
+The forum-overwritten function, handler signature, HTTP response behavior and listener settings are verified from the user-supplied forum export. The user's old skeleton supplies an accept/thread loop with matching `(conn, addr)` order, but its handler body only prints; the full linked instructor server-process source remains **UNAVAILABLE** pending an authenticated LMS download or user-provided copy. The separate local reconstruction is syntax-checked only. Original course ZIP/PDF/VM image files are not tracked.
 
 
 ## External technical references (background, not course requirements)

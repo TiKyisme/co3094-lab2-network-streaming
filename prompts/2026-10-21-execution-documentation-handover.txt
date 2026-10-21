@@ -1,0 +1,924 @@
+# CO3094 LAB 2 — EXECUTION, DOCUMENTATION FINALIZATION & TEAM HANDOVER
+
+## 0. NHIỆM VỤ CHÍNH
+
+Bạn là AI Software Engineering Agent hỗ trợ nhóm 6 sinh viên HCMUT chuẩn bị Lab 2 môn CO3094 của giảng viên Nguyễn Phương Duy.
+
+Bạn đang tiếp tục dự án đã tồn tại:
+
+**GitHub repository:** `TiKyisme/co3094-lab2-network-streaming`
+
+**Branch:** `main`
+
+**Last reported commit:** `bff1d3e` (hãy xác minh HEAD thực tế).
+
+**Google Docs cần hoàn thiện:**  
+https://docs.google.com/document/d/1hxqLAD0eRfdBhDJJyopSY0i0vFqJUDhFCy7lOGO2CxQ/edit
+
+**MỤC TIÊU QUAN TRỌNG NHẤT CỦA PHIÊN NÀY:**
+
+Sau phiên làm việc này, tôi phải có một tài liệu **"CO3094 - LAB 2 | Hướng dẫn chuẩn bị & phân công nhóm 6 người"** hoàn chỉnh, chính xác, dễ hiểu và có thể gửi cho cả nhóm ngay lập tức.
+
+Mỗi thành viên phải đọc tài liệu và biết:
+
+1. Lab 2 yêu cầu những gì.
+2. Nhóm đang ở giai đoạn nào.
+3. Bản thân được giao nhiệm vụ gì.
+4. Cần nghiên cứu kiến thức nào.
+5. Cần làm gì theo thứ tự.
+6. Cần tạo ra những sản phẩm bàn giao nào.
+7. Cách xác định công việc đã hoàn thành.
+8. Phải nộp hoặc cập nhật kết quả vào đâu.
+9. Công việc của mình liên quan đến các thành viên khác như thế nào.
+10. Những gì chưa được giảng viên xác nhận.
+
+**Ưu tiên hoàn thiện TEAM HANDOVER trước khi mở rộng kỹ thuật.**
+
+Không để toàn bộ công việc bàn giao bị chặn chỉ vì thiếu source code của giảng viên, chưa chạy VirtualBox hoặc chưa xác nhận đủ tên sáu thành viên.
+
+Đây là nguyên tắc bắt buộc.
+
+---
+
+# 1. KHÔI PHỤC CONTEXT
+
+Trước khi làm việc:
+
+1. Mở đúng local repository.
+2. Đọc toàn bộ `README.md`.
+3. Đọc `state.md`.
+4. Đọc phần cuối `log.txt`.
+5. Kiểm tra `git status`, `git log`, `git remote -v`.
+6. Đọc `docs/requirements-matrix.md`.
+7. Đọc `docs/source-inventory.md`.
+8. Đọc `docs/open-questions.md`.
+9. Đọc các bản thiết kế streaming đã được tạo.
+10. Đọc `docs/lab2-group-guide.md` và `docs/docs-review.md`.
+
+Không tạo repository mới.
+
+Không làm lại những công việc đã hoàn thành.
+
+Không tự động ghi đè thay đổi của người dùng.
+
+Các trạng thái trong repository phải được kiểm tra lại với source và Git thực tế.
+
+---
+
+# 2. SOURCE OF TRUTH — ƯU TIÊN TUYỆT ĐỐI
+
+Thứ tự ưu tiên:
+
+**P1. Email mới nhất từ giảng viên Nguyễn Phương Duy liên quan trực tiếp Lab 2.**
+
+**P2. Thông báo chính thức trên BK-LMS, đặc biệt forum Lab 1 và Lab 2.**
+
+**P3. Tài liệu gốc CO3094, slide, assignment PDF, source giảng viên.**
+
+**P4. Tài liệu đã được nhóm xác minh.**
+
+**P5. Google Docs và tài liệu Markdown do AI tạo trước đây.**
+
+**P6. Tài liệu kỹ thuật bên ngoài và đề xuất của AI.**
+
+Những nguồn P4–P6 không được thay thế yêu cầu P1–P3.
+
+Phân loại:
+
+- `REQUIRED`: Thầy đã yêu cầu trực tiếp.
+- `SUPPORTED`: Có căn cứ từ tài liệu chính thức.
+- `PROPOSED`: Đề xuất của nhóm/AI.
+- `UNVERIFIED`: Chưa kiểm chứng.
+- `CONFLICT`: Có nguồn mâu thuẫn.
+
+Mỗi khi phát hiện xung đột, ghi vào `docs/open-questions.md`.
+
+Không biến một đề xuất thành yêu cầu bắt buộc.
+
+---
+
+# 3. YÊU CẦU CHÍNH THỨC LAB 2
+
+## 3.1. Email ngày 08/10/2026
+
+Thầy yêu cầu:
+
+> Kết nội mạng giữa các máy website các em làm để chuẩn bị cho lab 2. Các em access từ máy physical của em vào HTTP overwritten new_connection server máy ảo.
+>
+> Các em cũng chuẩn bị các thiết kế cho 3 thành phần của streaming nhe (ví dụ Steam UDP gaming network và Google QUIC) gồm reliable, flow và congestion. Các thiết kế và prompt sẽ phải trình lịch sử prompt vì tình trạng mua bán prompt thiết kế.
+
+## 3.2. Email về Assignment Group
+
+Thầy nói rõ:
+
+> In Lab 2 session, each team will prepare a draft design for features of reliability, flow control and congestion control (therefore we have 6 members which is approx. 2students/feature). There is no design fit for all, so each team will have a unique design.
+
+Assignment 1 được đánh giá vấn đáp trực tiếp trong tuần có ngày 17/11/2026.
+
+Đây là mốc đánh giá Assignment 1, không được tự xem là deadline Lab 2.
+
+## 3.3. Kết luận phạm vi Lab 2
+
+**PHẦN A — HTTP Networking**
+
+Máy thật phải truy cập được HTTP Server chạy trên máy ảo, sử dụng `new_connection` đã được thầy cập nhật.
+
+**PHẦN B — Streaming Protocol Design**
+
+Nhóm chuẩn bị bản thiết kế nháp cho:
+
+- Reliability.
+- Flow Control.
+- Congestion Control.
+
+**PHẦN C — Evidence & Explainability**
+
+Nhóm phải lưu lịch sử prompt AI, quá trình nghiên cứu và đủ khả năng giải thích thiết kế khi giảng viên hỏi.
+
+Lab 2 chưa có yêu cầu được xác minh rằng cả ba cơ chế phải được lập trình hoàn chỉnh.
+
+Không được yêu cầu nhóm làm vượt phạm vi chính thức mà không gắn nhãn `PROPOSED`.
+
+---
+
+# 4. REVIEW GOOGLE DOCS GỐC VÀ FILE WORD
+
+Tôi cung cấp tài liệu:
+
+`CO3094 - LAB 2 | Hướng dẫn chuẩn bị & phân công nhóm 6 người.docx`
+
+Đây là bản Word của tài liệu nhóm đã có.
+
+Google Docs gốc:
+
+https://docs.google.com/document/d/1hxqLAD0eRfdBhDJJyopSY0i0vFqJUDhFCy7lOGO2CxQ/edit
+
+## 4.1. Bắt buộc đọc toàn bộ
+
+Đọc từ đầu đến cuối, không chỉ đọc tên các heading.
+
+Đối chiếu với:
+
+- Email thầy.
+- Forum Lab 1.
+- CO3094 AI Study Pack.
+- Các phát hiện mới nhất trong repository.
+- Bản thiết kế streaming hiện tại.
+
+## 4.2. Những điểm đã biết cần cập nhật
+
+Qua đợt source recovery trước, đã có các bằng chứng:
+
+- Forum xác nhận `hostip = "0.0.0.0"`.
+- Port HTTP là `22236`.
+- Handler là `new_connection(conn, addr)`.
+- Handler trả HTTP response với status `200 OK` cho GET request.
+- Bộ khung Python cũ có `accept()` và Thread truyền `(conn, addr)`.
+- File server-process đính kèm chính thức vẫn chưa được xác minh đầy đủ.
+- VM `ubuntu` đã được phát hiện nhưng chưa được khởi động và kiểm thử.
+
+Vì vậy, sửa các chỗ còn ghi port 22236 hoặc handler signature là hoàn toàn không xác minh được.
+
+Phân biệt rõ:
+
+- Forum configuration: VERIFIED.
+- Complete original server source: NOT YET VERIFIED.
+- Historical HTTP demonstration: VERIFIED AS HISTORICAL EVIDENCE.
+- Current Windows–Ubuntu test: NOT YET TESTED.
+
+Bản Word hiện tại cũng có:
+
+**Reliability — phân công dự kiến:**
+
+- Nguyễn Đăng Gia Đạo.
+- Nguyễn Đổng Thiên Kỳ.
+
+Hãy giữ hai tên này với nhãn `TENTATIVE / CHỜ XÁC NHẬN`, không tự xóa và không tự khẳng định roster đã chốt.
+
+Bốn thành viên còn lại để placeholder cho đến khi tôi cung cấp tên.
+
+## 4.3. Yêu cầu sửa tài liệu
+
+Tài liệu mới phải:
+
+- Trực quan, chuyên nghiệp nhưng dễ hiểu.
+- Viết bằng tiếng Việt.
+- Giải thích thuật ngữ tiếng Anh khi xuất hiện lần đầu.
+- Có các bảng phân công rõ ràng.
+- Có checklist.
+- Có sơ đồ minh họa khi thực sự hữu ích.
+- Có đường dẫn tới tài liệu kỹ thuật trong GitHub.
+- Có trạng thái thực tế của các công việc.
+- Có phần hướng dẫn cho người mới.
+- Không chứa khẳng định sai hoặc bằng chứng giả.
+- Không có những đoạn quá dài, không giúp thành viên biết việc phải làm.
+
+Giữ một tài liệu chính duy nhất thay vì tạo nhiều Google Docs trùng lặp.
+
+---
+
+# 5. TEAM HANDOVER — DELIVERABLE ƯU TIÊN SỐ 1
+
+Đây là phần quan trọng nhất.
+
+Hãy biến Google Docs thành **một kế hoạch giao việc có thể thực thi ngay**.
+
+Không chỉ tóm tắt lý thuyết.
+
+## 5.1. Phần mở đầu: Cả nhóm cần làm gì?
+
+Tạo phần:
+
+`ĐỌC PHẦN NÀY TRƯỚC — LAB 2 CẦN LÀM GÌ?`
+
+Nội dung phải giải thích ngắn gọn:
+
+- Nhóm cần chuẩn bị hai đầu việc chính.
+- Đầu việc nào yêu cầu demo thực tế.
+- Đầu việc nào chỉ cần draft design ở giai đoạn này.
+- Việc gì đã làm.
+- Việc gì chưa làm.
+- Những công việc nhóm có thể bắt đầu ngay hôm nay.
+- Những công việc đang cần input hoặc kiểm thử thực tế.
+
+Một thành viên đọc phần này trong 3 phút phải hiểu được toàn bộ Lab 2.
+
+## 5.2. Bảng phân công sáu thành viên
+
+Tạo bảng chính với tối thiểu các cột:
+
+| Member | Họ tên | Phụ trách | Nhiệm vụ cụ thể | Deliverable | Trạng thái |
+|---|---|---|---|---|---|
+
+Đề xuất chia:
+
+**Member 1–2: Reliability**
+
+Member 1: tìm hiểu cơ chế phát hiện và xác nhận packet.
+
+Member 2: tìm hiểu mất gói, retransmission, timeout và xử lý sai thứ tự.
+
+Hai người cùng hoàn thiện một thiết kế Reliability chung.
+
+**Member 3–4: Flow Control**
+
+Member 3: nghiên cứu receiver buffer và receive window.
+
+Member 4: nghiên cứu sender control, window update và zero-window recovery.
+
+Hai người cùng hoàn thiện thiết kế Flow Control.
+
+**Member 5–6: Congestion Control**
+
+Member 5: nghiên cứu RTT, packet loss, congestion detection.
+
+Member 6: nghiên cứu điều chỉnh sending rate, congestion window, pacing và recovery.
+
+Hai người cùng hoàn thiện thiết kế Congestion Control.
+
+Đây là **phân công đề xuất**, không phải sự phân công đã được cả nhóm xác nhận.
+
+Reliability pair hiện có hai tên dự kiến trong bản Word; giữ lại và đánh dấu chờ xác nhận.
+
+Không tự tạo tên thành viên còn thiếu.
+
+## 5.3. Với MỖI thành viên phải có task card chi tiết
+
+Mỗi task card cần:
+
+**A. Mục tiêu**
+
+Sau khi làm xong, bạn phải hiểu và chứng minh được điều gì?
+
+**B. Kiến thức cần học**
+
+Các thuật ngữ, cơ chế và nguyên lý liên quan.
+
+**C. Công việc phải thực hiện**
+
+Các bước cụ thể, đánh số rõ ràng.
+
+**D. Deliverable**
+
+Các file hoặc nội dung cần tạo.
+
+**E. Acceptance Criteria**
+
+Điều kiện khách quan để xác định đã hoàn thành.
+
+**F. Dependencies**
+
+Cần người khác cung cấp hoặc thống nhất điều gì?
+
+**G. Questions for Oral Exam**
+
+Ít nhất 3 câu hỏi thầy có thể đặt ra để kiểm tra hiểu biết.
+
+**H. GitHub Handover Location**
+
+Đường dẫn file mà thành viên đó sẽ cập nhật.
+
+Không giao việc theo kiểu chung chung như "nghiên cứu Reliability" mà không giải thích phải nghiên cứu đến mức nào.
+
+## 5.4. Deliverable chung cho mỗi cặp
+
+Mỗi cặp cần bàn giao tối thiểu:
+
+1. Một mô tả bài toán ngắn gọn.
+2. Thiết kế thuật toán/mô hình đã chọn.
+3. Một sequence diagram hoặc flowchart.
+4. Danh sách biến, thông điệp hoặc trạng thái liên quan.
+5. Ít nhất hai tình huống ví dụ.
+6. Giải thích tại sao chọn thiết kế.
+7. Ưu điểm, nhược điểm và giới hạn.
+8. Các điểm cần phối hợp với hai cặp còn lại.
+9. Lịch sử prompt AI thực tế đã sử dụng.
+
+Các bản thiết kế hiện có trong GitHub là bản `PROPOSED` của AI. Mỗi cặp phải review, phản biện và tự đưa ra quyết định thay vì nhận nguyên bản đó là sản phẩm đã hoàn thành.
+
+## 5.5. Tạo bảng tiến độ
+
+Dùng các trạng thái:
+
+- NOT STARTED
+- IN PROGRESS
+- BLOCKED
+- READY FOR REVIEW
+- VERIFIED / DONE
+
+Mỗi nhiệm vụ phải có:
+
+- Người phụ trách.
+- Trạng thái.
+- File kết quả.
+- Người review.
+- Bằng chứng hoàn thành.
+
+Không đánh dấu DONE chỉ vì AI đã sinh ra một bản thiết kế.
+
+## 5.6. Lịch làm việc
+
+Nếu chưa có ngày Lab 2 chính thức, KHÔNG tự đặt deadline có ngày tháng cụ thể.
+
+Thay vào đó, xây dựng mốc tương đối:
+
+- D0: Nhận việc và xác nhận thành viên.
+- D0–D1: Nghiên cứu nguồn, kiểm tra thiết kế nháp.
+- D1–D2: Hoàn thiện thiết kế của từng cặp.
+- D2: Review chéo.
+- Trước buổi Lab 2: Chốt tài liệu và tập trình bày.
+
+Gắn nhãn `PROPOSED SCHEDULE`.
+
+Nếu ngày Lab 2 đã có nguồn xác minh, mới được chuyển sang lịch tuyệt đối.
+
+---
+
+# 6. PHÂN CÔNG PHẦN HTTP NETWORKING
+
+Đây là đầu việc chung của nhóm, không thuộc riêng một cặp streaming.
+
+Tạo một mục riêng:
+
+`PHẦN A — HTTP SERVER / VIRTUALBOX`
+
+Giải thích hệ thống:
+
+Windows Physical Host → VirtualBox Network → Ubuntu Virtual Machine → HTTP Server → HTTP Response.
+
+## 6.1. Tasks
+
+**HTTP-01 — Source Verification**
+
+- Kiểm tra source chính thức thầy.
+- Đối chiếu `new_connection(conn, addr)`.
+- Xác nhận server bind và port.
+- Ghi nguồn và phần chưa xác minh.
+
+**HTTP-02 — Server Integration**
+
+- Kiểm tra bộ khung Python đã tải.
+- Tích hợp handler theo forum PDF nếu cần.
+- Phân biệt code gốc và code nhóm tái dựng.
+- Kiểm tra syntax và socket/thread flow.
+
+**HTTP-03 — VirtualBox Networking**
+
+- Xác định Adapter mode.
+- Khởi động Ubuntu.
+- Xác định guest IP.
+- Xác định interface và listener.
+
+**HTTP-04 — Windows Access**
+
+- Kiểm tra TCP connectivity.
+- Kiểm tra HTTP GET/response.
+- Mở Chrome trên Windows.
+- Kiểm tra trang HTML hiển thị thành công.
+
+**HTTP-05 — Evidence and Documentation**
+
+- Chụp screenshot thật.
+- Lưu terminal output.
+- Ghi cấu hình IP/port.
+- Ghi các vấn đề gặp phải.
+- Hướng dẫn cả nhóm cách chạy lại.
+
+## 6.2. Owner
+
+Tạo hai vị trí:
+
+- HTTP Demo Owner: CHỜ PHÂN CÔNG.
+- HTTP Backup/Reviewer: CHỜ PHÂN CÔNG.
+
+Không tự gán người thực hiện.
+
+Nếu người dùng chưa xác nhận, để hai vị trí trống nhưng tài liệu vẫn phải đủ để giao việc ngay.
+
+## 6.3. Test criteria
+
+Phân biệt:
+
+- VM boots successfully.
+- Server listens on port 22236.
+- Windows TCP connection succeeds.
+- HTTP GET receives a valid response.
+- Browser displays the response.
+
+Không gộp TCP PASS và HTTP PASS làm một.
+
+Lưu ý `0.0.0.0` là địa chỉ lắng nghe, không phải địa chỉ cần nhập vào browser.
+
+---
+
+# 7. CHUẨN HÓA THIẾT KẾ STREAMING ĐỂ NHÓM CÓ THỂ NGHIÊN CỨU
+
+Đọc các tài liệu đã có:
+
+- `docs/streaming-architecture.md`
+- `docs/reliability-design.md`
+- `docs/flow-control-design.md`
+- `docs/congestion-control-design.md`
+- `docs/integration-design.md`
+
+Không viết lại toàn bộ nếu không cần.
+
+Cần xác định rõ:
+
+- Đây là thiết kế của ứng dụng streaming nào?
+- Giao thức nền là gì?
+- Có những loại dữ liệu nào?
+- Loại nào cần reliability?
+- Loại nào có thể hết hạn?
+- Receiver báo dung lượng bằng cách nào?
+- Sender phát hiện congestion bằng cách nào?
+- Các cơ chế liên quan đến nhau ra sao?
+
+### Reliability
+
+Giải thích dễ hiểu:
+
+- Sequence Number.
+- ACK.
+- Timeout.
+- Retransmission.
+- Packet Loss.
+- Duplicate Packet.
+- Out-of-order Packet.
+
+### Flow Control
+
+Giải thích:
+
+- Receiver Buffer.
+- Receive Window.
+- Flow Credit.
+- Zero Window.
+- Window Update.
+- Slow Receiver.
+
+### Congestion Control
+
+Giải thích:
+
+- RTT.
+- Packet Loss Signals.
+- Congestion Window.
+- AIMD / NewReno-like control.
+- Pacing.
+- Congestion Recovery.
+
+Chỉ lựa chọn các cơ chế phù hợp với kiến trúc đang đề xuất.
+
+Không yêu cầu cả nhóm tự xây dựng QUIC đầy đủ.
+
+### Integration
+
+Phải mô tả cách ba cơ chế phối hợp trong một luồng gửi dữ liệu chung.
+
+Phân biệt:
+
+- Giới hạn do receiver.
+- Giới hạn do mạng.
+- Trạng thái ACK.
+- Lượng dữ liệu đang truyền chưa được xác nhận.
+- Dữ liệu real-time đã quá hạn.
+
+Các công thức phải dùng những đại lượng cùng đơn vị và giải thích chính xác.
+
+Tạo ít nhất một tình huống xuyên suốt để cả 6 người thảo luận chung.
+
+Ví dụ:
+
+Sender truyền 100 packet, một số bị mất, receiver bị chậm và RTT tăng.
+
+Mỗi cặp phải giải thích cơ chế của mình phản ứng như thế nào.
+
+---
+
+# 8. GOOGLE DOCS PHẢI TRỞ THÀNH TÀI LIỆU BÀN GIAO CHÍNH
+
+Sau khi kiểm chứng và chuẩn hóa nội dung, cập nhật tài liệu:
+
+`CO3094 - LAB 2 | Hướng dẫn chuẩn bị & phân công nhóm 6 người`
+
+Yêu cầu bố cục cuối cùng:
+
+1. Trang đầu — Lab 2 cần làm gì?
+2. Yêu cầu chính thức từ giảng viên.
+3. Những gì nhóm đã chuẩn bị.
+4. Những gì chưa hoàn thành.
+5. Bảng phân công 6 thành viên.
+6. Hướng dẫn và task card Reliability.
+7. Hướng dẫn và task card Flow Control.
+8. Hướng dẫn và task card Congestion Control.
+9. Nhiệm vụ chung HTTP Networking.
+10. Cách tích hợp ba cơ chế.
+11. Checklist trước Lab 2.
+12. Cách bàn giao, review và cập nhật GitHub.
+13. Prompt evidence và academic integrity.
+14. Các câu hỏi chưa xác minh.
+15. Link đến repository và tài liệu tham khảo.
+
+### Yêu cầu quan trọng về cập nhật Google Docs
+
+Ưu tiên cập nhật **chính document gốc** theo ID trong URL đã cung cấp.
+
+Không tạo nhiều bản Google Docs trùng tên.
+
+Nếu API báo 404:
+
+1. Kiểm tra tài khoản đang kết nối.
+2. Thử quyền đọc bằng đúng document ID.
+3. Không tìm một tài liệu trùng tên rồi ghi đè nhầm.
+4. Không tiếp tục lặp lại API lỗi vô hạn.
+5. Chuyển sang fallback có kiểm soát.
+
+### Fallback bắt buộc
+
+Nếu không chỉnh sửa trực tiếp Google Docs được, hãy:
+
+- Hoàn thiện `docs/lab2-group-guide.md` trong repository.
+- Tạo file `docs/team-handover.md`.
+- Nếu có thể, xuất bản DOCX hoàn chỉnh để tôi tải lên Google Docs.
+- Hướng dẫn chính xác cách thay nội dung Google Docs gốc.
+- Đánh dấu `GOOGLE_DOC_SYNC_PENDING`.
+
+Không được kết luận Google Docs đã cập nhật thành công khi chưa đọc lại và xác minh.
+
+**Tài liệu bàn giao vẫn phải hoàn chỉnh ngay cả khi Google Docs API không hoạt động.**
+
+---
+
+# 9. TEAM HANDOVER PACKAGE — BẮT BUỘC
+
+Ngoài Google Docs, hoàn thiện một gói bàn giao trong GitHub.
+
+## 9.1. `docs/team-handover.md`
+
+Đây là bản bàn giao ngắn, tối đa khoảng 2–3 trang nội dung đọc.
+
+Phải trả lời:
+
+- Lab 2 là gì?
+- Nhóm phải làm những gì?
+- Ai phụ trách từng phần?
+- Khi nào cần xong?
+- Nộp/cập nhật vào đâu?
+- Khi gặp khó khăn hỏi ai?
+- Checklist trước buổi lab là gì?
+
+Nó phải đồng bộ với Google Docs.
+
+## 9.2. `docs/team-assignments.md`
+
+Chứa phân công chi tiết cho từng thành viên.
+
+Mỗi task cần ID, owner, deliverable, acceptance criteria và trạng thái.
+
+## 9.3. `docs/team-announcement.md`
+
+Tạo sẵn một tin nhắn tiếng Việt để tôi gửi vào nhóm Messenger/Zalo.
+
+Giọng văn tự nhiên như trưởng nhóm sinh viên, không quá trang trọng.
+
+Nội dung phải:
+
+- Thông báo tài liệu đã sẵn sàng.
+- Giải thích hai phần Lab 2.
+- Giới thiệu cách chia ba cặp.
+- Yêu cầu các thành viên xác nhận nhận việc.
+- Chỉ rõ nơi xem tài liệu và nơi cập nhật kết quả.
+- Nhắc lưu lịch sử prompt AI.
+- Nhắc mọi người phải hiểu phần mình làm.
+
+Dùng link thực tế đã xác minh.
+
+Không tự gửi tin nhắn cho nhóm. Chỉ tạo bản nháp sẵn để tôi copy.
+
+## 9.4. `docs/team-review-checklist.md`
+
+Tạo checklist để nhóm trưởng review sản phẩm của từng cặp.
+
+Checklist phải gồm:
+
+- Đúng phạm vi?
+- Có nguồn?
+- Có thuật toán?
+- Có sơ đồ?
+- Có ví dụ?
+- Có đánh đổi thiết kế?
+- Có xử lý edge cases?
+- Có tương thích với hai cơ chế còn lại?
+- Có prompt evidence?
+- Thành viên giải thích được?
+
+## 9.5. README
+
+Trong `README.md`, tạo mục dễ tìm:
+
+`START HERE — LAB 2 TEAM MEMBERS`
+
+Liên kết đến:
+
+- Google Docs.
+- Team Handover.
+- Team Assignments.
+- Network Setup.
+- Streaming Design.
+- Prompt Evidence Instructions.
+
+Các link phải hoạt động.
+
+---
+
+# 10. THỰC HÀNH HTTP — NHIỆM VỤ KỸ THUẬT TRONG PHIÊN NÀY
+
+Sau khi hoàn thành bản Team Handover có thể giao việc, tiếp tục phần HTTP.
+
+Tôi đã tải file:
+
+`server_skeleton_previous_upload.py`
+
+Hãy định vị file trong thư mục tôi cung cấp.
+
+Đây là bộ khung cũ, không phải source chính thức hoàn chỉnh.
+
+Cần:
+
+1. Đọc bộ khung.
+2. Đối chiếu `accept()` và `Thread()`.
+3. Tìm `sample_code_http_server_process.txt` nếu có.
+4. Đối chiếu handler từ PDF forum.
+5. Chuẩn bị một bản tích hợp chạy thử nếu cần.
+6. Kiểm tra Python syntax.
+7. Chuẩn bị lệnh chạy trong Ubuntu.
+8. Chuẩn bị lệnh test từ Windows.
+
+Không tạo file server rồi tự tuyên bố kết nối thành công.
+
+### Quy tắc chạy thực tế
+
+Nếu VM đang tắt hoặc thao tác đòi hỏi tôi mở VirtualBox:
+
+- Hướng dẫn tôi một bước cụ thể.
+- Chờ output hoặc screenshot nếu cần.
+- Không giả lập kết quả.
+- Có thể tiếp tục những công việc độc lập.
+
+Nếu chưa thể chạy demo, giữ:
+
+`WAITING_FOR_MANUAL_TEST`
+
+Điều này **không ngăn** việc đánh dấu Team Handover là hoàn chỉnh nếu các task và hướng dẫn đã được chuẩn bị đầy đủ.
+
+---
+
+# 11. THIẾT KẾ WORKFLOW CỘNG TÁC NHÓM
+
+Hãy đề xuất một workflow đơn giản, phù hợp với sinh viên:
+
+**Nhận việc → Nghiên cứu → Bàn giao bản nháp → Review chéo → Chỉnh sửa → Chốt thiết kế.**
+
+Mỗi cặp cập nhật file Markdown tương ứng trong repo.
+
+Nhóm có thể dùng branch hoặc Pull Request nếu cả 6 người quen Git. Nếu chưa quen, đề xuất phương án đơn giản hơn với một người tích hợp, nhưng không cho nhiều người sửa trực tiếp cùng file mà không có quy trình.
+
+Đảm bảo thành viên không phải học quá nhiều công cụ mới chỉ để giao một bản thiết kế.
+
+Nhóm trưởng cần biết cách kiểm tra tiến độ trong GitHub và tài liệu chính.
+
+Không tự động cấp quyền truy cập Private repository cho người khác. Chuẩn bị hướng dẫn để tôi mời thành viên sau.
+
+---
+
+# 12. ACCEPTANCE CRITERIA — TEAM HANDOVER READY
+
+Chỉ đánh dấu `TEAM_HANDOVER_READY = YES` khi đáp ứng đủ:
+
+- [ ] Đã review toàn bộ bản Word/Google Docs.
+- [ ] Các yêu cầu trực tiếp từ thầy được phân loại chính xác.
+- [ ] Phần HTTP và Streaming được tách rõ.
+- [ ] Có bảng phân công đủ 6 vị trí.
+- [ ] Hai thành viên Reliability được giữ ở trạng thái tentative cho đến khi xác nhận.
+- [ ] Bốn thành viên còn lại có placeholder rõ ràng.
+- [ ] Mỗi thành viên có công việc chi tiết.
+- [ ] Mỗi cặp có deliverable riêng.
+- [ ] Mỗi deliverable có acceptance criteria.
+- [ ] Có task chung HTTP Networking.
+- [ ] Có người phụ trách HTTP đang chờ được gán nếu roster chưa xác nhận.
+- [ ] Có checklist trước Lab 2.
+- [ ] Có quy trình cập nhật và review.
+- [ ] Có hướng dẫn lưu prompt AI.
+- [ ] Có bản tin nhắn gửi nhóm sẵn.
+- [ ] Có link đến tài liệu và repository.
+- [ ] Không có công việc chưa kiểm thử bị đánh dấu hoàn thành.
+- [ ] Đã cập nhật và kiểm chứng tài liệu bàn giao.
+- [ ] Đã cập nhật `state.md`, `log.txt`.
+- [ ] Các thay đổi hợp lệ đã được commit/push.
+
+Quan trọng:
+
+`TEAM_HANDOVER_READY = YES` chỉ có nghĩa là **tài liệu đủ rõ để phân công và bắt đầu làm việc**.
+
+Nó KHÔNG có nghĩa:
+
+- HTTP demo đã PASS.
+- Streaming protocol đã được triển khai.
+- Giảng viên đã duyệt thiết kế.
+- Tất cả thành viên đã xác nhận nhận việc.
+
+Những trạng thái đó phải được theo dõi riêng.
+
+---
+
+# 13. STATE MANAGEMENT & PROMPT EVIDENCE
+
+Sau mỗi milestone:
+
+1. Cập nhật `state.md`.
+2. Append vào `log.txt`.
+3. Lưu prompt thực tế trong `prompts/`.
+4. Cập nhật status của từng task.
+5. Commit khi phù hợp.
+6. Push lên GitHub.
+7. Xác minh remote commit.
+
+Đề xuất bổ sung vào `state.md`:
+
+```text
+TEAM_HANDOVER_STATUS:
+GOOGLE_DOC_STATUS:
+HTTP_DEMO_STATUS:
+STREAMING_DESIGN_STATUS:
+GROUP_ROSTER_STATUS:
+PROMPT_EVIDENCE_STATUS:
+NEXT_ACTION:
+```
+
+Không xóa lịch sử cũ.
+
+Không đưa mật khẩu, token, tài liệu riêng tư hoặc toàn bộ tài liệu có bản quyền của môn học lên GitHub.
+
+---
+
+# 14. TRÌNH TỰ THỰC HIỆN
+
+Thực hiện theo thứ tự sau.
+
+## Phase A — Audit & Handover Planning
+
+- Resume repo.
+- Đọc bản Word.
+- Đọc Google Docs nếu truy cập được.
+- Đọc các yêu cầu chính thức.
+- Đối chiếu source recovery mới nhất.
+- Xác định những nội dung cần sửa.
+
+## Phase B — Finalize Team Documentation
+
+- Hoàn thiện bảng phân công.
+- Tạo task card cho 6 người.
+- Bổ sung deliverable và acceptance criteria.
+- Chuẩn hóa lịch trình tương đối.
+- Hoàn thiện checklist và hướng dẫn GitHub.
+- Tạo team announcement.
+
+**Phase B là ưu tiên cao nhất, phải hoàn thành trước khi bị cuốn vào debugging VirtualBox.**
+
+## Phase C — Google Docs Synchronization
+
+- Cập nhật tài liệu gốc nếu có quyền.
+- Đọc lại và kiểm chứng nội dung.
+- Nếu API bị lỗi, xuất fallback hoàn chỉnh.
+- Đảm bảo tôi có tài liệu có thể giao ngay cho nhóm.
+
+## Phase D — HTTP Source Integration
+
+- Đọc server skeleton.
+- So sánh forum code.
+- Tích hợp bản thử nghiệm.
+- Chuẩn bị kiểm thử.
+- Hướng dẫn thao tác thực tế.
+- Đánh dấu chính xác các bước còn chờ.
+
+## Phase E — Repository Finalization
+
+- Kiểm tra docs.
+- Kiểm tra link.
+- Review các file thay đổi.
+- Cập nhật state/log.
+- Commit/push.
+- Đọc lại kết quả sau khi push.
+
+---
+
+# 15. FINAL DELIVERY FORMAT
+
+Khi kết thúc, hãy trả về:
+
+## A. TEAM HANDOVER
+
+**Status:** READY / PARTIAL / BLOCKED
+
+**Google Docs:** Link và trạng thái cập nhật thực tế.
+
+**Team Handover:** GitHub link.
+
+**Team Assignments:** GitHub link.
+
+**Team Announcement:** GitHub link.
+
+**Unassigned Members:** Những vị trí cần tôi điền tên.
+
+**What I Can Send to My Team Now:** Nêu chính xác tài liệu và tin nhắn nào đã có thể gửi.
+
+## B. HTTP DEMO
+
+- Source status.
+- Integration status.
+- VM status.
+- Tests performed.
+- Tests pending.
+- Next manual action.
+
+## C. STREAMING DESIGN
+
+- Reliability design status.
+- Flow Control design status.
+- Congestion Control design status.
+- Integration status.
+- Pending team decisions.
+
+## D. REPOSITORY
+
+- Branch.
+- Last commit hash.
+- Push status.
+- Worktree status.
+- State/log status.
+
+## E. READY-TO-SEND MESSAGE
+
+In nguyên văn tin nhắn ngắn để tôi copy vào nhóm ngay.
+
+---
+
+# 16. EXECUTION RULES
+
+- Không chỉ viết kế hoạch, hãy tạo và cập nhật tài liệu thật.
+- Không tự ý triển khai toàn bộ Assignment 1.
+- Không tạo thêm repository hoặc Google Docs trùng lặp.
+- Không tự ý điền tên sinh viên chưa được xác nhận.
+- Không giả lập test results.
+- Không đánh dấu mã nguồn giáo viên là VERIFIED nếu chưa chứng minh.
+- Không chỉnh sửa hoặc xóa tài liệu gốc của thầy.
+- Không cho người khác quyền truy cập GitHub nếu tôi chưa yêu cầu.
+- Không tự gửi email hoặc tin nhắn thay tôi.
+- Không yêu cầu tôi trả lời nhiều câu hỏi nếu có thể dùng placeholder để tiếp tục.
+- Chỉ dừng khi thật sự có hành động bắt buộc từ phía tôi.
+- Khi bị chặn ở một nhiệm vụ, tiếp tục nhiệm vụ độc lập khác.
+
+**Điều kiện thành công quan trọng nhất: Sau khi phiên này kết thúc, tôi phải có thể mở tài liệu “CO3094 - LAB 2 | Hướng dẫn chuẩn bị & phân công nhóm 6 người”, gửi cho nhóm, và cả 6 người có thể bắt đầu làm việc ngay mà không cần tôi phải tự giải thích lại toàn bộ Lab 2.**
+
+START NOW. Ưu tiên hoàn thiện Team Handover trước, sau đó tiếp tục HTTP integration và kiểm thử thực tế.

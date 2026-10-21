@@ -42,10 +42,23 @@ Source basis: Email A and Email B excerpts supplied by the user. Original mailbo
 
 ## Current Phase
 - Phase 1B Source Recovery: **PARTIAL** — CO3094/L07 package and forum overwrite/settings verified; the linked complete server source is unavailable.
-- Phase 2 Documentation audit: **PARTIAL** — guide text review and Markdown correction exist; original Google Doc could not be edited through the connected API.
-- Phase 3 HTTP environment: **DISCOVERED / WAITING_FOR_MATCHING_SERVER_SOURCE_AND_MANUAL_TEST**. The PDF's historical demo is not a current test of this VM.
-- Phase 4 Streaming: draft proposals exist; **not implemented/tested** and not confirmed Assignment 1-compliant.
+- Phase 2 Team handover: **READY FOR LOCAL TEAM START** — main Vietnamese guide, short handover, six detailed task cards, announcement, checklist, prompt instructions and a visually reviewed Word fallback exist. Exact Google Docs read returned 404; sync is pending.
+- Phase 3 HTTP environment: **WAITING_FOR_MANUAL_TEST**. Forum settings and local reconstruction are documented; syntax is checked only. The VM is off and no TCP/HTTP/browser test has been run.
+- Phase 4 Streaming: draft proposals exist; **not reviewed by the pairs, not implemented/tested**, and not confirmed Assignment 1-compliant.
 - Phase 5 Repository: private GitHub repo on `main`; latest source/status milestone is verified against `origin/main` after push.
+
+## Session Status Fields
+
+```text
+TEAM_HANDOVER_STATUS: READY_FOR_LOCAL_TEAM_START
+TEAM_HANDOVER_READY: YES (local fallback package; Google Docs sync pending)
+GOOGLE_DOC_STATUS: GOOGLE_DOC_SYNC_PENDING (exact-ID metadata and native text reads returned 404)
+HTTP_DEMO_STATUS: WAITING_FOR_MANUAL_TEST (syntax only; VM powered off)
+STREAMING_DESIGN_STATUS: PROPOSED_NOT_REVIEWED_BY_PAIRS
+GROUP_ROSTER_STATUS: PARTIAL (2 tentative names, 4 placeholders, HTTP owners unassigned)
+PROMPT_EVIDENCE_STATUS: current user prompt saved byte-identically; student prompts pending
+NEXT_ACTION: start the intended Ubuntu VM and provide `ip -4 addr` output
+```
 
 ## Completed Tasks
 - Read the continuation prompt, previous README/state/log, requirements, source inventory, open questions, and all five streaming design docs.
@@ -53,6 +66,12 @@ Source basis: Email A and Email B excerpts supplied by the user. Original mailbo
 - Inspected Assignment 1, Lab 1 and Sample NetApp PDFs from the ZIP; visually checked Sample NetApp pages 7–8.
 - Inspected all pages of the user-supplied Lab 1 forum PDF. Confirmed `hostip = "0.0.0.0"`, port `22236`, `new_connection(conn, addr)`, and a historical HTTP 200/browser-rendering result. Recorded the `.100` text vs `.103` screenshot discrepancy.
 - Checked the linked forum attachment without LMS authentication; it redirects to login. Searched the relevant local course, repo, Downloads, `D:\download`, `D:\TiKy`, and Codex attachment folders; no matching `server.py` or `sample_code_http_server_process.txt` was found.
+- Located and read `server_skeleton_previous_upload.py`. Its `Thread(args=(conn, addr))` matches the forum handler argument order, but the handler body only prints and its host helper differs from the forum's wildcard bind instruction.
+- Created `examples/http_server_reconstructed_demo.py` as a clearly labeled group reconstruction; Python AST syntax checks passed for it and the old skeleton. Neither was run on a VM.
+- Built the local team handover package: complete guide, 2–3 page handover, six member task cards/progress board, announcement draft, reviewer checklist, and prompt evidence instructions.
+- Created `docs/lab2-group-guide.docx` by combining the guide and detailed task cards; Word export was rendered to 17 page images and visually inspected. The supplied original Word copy was not found and was not overwritten.
+- Checked the connected Google Drive profile, tried the exact original Doc ID for metadata and native text, and searched for the exact supplied DOCX title. The native reads returned 404 and the DOCX search returned no results; no duplicate Google Doc was created.
+- Saved the current execution/finalization prompt byte-identically in `prompts/`; 30,226 bytes, SHA-256 `bfbead30d4206ea34cabf4439373e9583aa5b022fbde905fd7dee5667f555182`.
 - Verified the ZIP has 325 entries, no bad member, no standalone `.py` or `.ova`, and that the checked extracted PDFs match the ZIP members.
 - Confirmed Sample NetApp page 7 uses accept order `conn, addr`, passes thread args `(addr, conn)` to `new_connection(addr, conn)`, derives a host IP and uses sample port 22236. The handler only prints the socket.
 - Discovered Windows/Python/VirtualBox/VM/Host-only/DHCP configuration read-only.
@@ -63,24 +82,27 @@ Source basis: Email A and Email B excerpts supplied by the user. Original mailbo
 ## Waiting / Pending
 - Complete forum-linked `sample_code_http_server_process.txt` or matching server source, including the accept/thread call that must match `new_connection(conn, addr)`.
 - Confirm whether the local `ubuntu` VM is the intended test guest.
-- After source confirmation, guide the user through VM networking and guest checks.
-- Observe guest `ip -4 addr`, `ss -lntp`, Windows `ipconfig`, `Test-NetConnection`, curl and browser output.
-- Confirm the Reliability pair and remaining roster.
+- Start the intended Ubuntu VM; obtain guest `ip -4 addr`, then proceed to listener, Windows TCP, curl and Chrome checks.
+- Confirm the Reliability pair and fill the other four names; assign HTTP primary/backup.
+- Re-review the AI-proposed designs with their pairs and add actual prompt evidence.
+- Restore access to the original Google Doc or provide the missing Word copy if it contains changes beyond the previously reviewed text; then sync the local fallback without creating a duplicate.
 - Clarify Assignment 1 transport, group size, HoL expectations and exact deadline.
 - Export the full conversation privately and inspect it before any upload.
 
 ## Blockers
 - The ZIP contains a sample server image in a PDF but no standalone Python server/client or OVA. The forum override is confirmed in the supplied PDF, but its linked complete server attachment is unavailable without LMS authentication.
 - The local VMs are powered off; guest IP/firewall/server state and HTTP results are unavailable.
+- Google Docs sync is pending: the exact ID returned 404 under the connected account, the exact-title DOCX search returned no results, and no supplied DOCX was found in the checked local folders.
 - Assignment 1 source conflicts are unresolved.
 - The original Google Doc remains unchanged because its native Docs read/fetch API returned 404 in the prior pass.
 
 ## Important Decisions
 - Lab 2 email requirements outrank the Assignment 1 PDF for Lab 2 scope.
 - Keep Assignment 1 PDF conflicts visible; do not select a transport/group/date by assumption.
-- Sample_NetApp page 7 is a reference skeleton only, not the forum overwrite or an HTTP responder.
+- Sample_NetApp page 7 is a separate reference skeleton, not the forum handler or HTTP responder. The user's previous skeleton matches the forum `(conn, addr)` order but is only a print stub.
 - Forum source confirms listener `0.0.0.0:22236`; this does not establish the current guest IP or current listener state.
 - The forum handler signature is `(conn, addr)`; do not pair it with the sample's `(addr, conn)` thread args without verifying the complete server source.
+- `examples/http_server_reconstructed_demo.py` is a group reconstruction, not an authenticated copy of the instructor's full server. Syntax checks do not prove runtime behavior.
 - Host-only is proposed, but do not change adapters until the linked server source and intended VM are confirmed.
 - Preserve the earlier Reliability names as TENTATIVE; other names remain placeholders.
 
@@ -97,6 +119,7 @@ Source basis: Email A and Email B excerpts supplied by the user. Original mailbo
 - Remote: `https://github.com/TiKyisme/co3094-lab2-network-streaming.git`
 - Last commit: HEAD; verify with `rtk git rev-parse HEAD`
 - The user-provided forum PDF, source ZIP, extracted pack and handoff are present as untracked repo-root copies. The PDF, ZIP and handoff byte-match the copies in the external course folder. They were left unchanged, unstaged and uncommitted; `git ls-files` contains no PDF or ZIP.
+- `server_skeleton_previous_upload.py` remains an untracked user file. The reconstructed example and handover docs are separate files; the original skeleton is not staged.
 
 ## Important File Paths
 - [README](README.md)
@@ -109,9 +132,9 @@ Source basis: Email A and Email B excerpts supplied by the user. Original mailbo
 - [prompt history](prompts/prompt-history.md)
 
 ## Next 3 Actions
-1. Obtain the forum-linked `sample_code_http_server_process.txt` attachment or matching complete server source.
-2. Confirm the intended VM, then run guided guest/host checks and share the real output.
-3. Ask the instructor to resolve Assignment 1 conflicts before choosing its final architecture.
+1. Start the intended Ubuntu VM and share `ip -4 addr` output so the live network checks can proceed.
+2. Obtain the linked full server attachment when available; keep the reconstruction label until then.
+3. Confirm the roster/HTTP owners and ask the instructor about Assignment 1 conflicts before selecting its final architecture.
 
 ## Resume Instructions
 Read this file, README, and the end of log first. Check Git status, branch, remote and HEAD. Keep original course sources outside Git. Do not treat the Sample NetApp PDF code as the forum overwrite. Do not mark tests passed without real outputs.

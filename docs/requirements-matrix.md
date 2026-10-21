@@ -6,7 +6,7 @@ The two email excerpts were supplied by the user; the original mailbox and curre
 
 | Requirement / claim | Classification | Source | Boundary |
 |---|---|---|---|
-| Physical Windows host accesses an HTTP server running in a VM using the teacher-overwritten `new_connection` | REQUIRED | Email A, 2026-10-08 | The exact forum function and matching server are still missing |
+| Physical Windows host accesses an HTTP server running in a VM using the teacher-overwritten `new_connection` | REQUIRED | Email A, 2026-10-08 | Forum handler/settings verified; complete instructor server attachment and current host-to-guest test remain unavailable |
 | Draft design for Reliability, Flow Control, Congestion Control | REQUIRED | Email A and Email B | “Draft design” does not itself require implementation |
 | Six-person team, approximately two students per feature | REQUIRED / SUPPORTED | Email B | The six-person Lab 2 design group is stated; this does not by itself settle Assignment 1 project grouping |
 | Preserve AI prompt history | REQUIRED | Email A and Email B | Preserve exact prompts and a private session export; no unreviewed export is committed |

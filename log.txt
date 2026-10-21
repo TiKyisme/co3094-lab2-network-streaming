@@ -239,3 +239,27 @@ Execution/state:
 Post-push verification:
 - Commit `853aec27f875522bcf123cfd9554ad71eb38c796` was pushed; `origin/main` resolved to the same hash.
 - The forum PDF, source ZIP, extracted pack and handoff are untracked copies present in the repo worktree. The PDF, ZIP and handoff match the external course-folder copies byte-for-byte. They were left unchanged and uncommitted; no PDF or ZIP is tracked.
+
+[2026-10-21] [TEAM HANDOVER, DOCX FALLBACK, AND HTTP INTEGRATION PREPARATION]
+Context/access:
+- Verified local HEAD/branch/remote before work. The supplied Word copy was not found in the repo, attachments, Downloads or course folder. The connected Google Drive profile was checked; metadata and native text reads for the exact original Doc ID returned 404. Exact-title DOCX search returned no result. No new Google Doc was created and no document was overwritten.
+- The previously reviewed indexed Google Docs text remains recorded in docs/docs-review.md. Local Markdown/source evidence was used for the fallback; original Word-to-fallback comparison is unavailable.
+
+Team handover:
+- Replaced docs/lab2-group-guide.md with the Vietnamese primary guide and created docs/team-handover.md, docs/team-assignments.md, docs/team-announcement.md, docs/team-review-checklist.md, and docs/prompt-evidence-instructions.md.
+- Preserved Nguyễn Đăng Gia Đạo and Nguyễn Đổng Thiên Kỳ as TENTATIVE; left four names and both HTTP owner roles unassigned.
+- Added relative D0–D2 proposed schedule, pair deliverables, six A–H task cards, status/evidence requirements, workflow, cross-mechanism byte-budget explanation, and unresolved-source notes.
+- Created docs/lab2-group-guide.docx from the main guide plus the six task cards. Word-rendered PDF page images were inspected across all 17 pages; the title/TOC, tables and task cards were iterated for readable layout. This is a new local fallback, not a replacement of the unavailable original Word file.
+- Saved the current user prompt byte-identically as prompts/2026-10-21-execution-documentation-handover.txt (30,226 bytes; SHA-256 bfbead30d4206ea34cabf4439373e9583aa5b022fbde905fd7dee5667f555182).
+
+HTTP integration preparation:
+- Found and read the untracked user file server_skeleton_previous_upload.py. `accept()` and Thread args use `(conn, addr)`, matching the forum handler; the old handler only prints the address.
+- Created examples/http_server_reconstructed_demo.py, clearly labeled as a group reconstruction from the visible handler and old skeleton, not as the complete instructor source.
+- Python AST syntax checks passed for the old skeleton and reconstruction. No server was run; the local ubuntu VM remains powered off; no current TCP, HTTP or browser test was run.
+- The linked sample_code_http_server_process.txt remains unavailable; unauthenticated LMS access redirects to login.
+
+Status:
+- TEAM_HANDOVER_READY=YES for the local fallback package; Google Docs sync remains pending.
+- HTTP_DEMO_STATUS=WAITING_FOR_MANUAL_TEST; STREAMING_DESIGN_STATUS=PROPOSED_NOT_REVIEWED_BY_PAIRS; roster remains partial.
+- Original course PDF/ZIP/pack/handoff and user skeleton remain untracked and were not staged. Only the new group reconstruction and authored handover files are candidates for Git.
+- Git commit/push and remote verification are recorded after the final staged review.

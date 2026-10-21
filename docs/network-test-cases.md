@@ -1,6 +1,6 @@
 # Network test cases
 
-**Overall status: WAITING_FOR_MATCHING_SERVER_SOURCE_AND_MANUAL_TEST.** The forum PDF contains a historical instructor demonstration; no VirtualBox VM or GUI test of the current local environment was run.
+**Overall status: WAITING_FOR_MANUAL_TEST.** The local reconstruction passes syntax parsing only. The forum PDF contains a historical instructor demonstration; no VirtualBox VM or GUI test of the current local environment was run.
 
 ## Historical course demonstration (not a current test pass)
 
@@ -8,8 +8,9 @@ The supplied LMS PDF p. 3 shows command-prompt output with `HTTP/1.1 200 OK` and
 
 | ID | Test | Procedure | Expected result | Status |
 |---|---|---|---|---|
+| NET-00 | Python syntax | Parse `server_skeleton_previous_upload.py` and `examples/http_server_reconstructed_demo.py` with Python AST | Both source files parse | PASS: syntax only; no server was run |
 | NET-01 | Guest interface | In Ubuntu run `ip -4 addr`; record the Host-only NIC and IPv4 | A real address on the selected Host-only subnet | NOT RUN |
-| NET-02 | Server listener | Run the matching server source; inspect startup/log and bind/port | Listener is active on the reachable interface and actual source port | BLOCKED: linked `sample_code_http_server_process.txt` server source is unavailable; forum handler is confirmed, Sample NetApp skeleton has incompatible argument order |
+| NET-02 | Server listener | Run the selected instructor source or group reconstruction; inspect startup/log and bind/port | Listener is active on the reachable interface and actual source port | NOT RUN: VM is off; official attachment missing. Local candidate is syntax-only |
 | NET-03 | TCP reachability | Windows: `Test-NetConnection <VM_IP> -Port <PORT>` | `TcpTestSucceeded : True` | NOT RUN |
 | NET-04 | HTTP response | Browser: `http://<VM_IP>:<PORT>/`; optionally `curl.exe -v` | Valid HTTP status/headers/body; server logs the request | NOT RUN |
 | NET-05 | Refresh/repeat | Reload browser or repeat GET | A second request is logged and response remains valid | NOT RUN |

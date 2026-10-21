@@ -1,6 +1,6 @@
 # Windows host ↔ Ubuntu guest HTTP setup
 
-**Status:** Environment discovered; forum handler/settings verified; **WAITING_FOR_MATCHING_SERVER_SOURCE_AND_MANUAL_TEST**. No VM settings were changed and no current connection test was run.
+**Status:** Forum handler/settings verified; user skeleton and a separate reconstruction syntax-checked; **WAITING_FOR_MANUAL_TEST**. The complete instructor attachment is still missing. No VM settings were changed and no connection test was run.
 
 ## Read-only environment discovery (2026-10-21)
 
@@ -20,7 +20,7 @@ The ZIP contains no OVA, so the registered `ubuntu` VM's identity as the instruc
 
 ## Instructor forum source and historical result
 
-The supplied Lab 1 forum export specifies listener `hostip = "0.0.0.0"` and port `22236`; the handler signature is `new_connection(conn, addr)`. The forum's linked `sample_code_http_server_process.txt` attachment is still needed to confirm the server loop and thread arguments. A historical instructor screenshot shows HTTP 200 and browser rendering at `192.168.56.103:22236`; the text above that image says `.100`. Neither address is confirmed for the local VM.
+The supplied Lab 1 forum export specifies listener `hostip = "0.0.0.0"` and port `22236`; the handler signature is `new_connection(conn, addr)`. The old user skeleton has matching `Thread(args=(conn, addr))`, but its handler only prints. `examples/http_server_reconstructed_demo.py` combines the skeleton flow and visible forum handler; it is labeled as group reconstruction, not official complete source. The linked attachment is still needed to verify the teacher's full server. A historical screenshot shows HTTP 200 and browser rendering at `192.168.56.103:22236`; the text above says `.100`. Neither is confirmed for the local VM.
 
 ## Topology decision
 
@@ -28,12 +28,12 @@ The supplied Lab 1 forum export specifies listener `hostip = "0.0.0.0"` and port
 
 The separate Sample NetApp page 7 helper discovers an outgoing-interface address through a UDP route attempt and falls back to loopback; that behavior belongs to the sample only. The forum specifies `0.0.0.0`, but the linked server file is needed to confirm how it applies that setting. Verify the actual listener with `ss -lntp` before choosing or changing the adapter combination.
 
-## Guided manual sequence after source confirmation
+## Guided manual sequence
 
 1. In VirtualBox Manager, select the intended Ubuntu VM and inspect **Settings → Network**. Record all enabled adapters. Do not assume the local `ubuntu` VM is the course VM.
-2. Select Host-only for host↔guest traffic if the instructor code can bind that interface. Add NAT only if Ubuntu needs Internet; avoid Bridged unless required and allowed.
+2. Host-only remains **PROPOSED** for isolated host↔guest traffic; add NAT only if Ubuntu needs Internet. The local VM is Bridged today. Do not change adapters until the intended VM and test candidate are confirmed.
 3. Start the VM and run Ubuntu `ip -4 addr`. Record the guest IPv4 and interface.
-4. Run the confirmed server source and `ss -lntp`. Record the exact listening IP/port from output.
+4. Copy the instructor server or explicitly approved group reconstruction to the guest, run it, then check `ss -lntp`. Record the exact listening IP/port from output.
 5. On Windows run `ipconfig`, then `Test-NetConnection <VM_IP> -Port <PORT>`.
 6. If TCP succeeds, run `curl.exe -v http://<VM_IP>:<PORT>/`; then open the same URL in a Windows browser.
 7. Save real output and server log. Do not mark a test PASS until its output is observed.

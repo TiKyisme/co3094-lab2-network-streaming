@@ -12,12 +12,27 @@ Private working repository for evidence-grounded Lab 2 preparation and future As
 
 The Lab 1 LMS export confirms the overwritten HTTP handler and its listener settings. The linked complete server-process attachment is not available locally yet. Assignment 1 source conflicts are recorded separately and do not replace Lab 2 email requirements.
 
+## START HERE — LAB 2 TEAM MEMBERS
+
+Use the **local team guide as the current handover**. The original Google Docs link is kept here, but its native read returned 404 for the connected account; no duplicate Google Doc was created. `GOOGLE_DOC_SYNC_PENDING`.
+
+- [Google Docs original](https://docs.google.com/document/d/1hxqLAD0eRfdBhDJJyopSYi0vFqJUDhFCy7lOGO2CxQ/edit) — sync pending
+- [Main Lab 2 guide](docs/lab2-group-guide.md)
+- [Word fallback for the main guide](docs/lab2-group-guide.docx) — upload manually if Google Docs remains unavailable
+- [Short team handover](docs/team-handover.md)
+- [Six member task cards and progress board](docs/team-assignments.md)
+- [Draft team announcement](docs/team-announcement.md)
+- [Windows to Ubuntu network setup](docs/network-setup.md)
+- [Streaming design overview](docs/streaming-architecture.md)
+- [Prompt evidence instructions](docs/prompt-evidence-instructions.md)
+- [Team review checklist](docs/team-review-checklist.md)
+
 ## Current status
 
 - Phase 1B: CO3094/L07 package identity, Assignment 1 and Lab 1 sources verified. The Lab 1 forum export confirms the HTTP handler, bind address and port; Assignment 1's transport/group/deadline inconsistencies remain unresolved.
-- Phase 2: Google Doc text review and Markdown replacement are complete; native Docs edit remains unavailable through the connected API.
-- Phase 3: Windows/VirtualBox discovered. The Ubuntu VM is off and bridged; no guest IP, current server listener or current connection test has been observed. The LMS export contains a historical `200 OK` and browser-rendering demonstration, not a test of this local VM.
-- Phase 4: streaming design remains a Lab 2 proposal. Assignment 1 compliance is not claimed.
+- Phase 2: the prior full-text Google Doc review is recorded in `docs/docs-review.md`; the supplied Word copy was not found, and the exact native Doc now returns 404. The local Markdown guide, task cards, announcement, checklist and rendered Word fallback are ready; Google Docs sync is pending.
+- Phase 3: Windows/VirtualBox discovered. The Ubuntu VM is off and bridged; no guest IP, current server listener or connection test has been observed. A separately labeled group-reconstructed demo candidate is syntax-checked only.
+- Phase 4: streaming designs remain AI proposals awaiting pair review. Assignment 1 compliance is not claimed.
 - Phase 5: repository is private at [GitHub](https://github.com/TiKyisme/co3094-lab2-network-streaming), branch `main`.
 
 ## Key documents
@@ -33,8 +48,8 @@ The Lab 1 LMS export confirms the overwritten HTTP handler and its listener sett
 
 ## Running the HTTP demo
 
-No run command is approved yet because the full server-process attachment linked from the forum is unavailable. The forum export confirms `hostip = "0.0.0.0"`, port `22236`, and a `new_connection(conn, addr)` HTTP handler. Sample_NetApp PDF page 7 is a separate TCP accept/print skeleton; its worker argument order does not match the forum handler, so it cannot stand in for the linked server source.
+The forum export confirms `hostip = "0.0.0.0"`, port `22236`, and a `new_connection(conn, addr)` HTTP handler. `examples/http_server_reconstructed_demo.py` is a local group reconstruction from that visible handler and the old skeleton, not the complete instructor source. It has not been run on the Ubuntu VM. See [HTTP source analysis](docs/http-server-analysis.md) and [network test cases](docs/network-test-cases.md).
 
 ## Resume
 
-Read README, state, and the end of log; verify Git status/HEAD. Obtain the linked `sample_code_http_server_process.txt` attachment, inspect its accept loop against the confirmed handler signature, then guide current VM checks. Keep each Assignment 1 contradiction unresolved until an authoritative clarification arrives.
+Read README, state, and the end of log; verify Git status/HEAD. Confirm member names and HTTP owners. Obtain the linked server attachment or, if unavailable, keep the group reconstruction labeled as such and guide the real VM checks. Keep each Assignment 1 contradiction unresolved until an authoritative clarification arrives.

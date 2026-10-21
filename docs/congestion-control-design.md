@@ -13,7 +13,7 @@ Sender tracks `cwnd` in bytes, `bytes_in_flight`, `ssthresh`, smoothed RTT, RTT 
 3. **Congestion avoidance:** grow approximately additively, at most about one maximum datagram size per acknowledged window.
 4. On a confirmed loss or congestion mark, enter recovery once per recovery period and reduce `cwnd` (NewReno-style, roughly half), with a configured minimum. Do not reduce repeatedly for every ACK of the same loss episode.
 5. Use a probe timeout to ensure forward progress. A single PTO expiration is not automatically proof of persistent congestion; track subsequent ACK/loss evidence.
-6. Pace transmissions at a rate related to `cwnd / smoothed_rtt`, and never exceed `cwnd - bytes_in_flight` for congestion-controlled data.
+6. Pace transmissions at a rate related to `cwnd / smoothed_rtt`, and never exceed `max(0, cwnd - bytes_in_flight)` bytes for congestion-controlled data. `bytes_in_flight` uses bytes and includes retransmitted packets while those transmissions remain outstanding.
 7. Apply the same path budget to reliable data, retransmissions and unreliable real-time updates. Drop an expired update if it cannot be sent while useful.
 
 ## RTT increase without loss
@@ -23,8 +23,8 @@ In this loss-based baseline, rising RTT updates the smoothed RTT and therefore l
 ## Distinguish receiver and network limits
 
 - Receiver flow credit can stop new reliable payload even if the path has free capacity.
-- Congestion budget can stop all traffic even if receiver credit remains.
-- Available new reliable bytes are constrained by both: `min(flow_credit, cwnd - bytes_in_flight)`.
+- Congestion budget can stop all congestion-controlled traffic even if receiver credit remains.
+- Available new reliable bytes are constrained by both byte budgets: `min(flow_credit, max(0, cwnd - bytes_in_flight))`.
 - If receiver credit is zero, wait for credit/probe; do not mislabel this as network congestion.
 - Loss or validated ECN can trigger recovery while receiver credit remains. RTT informs the pacer and loss timer; RTT growth alone does not trigger a cwnd reduction in this baseline.
 

@@ -8,7 +8,7 @@ For reliable data, receiver advertises a monotonic **absolute maximum byte offse
 - connection limit `max_data`
 - optional per-channel `max_channel_data[channel]`
 
-Sender tracks bytes/offsets already sent and may send new reliable bytes only up to the advertised limit. The credit available for new reliable bytes is the smallest remaining connection/channel credit. Define `rwnd_available = max_limit - sent_offset`; it may reach zero. Do not treat ACK arrival alone as proof that receiver application consumed buffer space.
+Sender tracks the next reliable byte offset and may send new data only up to the peer's absolute limit. For one connection-level limit, define `flow_credit = max(0, peer_max_data - next_new_data_offset)` bytes. If connection and channel limits both apply, available credit is the minimum of the nonnegative remaining byte credit at each scope. Do not treat ACK arrival alone as proof that receiver application consumed buffer space; the receiver raises its absolute limit only when capacity is actually freed.
 
 This resembles QUIC's limit-based flow control; it is a design reference, not a requirement to copy QUIC frames.
 

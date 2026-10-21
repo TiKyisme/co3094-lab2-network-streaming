@@ -3,7 +3,9 @@
 | Question | Why it matters | Evidence needed / owner |
 |---|---|---|
 | What is the complete `sample_code_http_server_process.txt` source linked from the forum, and how does its accept loop call `new_connection(conn, addr)`? | The PDF confirms the handler but the separate sample server passes arguments in the opposite order | User provides the linked attachment or matching server file; an unauthenticated LMS download redirects to login |
+| Does the supplied Word copy contain updates not in the previously reviewed Google Docs text? | The exact-title DOCX was not found in local folders or Drive search; exact native document ID returns 404 for the connected account | Provide the Word copy only if it has unreviewed changes; local fallback is ready and Google Docs sync remains pending |
 | Which VM is intended for Windows↔Ubuntu testing? | `ubuntu` is registered locally but the ZIP contains no OVA and does not identify this VM as the instructor template | User/instructor confirms the VM; provide its image only if permitted |
+| Who are the four remaining team members, HTTP Demo Owner and HTTP Backup/Reviewer? | Only the old Reliability pair names are known and they are tentative | Group fills placeholders before assigning owners; no names were invented |
 | Which guest address should Windows use for the current VM? | The forum says bind to `0.0.0.0`; the historical result text says `192.168.56.100`, while its screenshot shows `192.168.56.103` | Confirm the intended VM, then observe `ip -4 addr` / `ss -lntp` |
 | Does Assignment 1 require UDP for all payloads, or TCP reliable file/message transfer plus UDP discovery/streaming? | Assignment 1 PDF has conflicting transport statements on pp. 1–3 | Instructor clarification or a later authoritative LMS update |
 | Is reliable file transfer specifically reassembled over UDP? | A1 milestone 6 says UDP; p. 2 says TCP reliable transfer | Instructor clarification |
@@ -16,6 +18,8 @@
 ## Current blockers
 
 - The forum handler and listener settings are confirmed, but its linked complete server-process source is unavailable.
+- The local reconstruction and the old user skeleton have syntax only; neither has been run on the VM.
 - The local VMs are powered off; guest IP, firewall, and server listener are unknown.
+- Google Docs sync is pending after exact-ID 404; the supplied Word copy was not found in the available folders.
 - Assignment 1 transport, group size, HoL scope, and exact deadline are unresolved.
 - The original Google Doc remains unchanged; the connected Docs API returned 404 in the prior pass.
