@@ -1,0 +1,387 @@
+# CO3094 LAB 2 — MASTER PROMPT FOR FINAL GROUP REPORT (LATEX + PDF)
+
+Bạn đang làm việc trong repository/project hiện tại của nhóm cho CO3094 Lab 2.
+
+## 0. MỤC TIÊU CHUNG
+
+Tạo **một báo cáo hoàn chỉnh cho cả nhóm** về Lab 2, viết bằng **LaTeX**, sau đó **compile ra PDF**.
+
+Báo cáo phải:
+1. Dựa trên các tài liệu và công việc hiện có trong repo/workspace.
+2. Bám sát **yêu cầu của giảng viên** cho Lab 2.
+3. Chỉ dùng kiến thức **có trong slide / tài liệu bài giảng của thầy** và những gì đã được xác minh trong repo.
+4. Trình bày **đơn giản, dễ hiểu, mức sinh viên**, không đi quá sâu kiểu RFC/QUIC nâng cao nếu không nằm trong slide.
+5. Có đủ 3 phần:
+   - Reliability
+   - Flow Control
+   - Congestion Control
+6. Có hình minh họa cho từng phần.
+7. Xuất ra **PDF cuối cùng** để nộp/đem đi lab.
+
+Bản cuối phải là **một report hoàn chỉnh**, không phải chỉ là các ghi chú rời rạc.
+
+---
+
+## 1. NGUYÊN TẮC QUAN TRỌNG NHẤT
+
+### 1.1. Source of truth
+Ưu tiên nguồn theo thứ tự:
+1. Email / yêu cầu giảng viên đã lưu trong repo.
+2. Slide bài giảng / tài liệu môn học của thầy.
+3. Các file markdown và tài liệu nhóm đã tạo trong repo.
+4. Đề xuất trước đó của AI.
+
+Nếu có nội dung ngoài slide mà chưa được xác minh, **không đưa vào như kiến thức chính thức**.
+
+### 1.2. Mức độ kỹ thuật
+Báo cáo cần ở mức:
+- sinh viên hiểu được,
+- đủ để trình bày draft design ngày mai,
+- không cần biến thành paper nghiên cứu,
+- không cần triển khai toàn bộ giao thức thực tế.
+
+### 1.3. Không làm quá phức tạp
+Không dùng các phần nâng cao như:
+- RFC chi tiết,
+- QUIC loss detection nâng cao,
+- PTO/loss-time phức tạp,
+- stream offset nhiều channel,
+- các công thức dài dòng ngoài slide,
+
+trừ khi chúng thực sự có trong slide của giảng viên và thật sự cần.
+
+---
+
+## 2. VIỆC PHẢI ĐỌC TRƯỚC KHI VIẾT
+
+Đầu tiên, đọc và đối chiếu tất cả tài liệu liên quan trong workspace/repo:
+
+### 2.1. Các file cần đọc trong repo/project
+- `README.md`
+- `state.md`
+- `log.txt`
+- `docs/requirements-matrix.md`
+- `docs/source-inventory.md`
+- `docs/lab2-group-guide.md`
+- `docs/team-assignments.md`
+
+### 2.2. Reliability hiện có
+- `docs/reliability-slide-only.md`
+- `docs/reliability-easy-study.md`
+- `docs/reliability-lab2-presentation.md`
+
+### 2.3. Các phần còn lại
+Nếu đã có draft cho:
+- Flow Control
+- Congestion Control
+
+thì đọc các file tương ứng trong `docs/`.
+
+Nếu chưa có bản đơn giản cho 2 phần đó, hãy **tự rút gọn** theo đúng phong cách slide-only:
+- chỉ bám bài giảng,
+- đơn giản,
+- dễ trình bày,
+- có ví dụ và hình.
+
+### 2.4. Slide bài giảng
+Phải tìm và đọc slide liên quan để xác minh:
+- Reliability / Reliable Data Transfer
+- Flow Control
+- Congestion Control
+
+Nếu có cả PPTX và PDF thì ưu tiên đọc được nội dung thực tế.
+
+Ghi rõ:
+- tên file,
+- số slide / trang,
+- nội dung nào được dùng để viết report.
+
+### 2.5. Hình logo
+Trong thư mục làm việc hiện tại có file:
+- `hcmut.png`
+
+Dùng ảnh này làm logo trên bìa báo cáo.
+
+---
+
+## 3. MỤC TIÊU BÁO CÁO
+
+Hãy tạo báo cáo tổng hợp cho Lab 2 với cấu trúc hợp lý như sau:
+
+### 3.1. Cover page
+Dùng phong cách tương tự mẫu LaTeX tôi cung cấp, nhưng điều chỉnh cho đúng ngữ cảnh CO3094 Lab 2.
+
+Thông tin cần có:
+- TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG TP.HCM
+- KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+- Course: CO3094 / Computer Network Lab (hoặc tên môn tương ứng nếu có xác minh)
+- Tiêu đề báo cáo: `CO3094 Lab 2 Report`
+- Subtitle: `Draft Designs for Reliability, Flow Control and Congestion Control`
+- Group / class / lecturer nếu có thông tin xác minh
+- Group leader: Nguyễn Đổng Thiên Kỳ
+- Group members:
+  - Nếu có tên thành viên đã xác minh trong repo thì dùng.
+  - Nếu chưa đủ, dùng placeholder rõ ràng như `Member 3 (TBD)`, `Member 4 (TBD)`...
+  - Không tự bịa tên.
+
+### 3.2. Table of contents
+
+### 3.3. Introduction
+Ngắn gọn:
+- Lab 2 yêu cầu gì
+- Nhóm chuẩn bị những gì
+- Báo cáo này trình bày 3 cơ chế:
+  - Reliability
+  - Flow Control
+  - Congestion Control
+
+### 3.4. Overall architecture / overview
+Một mục ngắn giải thích nhóm đang xét mô hình truyền dữ liệu kiểu gì.
+Chỉ cần ở mức đơn giản, đủ để làm nền cho 3 phần còn lại.
+
+---
+
+## 4. NỘI DUNG KỸ THUẬT CẦN VIẾT
+
+---
+
+### 4.1. Reliability
+Dựa chủ yếu trên bản slide-only đã làm.
+
+Mục này cần có:
+1. Reliability là gì?
+2. Cơ chế nhóm chọn:
+   - ưu tiên **RDT 3.0 stop-and-wait** nếu đó là kết luận slide-only hiện tại
+3. Sender và Receiver hoạt động ra sao
+4. Sequence number, ACK, timer, retransmission
+5. Ưu điểm
+6. Hạn chế
+
+#### 4.1.1. VẼ LẠI 2 HÌNH reliability từ mô tả người dùng
+
+**Hình 1**
+Nội dung logic:
+- Sender gửi `[VITAL, Seq=1]`
+- Receiver gửi `[ACK, Seq=1]`
+- Sender gửi `[VITAL, Seq=2]`
+- Packet này bị mất (`×`)
+- Timer 100 ms
+- Sender retransmit `[VITAL, Seq=2]`
+- Receiver gửi `[ACK, Seq=2]`
+
+Caption:
+`Hình 1. Trao đổi bình thường và minh họa gói VITAL bị mất.`
+
+**Hình 2**
+Nội dung logic:
+- Sender gửi `[VITAL, Seq=3]`
+- Receiver gửi `[ACK, Seq=3]`
+- ACK bị mất (`×`) hoặc sender chưa nhận được ACK
+- Sender gửi lại `[VITAL, Seq=3]`
+- Receiver nhận ra `Seq_Num đã nhận`
+- Receiver bỏ dữ liệu trùng
+- Receiver gửi lại `[ACK, Seq=3]`
+
+Caption:
+`Hình 2. Receiver loại bỏ gói trùng và gửi lại ACK.`
+
+### Yêu cầu với 2 hình:
+- Tự tạo hình đẹp, rõ ràng, chuyên nghiệp.
+- Có thể dùng TikZ trong LaTeX hoặc tự sinh ảnh/vector rồi chèn vào.
+- Ưu tiên dùng TikZ/LaTeX để tài liệu đồng bộ.
+- Nhãn Sender / Receiver rõ ràng.
+- Các thông điệp, dấu mất gói (`×`), timer, retransmit phải rõ.
+- Chèn trực tiếp vào report.
+
+---
+
+### 4.2. Flow Control
+Làm tương tự Reliability nhưng đơn giản và bám slide.
+
+Mục này phải có:
+1. Flow Control là gì?
+2. Mục tiêu:
+   - tránh sender gửi quá nhanh làm receiver quá tải
+3. Cơ chế cơ bản theo slide:
+   - receiver buffer
+   - receive window / advertised window (nếu có trong slide)
+   - sender chỉ gửi trong giới hạn cho phép
+4. Ví dụ minh họa
+5. Ưu điểm và hạn chế
+
+#### 4.2.1. Hình cho Flow Control
+Tạo ít nhất 1 hình minh họa đơn giản, ví dụ:
+- Sender muốn gửi nhanh
+- Receiver chỉ còn ít buffer
+- Receiver quảng bá window nhỏ
+- Sender giảm lượng dữ liệu gửi
+
+Nếu slide có cách minh họa riêng thì ưu tiên dùng logic đó.
+
+---
+
+### 4.3. Congestion Control
+Làm tương tự, bám slide, đơn giản.
+
+Mục này phải có:
+1. Congestion Control là gì?
+2. Mục tiêu:
+   - tránh làm nghẽn mạng
+3. Cơ chế cơ bản theo slide:
+   - ví dụ slow start / congestion avoidance / AIMD / cwnd
+   - hoặc các ý chính thực sự có trong slide
+4. Ví dụ minh họa đơn giản
+5. Ưu điểm và hạn chế
+
+#### 4.3.1. Hình cho Congestion Control
+Tạo ít nhất 1 hình minh họa đơn giản, ví dụ:
+- sender tăng dần tốc độ
+- phát hiện nghẽn / mất gói
+- giảm tốc độ gửi
+- sau đó tăng lại
+
+Nếu slide có đồ thị hoặc ý tưởng kinh điển, hãy mô phỏng lại ở mức đơn giản, đẹp và dễ hiểu.
+
+---
+
+## 5. PHONG CÁCH VIẾT
+
+Báo cáo phải:
+- dùng tiếng Anh hoặc song ngữ theo khung LaTeX mẫu, nhưng phần chính nên nhất quán.
+- Nếu dùng tiếng Anh, dùng từ đơn giản, rõ ràng.
+- Nếu dùng tiếng Việt trong nội dung kỹ thuật, vẫn được, miễn đồng bộ và dễ hiểu.
+- Không viết như paper nghiên cứu.
+- Viết như report sinh viên, rõ ràng, gọn, có cấu trúc.
+- Mỗi phần chỉ cần đủ ý, tránh lan man.
+
+Tông tài liệu:
+- nghiêm túc,
+- học thuật vừa phải,
+- dễ đọc.
+
+---
+
+## 6. LATEX TEMPLATE
+
+Tôi cung cấp một khung LaTeX tham khảo. Hãy dùng nó làm nền chính, nhưng **sửa cho đúng bối cảnh CO3094 Lab 2**.
+
+### Yêu cầu:
+1. Tạo file `.tex` hoàn chỉnh.
+2. Chỉnh lại:
+   - course name,
+   - title,
+   - subtitle,
+   - header/footer nếu cần.
+3. Dùng `hcmut.png` từ thư mục hiện tại.
+4. Có mục lục.
+5. Có đánh số section.
+6. Có figure, caption, label hợp lý.
+7. Compile không lỗi.
+8. Xuất ra PDF.
+
+### Khung style tham khảo
+Dùng phong cách gần giống đoạn LaTeX mẫu mà tôi đã cung cấp trong prompt trước đó.
+Không cần giữ nguyên chữ `Smart E-Mobility Hub` hay `CO3001`; phải thay bằng nội dung CO3094 Lab 2.
+
+Nếu cần tạo thư mục như:
+- `report/`
+- `report/graphics/`
+- `output/pdf/`
+
+thì tự tổ chức hợp lý.
+
+---
+
+## 7. TÊN FILE ĐẦU RA
+
+Tạo tối thiểu các file sau:
+
+### 7.1. File LaTeX nguồn
+Ví dụ:
+- `report/co3094_lab2_report.tex`
+
+### 7.2. Tài nguyên hình
+- Hình TikZ nội tuyến trong tex là tốt nhất.
+- Nếu tạo ảnh riêng, đặt trong thư mục `report/graphics/`.
+
+### 7.3. PDF cuối cùng
+Xuất ra:
+- `output/pdf/co3094_lab2_report.pdf`
+
+Đây là output quan trọng nhất.
+
+---
+
+## 8. QUY TẮC CHẤT LƯỢNG
+
+Trước khi kết thúc, phải:
+1. Kiểm tra LaTeX compile thành công.
+2. Nếu compile lỗi, tự sửa cho đến khi build được PDF.
+3. Kiểm tra PDF:
+   - bìa đúng,
+   - logo hiện đúng,
+   - mục lục đúng,
+   - 2 hình Reliability hiện đúng,
+   - có hình cho Flow Control và Congestion Control,
+   - không bị tràn lề,
+   - không placeholder xấu.
+4. Giữ report ngắn gọn, ví dụ khoảng:
+   - 8–15 trang là hợp lý,
+   - không biến thành 30 trang.
+5. Không yêu cầu tôi sửa tay thủ công nhiều bước nếu có thể tự xử lý được.
+
+---
+
+## 9. GIT / LOGGING
+
+Nếu repo đang dùng git:
+- ghi lại thay đổi hợp lý,
+- cập nhật `state.md` và `log.txt`,
+- lưu prompt hiện tại vào `prompts/`,
+- commit các file report nếu phù hợp.
+
+Nhưng ưu tiên chính vẫn là:
+**có file PDF report hoàn chỉnh.**
+
+Không commit file nặng không cần thiết ngoài output cần thiết.
+
+---
+
+## 10. KẾT QUẢ CUỐI CÙNG PHẢI TRẢ VỀ
+
+Khi xong, trả lời bằng tiếng Việt với format:
+
+### REPORT STATUS
+- DONE / PARTIAL / BLOCKED
+
+### OUTPUT FILES
+- đường dẫn file `.tex`
+- đường dẫn file `.pdf`
+- đường dẫn các file hình (nếu có)
+
+### SOURCES USED
+- slide / file nào đã dùng cho Reliability
+- slide / file nào đã dùng cho Flow Control
+- slide / file nào đã dùng cho Congestion Control
+
+### WHAT WAS WRITTEN
+- tóm tắt các section trong report
+
+### FIGURES
+- xác nhận đã vẽ lại 2 hình Reliability
+- xác nhận đã tạo hình cho Flow Control
+- xác nhận đã tạo hình cho Congestion Control
+
+### PDF CHECK
+- compile thành công chưa
+- số trang
+- còn vấn đề gì không
+
+### PENDING ITEMS
+- thông tin nào còn placeholder (ví dụ tên thành viên chưa xác nhận)
+
+### NEXT STEP FOR USER
+- chính xác tôi cần mở file nào / gửi file nào
+
+Bắt đầu ngay.
+Mục tiêu quan trọng nhất là: **tạo được 1 file PDF report hoàn chỉnh để tôi có thể dùng luôn, càng ít phải chỉnh tay càng tốt.**

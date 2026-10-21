@@ -55,3 +55,9 @@ Exact prompt: [2026-10-22-reliability-slide-only.txt](2026-10-22-reliability-sli
 Source: User message in the current Codex conversation; no separate attachment was supplied.
 
 Exact prompt: [2026-10-22-reliability-slide-only.txt](2026-10-22-reliability-slide-only.txt). Saved verbatim (6,176 bytes; SHA-256 8a1becfaf94abe12afc0f11f2ddab2ebecf86f8b110a01e32c6829ef1464b749). This is task prompt evidence, not either student's actual prompt or a full session export.
+
+## 2026-10-22 - Final group report (LaTeX + PDF)
+
+Source attachment: f01d3f61-9f96-4924-bc9e-01d896acc635.
+
+Exact prompt: [2026-10-22-final-group-report.txt](2026-10-22-final-group-report.txt). Saved verbatim (12259 bytes; SHA-256 ef2b3a89744fe615308976c70b36e9d3ef922af647a5fb2f0d88813a742c5799). This is task prompt evidence, not student prompt evidence or a full session export.
