@@ -1,6 +1,6 @@
 # CO3094 Lab 2 — HTTP Networking & Streaming Design
 
-Private working repository for evidence-grounded Lab 2 preparation and future Assignment 1 comparison. Original course ZIP/PDF/OVA files are not in Git.
+Working repository for evidence-grounded Lab 2 preparation and future Assignment 1 comparison. Original course ZIP/PDF/OVA files are not in Git.
 
 ## Confirmed Lab 2 scope from instructor emails
 
@@ -32,8 +32,8 @@ Use the **local team guide as the current handover**. The original Google Docs l
 - Phase 1B: CO3094/L07 package identity, Assignment 1 and Lab 1 sources verified. The Lab 1 forum export confirms the HTTP handler, bind address and port; Assignment 1's transport/group/deadline inconsistencies remain unresolved.
 - Phase 2: the prior full-text Google Doc review is recorded in `docs/docs-review.md`; the supplied Word copy was not found, and the exact native Doc now returns 404. The local Markdown guide, task cards, announcement, checklist and rendered Word fallback are ready; Google Docs sync is pending.
 - Phase 3: Windows/VirtualBox discovered. The Ubuntu VM is off and bridged; no guest IP, current server listener or connection test has been observed. A separately labeled group-reconstructed demo candidate is syntax-checked only.
-- Phase 4: streaming designs remain AI proposals awaiting pair review. Assignment 1 compliance is not claimed.
-- Phase 5: repository is private at [GitHub](https://github.com/TiKyisme/co3094-lab2-network-streaming), branch `main`.
+- Phase 4: Reliability, Flow Control and Congestion Control remain AI proposals awaiting pair review. The Reliability draft is complete as a review package on a feature branch; student and team decisions are still pending. Assignment 1 compliance is not claimed.
+- Phase 5: repository is public at [GitHub](https://github.com/TiKyisme/co3094-lab2-network-streaming); the handover is on `main` and Reliability work is isolated for review.
 
 ## Key documents
 
@@ -43,6 +43,8 @@ Use the **local team guide as the current handover**. The original Google Docs l
 - [Guide review](docs/docs-review.md) and [corrected Lab 2 guide](docs/lab2-group-guide.md)
 - [HTTP source analysis](docs/http-server-analysis.md), [network setup](docs/network-setup.md), [test cases](docs/network-test-cases.md)
 - [Streaming architecture](docs/streaming-architecture.md) and component design docs
+- [Reliability design draft](docs/reliability-design.md), [short presentation](docs/reliability-lab2-presentation.md), [oral preparation](docs/reliability-oral-preparation.md), and [pair-interface review](docs/reliability-interface-review.md)
+- [Reliability presentation PDF](output/pdf/reliability-lab2-presentation.pdf) - two-page rendered copy of the short presentation
 - [Tentative team assignments](docs/team-assignments.md), [open questions](docs/open-questions.md)
 - [Prompt history](prompts/prompt-history.md)
 

@@ -44,8 +44,8 @@ Source basis: Email A and Email B excerpts supplied by the user. Original mailbo
 - Phase 1B Source Recovery: **PARTIAL** — CO3094/L07 package and forum overwrite/settings verified; the linked complete server source is unavailable.
 - Phase 2 Team handover: **READY FOR LOCAL TEAM START** — main Vietnamese guide, short handover, six detailed task cards, announcement, checklist, prompt instructions and a visually reviewed Word fallback exist. Exact Google Docs read returned 404; sync is pending.
 - Phase 3 HTTP environment: **WAITING_FOR_MANUAL_TEST**. Forum settings and local reconstruction are documented; syntax is checked only. The VM is off and no TCP/HTTP/browser test has been run.
-- Phase 4 Streaming: draft proposals exist; **not reviewed by the pairs, not implemented/tested**, and not confirmed Assignment 1-compliant.
-- Phase 5 Repository: private GitHub repo on `main`; latest source/status milestone is verified against `origin/main` after push.
+- Phase 4 Streaming: draft proposals exist; **not reviewed by the pairs, not implemented/tested**, and not confirmed Assignment 1-compliant. The Reliability review package is AI_DRAFT_COMPLETE; TECHNICAL_REVIEW_PENDING and TEAM_DECISION_PENDING.
+- Phase 5 Repository: public GitHub repo; handover is on `main`. Reliability changes are isolated on a feature branch; no merge or student approval is recorded.
 
 ## Session Status Fields
 
@@ -56,12 +56,19 @@ GOOGLE_DOC_STATUS: GOOGLE_DOC_SYNC_PENDING (exact-ID metadata and native text re
 HTTP_DEMO_STATUS: WAITING_FOR_MANUAL_TEST (syntax only; VM powered off)
 STREAMING_DESIGN_STATUS: PROPOSED_NOT_REVIEWED_BY_PAIRS
 GROUP_ROSTER_STATUS: PARTIAL (2 tentative names, 4 placeholders, HTTP owners unassigned)
-PROMPT_EVIDENCE_STATUS: current user prompt saved byte-identically; student prompts pending
-NEXT_ACTION: start the intended Ubuntu VM and provide `ip -4 addr` output
+PROMPT_EVIDENCE_STATUS: latest user master prompt saved byte-identically; student prompts pending
+RELIABILITY_DRAFT_STATUS: AI_DRAFT_COMPLETE; TECHNICAL_REVIEW_PENDING; TEAM_DECISION_PENDING
+RELIABILITY_NEXT_ACTION: REL-01 and REL-02 review packet/ACK and recovery sections; keep every team-review box unchecked
+NEXT_ACTION: REL-01 and REL-02 review the Reliability draft; VM network checks remain pending
 ```
 
 ## Completed Tasks
 - Read the continuation prompt, previous README/state/log, requirements, source inventory, open questions, and all five streaming design docs.
+- Read the user's Reliability implementation-draft prompt and saved it byte-identically in prompts/.
+- Created the detailed Reliability proposal, four sequence diagrams plus a recovery state diagram, algorithms, state tables, worked cases, alternatives, interface boundaries, and a short presentation/oral review package.
+- Verified RFC 9000, RFC 9002, RFC 9221, and Valve GameNetworkingSockets primary references for the technical claims used in the draft.
+- Mermaid CLI 12.0.0 rendered all five detailed-design diagrams and both presentation diagrams to PNG; all seven render runs succeeded and the diagrams were visually reviewed.
+- Exported the short presentation to a two-page PDF in output/pdf and visually inspected both rendered pages. The PDF contains the two key flow diagrams and direct technical-reference links.
 - Read the source handoff, `00_START_HERE.md`, `03_SOURCE_INDEX.md`, Assignment 1 PDF, CO3094 Lab 1 PDF, Assignment 1 LMS note, general announcement note and Sample NetApp text.
 - Inspected Assignment 1, Lab 1 and Sample NetApp PDFs from the ZIP; visually checked Sample NetApp pages 7–8.
 - Inspected all pages of the user-supplied Lab 1 forum PDF. Confirmed `hostip = "0.0.0.0"`, port `22236`, `new_connection(conn, addr)`, and a historical HTTP 200/browser-rendering result. Recorded the `.100` text vs `.103` screenshot discrepancy.
@@ -80,6 +87,7 @@ NEXT_ACTION: start the intended Ubuntu VM and provide `ip -4 addr` output
 - Updated requirements/conflict matrix, source inventory, guide review, HTTP analysis, network setup, open questions and A1 compatibility notes.
 
 ## Waiting / Pending
+- REL-01/REL-02 technical review and cross-pair agreement on packet semantics, ACK-only congestion treatment, expiry clock, and retry cap; no student confirmations are recorded.
 - Complete forum-linked `sample_code_http_server_process.txt` or matching server source, including the accept/thread call that must match `new_connection(conn, addr)`.
 - Confirm whether the local `ubuntu` VM is the intended test guest.
 - Start the intended Ubuntu VM; obtain guest `ip -4 addr`, then proceed to listener, Windows TCP, curl and Chrome checks.
@@ -110,11 +118,11 @@ NEXT_ACTION: start the intended Ubuntu VM and provide `ip -4 addr` output
 - Windows PowerShell; all shell commands are prefixed with `rtk`.
 - Git 2.50.0.windows.1; GitHub CLI authenticated as `TiKyisme`.
 - VirtualBox installed at `C:\Program Files\Oracle\VirtualBox`; `VBoxManage` runs via `C:\Progra~1\Oracle\VirtualBox\VBoxManage.exe`.
-- Project: `D:\01. Dai_Hoc_Dai_Dai_Di\05. HK1_NAM3\co3094-lab2-network-streaming`.
+- Project: `D:\01. Dai_Hoc_Dai_Dai_Di\05. HKI_NAM3\Mạng máy tính (TN) (CO3094)_NGUYỄN PHƯƠNG DUY (CQ_HK261) [L07]\co3094-lab2-network-streaming`.
 - CO3094 source root: `D:\01. Dai_Hoc_Dai_Dai_Di\05. HKI_NAM3\Mạng máy tính (TN) (CO3094)_NGUYỄN PHƯƠNG DUY (CQ_HK261) [L07]`.
 
 ## GitHub Status
-- Repo: [private repository](https://github.com/TiKyisme/co3094-lab2-network-streaming)
+- Repo: [public repository](https://github.com/TiKyisme/co3094-lab2-network-streaming)
 - Branch: main, tracking origin/main
 - Remote: `https://github.com/TiKyisme/co3094-lab2-network-streaming.git`
 - Last commit: HEAD; verify with `rtk git rev-parse HEAD`
@@ -130,12 +138,13 @@ NEXT_ACTION: start the intended Ubuntu VM and provide `ip -4 addr` output
 - [HTTP analysis](docs/http-server-analysis.md)
 - [network setup](docs/network-setup.md)
 - [streaming compatibility](docs/streaming-architecture.md)
+- [Reliability draft](docs/reliability-design.md), [presentation](docs/reliability-lab2-presentation.md), [oral prep](docs/reliability-oral-preparation.md), and [interface review](docs/reliability-interface-review.md)
 - [prompt history](prompts/prompt-history.md)
 
 ## Next 3 Actions
-1. Start the intended Ubuntu VM and share `ip -4 addr` output so the live network checks can proceed.
-2. Obtain the linked full server attachment when available; keep the reconstruction label until then.
-3. Confirm the roster/HTTP owners and ask the instructor about Assignment 1 conflicts before selecting its final architecture.
+1. REL-01 and REL-02 review the Reliability draft and record real decisions and prompt evidence.
+2. Start the intended Ubuntu VM and share ip -4 addr output so the HTTP network checks can proceed.
+3. Obtain the linked full server attachment and ask the instructor about Assignment 1 conflicts when available.
 
 ## Resume Instructions
 Read this file, README, and the end of log first. Check Git status, branch, remote and HEAD. Keep original course sources outside Git. Do not treat the Sample NetApp PDF code as the forum overwrite. Do not mark tests passed without real outputs.

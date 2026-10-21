@@ -1,0 +1,478 @@
+# CO3094 LAB 2 — RELIABILITY DESIGN IMPLEMENTATION DRAFT
+
+## 0. MỤC TIÊU
+
+Bạn đang hỗ trợ hai thành viên nhóm CO3094 của HCMUT hoàn thiện phần **Reliability Design** cho buổi Lab 2 ngày 22/10/2026.
+
+Repository: `TiKyisme/co3094-lab2-network-streaming`
+
+Hai thành viên dự kiến:
+
+- **Nguyễn Đăng Gia Đạo (M1 — REL-01):** Packet Number, ACK, ACK Range, Duplicate Detection.
+- **Nguyễn Đổng Thiên Kỳ (M2 — REL-02):** Packet Loss, Timeout, Retransmission, Out-of-order Handling.
+
+Đây là phân công hiện tại, chờ cả hai xác nhận chính thức.
+
+**Nhiệm vụ của bạn: tạo một bản thiết kế Reliability thống nhất, có sơ đồ, thuật toán, ví dụ cụ thể và tài liệu trình bày để hai thành viên có thể đọc, phản biện, điều chỉnh và bảo vệ trước giảng viên vào ngày mai.**
+
+Không chỉ tóm tắt lý thuyết. Phải tạo ra các file thực tế trong repository.
+
+Không tuyên bố thiết kế là sản phẩm cuối đã được hai sinh viên thông qua. Mọi quyết định mới của AI vẫn là PROPOSED cho đến khi hai thành viên review.
+
+---
+
+## 1. RESUME PROJECT
+
+Trước khi làm:
+
+1. Đọc `README.md`, `state.md` và cuối `log.txt`.
+2. Kiểm tra `git status`, `git log` và HEAD.
+3. Đọc `docs/requirements-matrix.md`.
+4. Đọc `docs/team-assignments.md`, đặc biệt REL-01 và REL-02.
+5. Đọc `docs/reliability-design.md`.
+6. Đọc `docs/streaming-architecture.md`.
+7. Đọc `docs/integration-design.md`.
+8. Đọc `docs/flow-control-design.md` và `docs/congestion-control-design.md` để xác định interface chung.
+9. Kiểm tra tài liệu nguồn CO3094, email giảng viên và tham chiếu kỹ thuật đã có.
+
+**Email giảng viên là nguồn yêu cầu quan trọng nhất.**
+
+Thầy yêu cầu thiết kế nháp cho Reliability, Flow Control và Congestion Control; không có xác nhận Lab 2 bắt buộc phải implement toàn bộ thuật toán.
+
+Không mở rộng sang HTTP demo hoặc lập trình Assignment 1 trong phiên này.
+
+---
+
+## 2. KIẾN TRÚC ĐANG ĐƯỢC ĐỀ XUẤT
+
+Dự án hiện có một mô hình streaming hướng UDP, gồm:
+
+**Reliable ordered messages:**
+- Session setup.
+- Configuration.
+- Important control commands.
+- Dữ liệu cần nhận đầy đủ, không bị thực thi hai lần.
+
+**Expiring real-time updates:**
+- Game state / media state.
+- Dữ liệu có sequence và thời hạn hữu ích.
+- Khi đã quá hạn, có thể bỏ thay vì retransmit muộn.
+
+Đây là proposal của nhóm để thảo luận, không phải giao thức do giảng viên bắt buộc.
+
+Tạm sử dụng mô hình này để phát triển bản nháp, nhưng phải trình bày các giả định, hạn chế và điểm cần nhóm xác nhận.
+
+Không được khẳng định mô hình hiện tại tương thích hoàn toàn với QUIC, Steam Networking hoặc yêu cầu cuối cùng của Assignment 1.
+
+---
+
+## 3. THIẾT KẾ RELIABILITY CHUNG
+
+Hãy xây dựng một thiết kế nhất quán, dựa trên các ý tưởng:
+
+- Packet numbering.
+- Selective acknowledgment / ACK ranges.
+- Reliable message ID hoặc stream offset.
+- Loss detection.
+- Probe timeout (PTO).
+- Selective retransmission.
+- Duplicate suppression.
+- Bounded reordering buffer.
+- Separate handling for expiring real-time updates.
+
+Có thể đề xuất một cơ chế Selective Repeat-like ở mức ứng dụng để dễ giải thích.
+
+Tuy nhiên, phải nêu rõ các quy tắc do nhóm tự đề xuất và điểm khác biệt so với QUIC chuẩn.
+
+Nếu có nhiều phương án hợp lý, so sánh ngắn gọn và chọn một baseline cụ thể cho bản nháp. Không để tài liệu chỉ liệt kê tên thuật toán mà không đưa ra quyết định đề xuất.
+
+### Yêu cầu tính chính xác
+
+- Phân biệt packet number với message ID/stream offset.
+- Packet ACK không tự động chứng minh ứng dụng đã xử lý message.
+- ACK range dùng để phản ánh những packet được nhận.
+- Không mặc định một khoảng trống packet number đã đủ để kết luận packet bị mất.
+- Loss detection phải có quy tắc tránh retransmit quá sớm do reordering.
+- Retransmission của reliable data dùng packet number mới.
+- Receiver không giao một reliable command hai lần.
+- Ordered delivery và Head-of-Line blocking phải được giải thích đúng phạm vi.
+- Dữ liệu real-time quá hạn không cần retransmit.
+- Retransmission vẫn phải tuân thủ congestion control.
+- Buffer cho out-of-order data phải tuân thủ flow control.
+
+---
+
+## 4. REL-01 — PHẦN GIA ĐẠO
+
+Xây dựng đầy đủ nội dung:
+
+### A. Packet Number / Sequence Tracking
+
+Giải thích:
+
+- Packet number là gì.
+- Vì sao cần đánh số.
+- Khi nào tăng packet number.
+- Packet được lưu trạng thái gì ở sender.
+- Receiver theo dõi packet đã nhận ra sao.
+
+### B. ACK / ACK Range
+
+Thiết kế:
+
+- Receiver phản hồi những packet đã nhận bằng cách nào.
+- Cấu trúc ACK được đề xuất.
+- ACK đến trễ thì sao.
+- ACK bị mất thì sao.
+- ACK trùng thì sao.
+
+### C. Duplicate Detection
+
+- Phát hiện gói trùng.
+- Không đưa command trùng đến application.
+- Phân biệt packet bị nhận trùng và reliable content được retransmit trong packet khác.
+
+### Deliverables
+
+- Giải thích thuật toán.
+- Sender/Receiver state table.
+- Sequence diagram Mermaid.
+- Pseudocode sender ACK processing và receiver ACK generation.
+- Ít nhất hai ví dụ cụ thể.
+- Ba câu hỏi vấn đáp có đáp án.
+
+Ghi rõ `Owner: Nguyễn Đăng Gia Đạo — TENTATIVE`.
+
+---
+
+## 5. REL-02 — PHẦN THIÊN KỲ
+
+Xây dựng đầy đủ nội dung:
+
+### A. Packet Loss Detection
+
+Giải thích:
+
+- Những nguyên nhân mất packet.
+- Cách sender phát hiện packet có khả năng bị mất.
+- Sự khác nhau giữa mất packet và packet đến chậm.
+- ACK từ packet mới hơn hỗ trợ phát hiện mất packet thế nào.
+- Quy tắc packet threshold hoặc time threshold được đề xuất.
+
+### B. Timeout / PTO
+
+Thiết kế:
+
+- Sender theo dõi thời gian chờ ra sao.
+- Timeout xảy ra khi nào.
+- Phản ứng khi không có ACK progress.
+- Retry và giới hạn retry.
+- Backoff và cách xử lý khi kết nối không còn hoạt động.
+
+Không chọn các thông số timeout vô căn cứ. Nếu đưa ví dụ số học để minh họa, ghi rõ đó là giả định.
+
+### C. Retransmission
+
+Giải thích:
+
+- Dữ liệu nào cần gửi lại.
+- Dữ liệu nào không nên gửi lại.
+- Cách tái truyền reliable content.
+- Vì sao packet number mới phải được sử dụng.
+- Làm sao không vi phạm congestion budget.
+
+### D. Out-of-order / Duplicate
+
+Thiết kế:
+
+- Receiver nhận packet sai thứ tự.
+- Reordering buffer.
+- Khi nào chuyển dữ liệu lên application.
+- Làm sao không xử lý trùng.
+- Khi nào cần bỏ data quá hạn.
+
+### Deliverables
+
+- Loss/recovery state diagram.
+- Pseudocode loss detection / PTO / retransmission.
+- Bảng tình huống packet loss.
+- Giải thích Head-of-Line blocking.
+- Ít nhất ba ví dụ.
+- Ba câu hỏi vấn đáp có đáp án.
+
+Ghi rõ `Owner: Nguyễn Đổng Thiên Kỳ — TENTATIVE`.
+
+---
+
+## 6. BẢN THIẾT KẾ CHUNG PHẢI CÓ
+
+### 6.1. Packet / message format
+
+Đề xuất cấu trúc đơn giản có những trường cần thiết như:
+
+- Connection ID.
+- Packet Number.
+- Type / Flags.
+- ACK information.
+- Message ID hoặc Stream Offset.
+- Payload.
+
+Không nhất thiết mọi packet đều có tất cả trường. Cần mô tả rõ trường nào bắt buộc và trường nào tùy loại packet.
+
+Đây là format PROPOSED, không phải định dạng chính thức từ thầy.
+
+### 6.2. End-to-end algorithm
+
+Mô tả một vòng đời hoàn chỉnh:
+
+1. Application tạo message.
+2. Sender đóng gói và đánh số packet.
+3. Sender gửi packet.
+4. Receiver nhận và kiểm tra.
+5. Receiver gửi ACK.
+6. Sender xử lý ACK.
+7. Nếu nghi ngờ mất, thực hiện loss detection.
+8. Nếu loss được xác định, lên lịch retransmission phù hợp.
+9. Receiver loại duplicate hoặc buffer reordering.
+10. Application nhận reliable data đúng quy tắc.
+
+Tạo pseudocode đủ cụ thể để người đọc có thể lần theo từng trạng thái.
+
+### 6.3. Sequence diagrams
+
+Tạo ít nhất bốn sơ đồ Mermaid:
+
+**Diagram 1:** Normal delivery — packet/ACK bình thường.
+
+**Diagram 2:** Packet loss — packet bị mất, sau đó retransmission.
+
+**Diagram 3:** Lost ACK — data đã đến nhưng ACK bị mất.
+
+**Diagram 4:** Out-of-order — packet đến sai thứ tự, receiver xử lý.
+
+Mermaid phải đúng cú pháp và có thể render.
+
+### 6.4. Scenario table
+
+Có bảng:
+
+| Scenario | What Happens | Sender Action | Receiver Action | Outcome |
+|---|---|---|---|---|
+
+Bao gồm:
+
+- Normal delivery.
+- Packet loss.
+- ACK loss.
+- Packet duplication.
+- Out-of-order arrival.
+- Expired real-time update.
+- No ACK progress / connection failure.
+
+### 6.5. Alternative comparison
+
+So sánh ngắn:
+
+- Stop-and-Wait.
+- Go-Back-N.
+- Selective Repeat.
+- Hướng selective retransmission và ACK ranges đang đề xuất.
+
+Nêu tại sao phương án đã chọn phù hợp với ứng dụng streaming, đồng thời chỉ ra độ phức tạp và hạn chế.
+
+### 6.6. Integration
+
+Nêu chính xác những dữ liệu Reliability cần trao đổi với:
+
+**Flow Control**
+- Reliable offset.
+- Receiver buffer.
+- Receive credit.
+- Out-of-order buffer.
+
+**Congestion Control**
+- Packet ACK events.
+- Loss events.
+- RTT sample.
+- Retransmission.
+- Bytes in flight.
+
+Không tự sửa thiết kế của hai cặp kia. Ghi những vấn đề cần thảo luận vào phần interface contract hoặc open questions.
+
+---
+
+## 7. TẠO BẢN DRAFT ĐỂ TRÌNH BÀY NGÀY MAI
+
+Tạo file:
+
+`docs/reliability-lab2-presentation.md`
+
+File này phải là bản ngắn, khoảng 2–3 trang nội dung chính khi xuất ra PDF, có:
+
+1. Problem Statement.
+2. Proposed Solution.
+3. Packet/ACK Design.
+4. Sender/Receiver Algorithm.
+5. One or two key diagrams.
+6. Two worked examples.
+7. Advantages / Limitations.
+8. Integration Notes.
+9. Pending Team Decisions.
+
+Viết bằng tiếng Việt, giữ thuật ngữ kỹ thuật tiếng Anh khi cần.
+
+Tạo bản trình bày theo kiểu một sinh viên hiểu và tự bảo vệ được, không phải một bài nghiên cứu học thuật quá phức tạp.
+
+Nếu có thể, xuất PDF để nhóm dễ mở trên điện thoại. Giữ Markdown làm nguồn chính.
+
+Đừng biến tài liệu trình bày thành một bản báo cáo 20 trang.
+
+---
+
+## 8. REVIEW, KIỂM CHỨNG VÀ HỌC ĐỂ VẤN ĐÁP
+
+Tạo thêm file:
+
+`docs/reliability-oral-preparation.md`
+
+Nội dung gồm:
+
+- Giải thích từ cơ bản đến mức đủ để bảo vệ thiết kế.
+- Mỗi thuật ngữ có ví dụ dễ hiểu.
+- 10 câu hỏi giảng viên có thể hỏi.
+- Câu trả lời ngắn nhưng đúng kỹ thuật.
+- Ba tình huống giảng viên có thể thay đổi giả định để kiểm tra sự hiểu biết.
+- Danh sách các câu hỏi cả hai phải thảo luận trước Lab.
+
+Không chỉ tạo đáp án để học thuộc. Hãy giải thích tại sao đáp án đúng.
+
+Tạo mục cuối cùng:
+
+`TEAM REVIEW REQUIRED`
+
+với checklist:
+
+- Gia Đạo đã review ACK design?
+- Thiên Kỳ đã review retransmission design?
+- Hai người đã thống nhất packet/message semantics?
+- Đã đối chiếu Flow Control?
+- Đã đối chiếu Congestion Control?
+- Đã chọn cuối cùng giữa các alternative?
+- Cả hai đã giải thích được bốn sequence diagrams?
+- Đã lưu prompt AI thực tế?
+
+Các mục này để unchecked cho đến khi sinh viên tự xác nhận.
+
+---
+
+## 9. SOURCE FIDELITY
+
+Ưu tiên tài liệu môn CO3094 và các thông báo giảng viên.
+
+Tham khảo nguồn kỹ thuật chính thống khi có thể, chẳng hạn:
+
+- RFC 9000 — QUIC Transport.
+- RFC 9002 — QUIC Loss Detection and Congestion Control.
+- RFC 9221 — QUIC DATAGRAM.
+- Valve GameNetworkingSockets.
+
+Ghi rõ nguồn nào hỗ trợ quy tắc nào.
+
+Nếu không thể đọc một nguồn, không giả vờ đã đọc.
+
+Các đặc điểm học từ QUIC chỉ là technical reference. Không được viết rằng "thầy yêu cầu QUIC" hoặc "nhóm đã chọn QUIC" khi chưa có xác nhận.
+
+---
+
+## 10. FILES & REPOSITORY CHANGES
+
+Các file cần tạo hoặc cập nhật:
+
+- `docs/reliability-design.md` — thiết kế chi tiết.
+- `docs/reliability-lab2-presentation.md` — bản ngắn để đi Lab.
+- `docs/reliability-oral-preparation.md` — ôn vấn đáp.
+- `docs/reliability-interface-review.md` — câu hỏi phối hợp giữa ba cặp, nếu cần.
+- `prompts/` — lưu nguyên văn prompt này.
+
+Không sửa nội dung chuyên môn của Flow Control và Congestion Control.
+
+Không sửa tên hoặc task của thành viên khác.
+
+Vì những cặp khác có thể đang sửa repo cùng lúc:
+
+1. Kiểm tra working tree và remote trước.
+2. Không reset, force push hay ghi đè thay đổi người khác.
+3. Nếu cần, tạo branch `feat/reliability-lab2-draft`.
+4. Commit riêng nội dung Reliability và prompt.
+5. Ưu tiên tạo Pull Request để nhóm review.
+6. Nếu working tree có dữ liệu untracked từ giảng viên, giữ nguyên và không stage nhầm.
+
+Cập nhật `state.md`/`log.txt` theo cách không làm mất thay đổi đồng thời của thành viên khác. Nếu có nguy cơ conflict, ghi log riêng cho milestone trên feature branch rồi xử lý tích hợp sau.
+
+Không tự merge hoặc đánh dấu student review là hoàn thành.
+
+---
+
+## 11. PHÂN LOẠI TRẠNG THÁI
+
+Phân biệt:
+
+**AI_DRAFT_COMPLETE:** AI đã chuẩn bị bản đề xuất.
+
+**TECHNICAL_REVIEW_PENDING:** Chưa có sinh viên kiểm tra và phản biện.
+
+**TEAM_DECISION_PENDING:** Hai thành viên chưa chốt lựa chọn cuối cùng.
+
+**READY_FOR_LAB_REVIEW:** Nhóm đã review và sẵn sàng trình bày.
+
+Không tự chuyển từ AI_DRAFT_COMPLETE sang READY_FOR_LAB_REVIEW.
+
+Không tạo lịch sử prompt giả hoặc xác nhận giả.
+
+---
+
+## 12. ĐẦU RA CUỐI
+
+Sau khi hoàn thành, báo cáo bằng tiếng Việt:
+
+### RELIABILITY DESIGN
+- Tóm tắt giải pháp đã đề xuất.
+- Các quyết định kỹ thuật chính.
+- Những vấn đề còn mở.
+
+### FILES
+- Link từng file đã tạo.
+- PDF nếu tạo được.
+- Link Pull Request/commit.
+
+### REL-01 — GIA ĐẠO
+- Chính xác phần cần đọc và review.
+- Ba điều cần thống nhất với Thiên Kỳ.
+
+### REL-02 — THIÊN KỲ
+- Chính xác phần cần đọc và review.
+- Ba điều cần thống nhất với Gia Đạo.
+
+### BEFORE LAB
+- Checklist ngắn cả hai phải hoàn thành.
+- Các câu hỏi cần hỏi thành viên khác hoặc giảng viên.
+- Gợi ý trình bày trong 3–5 phút.
+
+### GIT & EVIDENCE
+- Branch/commit/PR.
+- Prompt log status.
+- State/log update status.
+
+## EXECUTION
+
+Hãy bắt đầu ngay bằng cách đọc bản Reliability hiện có và hoàn thiện thành bản thiết kế nháp nhất quán.
+
+Không dừng ở việc lập kế hoạch.
+
+Không viết code giao thức hoàn chỉnh khi chưa cần.
+
+Tạo file, diagram, pseudocode, ví dụ và nội dung trình bày thật.
+
+**Quan trọng: Đây là bản AI-assisted draft để hai sinh viên review và điều chỉnh, không phải kết quả đã được sinh viên xác nhận hay kiểm thử.**
+
+START NOW.

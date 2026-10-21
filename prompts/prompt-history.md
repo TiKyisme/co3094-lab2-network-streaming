@@ -31,3 +31,9 @@ The exact user reply identifying the LMS PDF and noting that the Lab 1 work was 
 Source: `C:\Users\TiKy\.codex\attachments\87c688de-08c4-475c-9548-0ddc2268eefa\Pasted text.txt`.
 
 Exact prompt: [2026-10-21-execution-documentation-handover.txt](2026-10-21-execution-documentation-handover.txt). Source and saved copy are byte-identical (30,226 bytes; SHA-256 `bfbead30d4206ea34cabf4439373e9583aa5b022fbde905fd7dee5667f555182`).
+
+## 2026-10-21 - Reliability design implementation draft
+
+Source: C:\Users\TiKy\.codex\attachments\ef74c1f9-126a-447c-8bcd-e5d4ecdb733b\Pasted text.txt.
+
+Exact prompt: [2026-10-21-reliability-design-draft.txt](2026-10-21-reliability-design-draft.txt). Source and saved copy are byte-identical (16,438 bytes; SHA-256 adb66bf54f8964b9233ee1f63a6adf4c5b9a70d9eaaf5cd942e44410e80dadd4). This is the master task prompt, not a student prompt or full session export. The two owners' actual prompt evidence remains pending.
