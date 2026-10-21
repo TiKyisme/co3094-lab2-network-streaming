@@ -1,7 +1,7 @@
 # PROJECT STATE
 
 ## Last Updated
-Date: 2026-10-21 (Asia/Saigon; no time was recorded)
+Date: 2026-10-22 (Asia/Saigon; no time was recorded)
 
 ## Project Goal
 Prepare CO3094 Lab 2: Windows physical host → Ubuntu VirtualBox HTTP access using the instructor's forum-overwritten `new_connection`, plus explainable draft designs for Reliability, Flow Control and Congestion Control. Preserve actual AI prompt evidence and a resumable project history.
@@ -31,6 +31,12 @@ Source basis: Email A and Email B excerpts supplied by the user. Original mailbo
 - Assignment 1 transport, group-size, HoL and deadline conflicts are in docs/requirements-matrix.md. They remain unresolved and do not replace Lab 2 email requirements.
 - The forum-overwritten `new_connection` and its listener settings are confirmed; the complete linked server file remains unavailable.
 
+## Verified Teaching Slides Used for the Group Report
+- Technical lecture source: `Chapter 3_ Transport Layer - Chapter_3_v9.0.pptx` from the CO3093 L02/L03 course collection; 154 slides; SHA-256 `0d30baf63053f753be037a81fc23604c7148ddcf55ff9c650920e28f0c4c2379`.
+- Matching lecture PDF: `Chapter 3 Transport - Mux_Demux, RDT- reilable data transfer - Chapter_3_v9.0.pdf`; 154 pages; SHA-256 `1600eaaf85f9a2e95f4eae2ae5a5e4606206c7fd6d076b2b6d19dd9ea572f4f4`. PDF page numbers match the printed lecture slide numbers in the inspected pages.
+- Reliability evidence: slides 45, 47-48, 53, 56-64, 66-67. Flow Control: slides 93-98, especially 97. Congestion Control: slides 108, 112-120, 122-126.
+- The CO3094/L07 study pack did not contain a separate Transport Layer lecture deck. The report labels the available CO3093 deck accurately and leaves its suitability for this Lab 2 to Gia Đạo and Thiên Kỳ to confirm.
+
 ## Environment Discovery
 - Windows 11 build 10.0.26200; Python 3.14.4 x64.
 - VirtualBox 7.2.20r175154 is installed; GUI is installed but not running.
@@ -44,7 +50,7 @@ Source basis: Email A and Email B excerpts supplied by the user. Original mailbo
 - Phase 1B Source Recovery: **PARTIAL** — CO3094/L07 package and forum overwrite/settings verified; the linked complete server source is unavailable.
 - Phase 2 Team handover: **READY FOR LOCAL TEAM START** — main Vietnamese guide, short handover, six detailed task cards, announcement, checklist, prompt instructions and a visually reviewed Word fallback exist. Exact Google Docs read returned 404; sync is pending.
 - Phase 3 HTTP environment: **WAITING_FOR_MANUAL_TEST**. Forum settings and local reconstruction are documented; syntax is checked only. The VM is off and no TCP/HTTP/browser test has been run.
-- Phase 4 Streaming: draft proposals exist; **not reviewed by the pairs, not implemented/tested**, and not confirmed Assignment 1-compliant. A slide-only Reliability candidate now accompanies the preserved advanced draft; technical review and team decision remain pending.
+- Phase 4 Streaming: three design drafts exist; **not reviewed by the pairs, not implemented/tested**, and not confirmed Assignment 1-compliant. The slide-only Reliability candidate and a 10-page group report are ready for review. The report uses an explicitly identified CO3093 L02/L03 lecture deck; student confirmation that it is the intended technical source for CO3094 Lab 2 remains pending.
 - Phase 5 Repository: public GitHub repo; handover remains on main. Reliability review is on feat/reliability-lab2-draft in open draft PR #1; no merge or student approval is recorded.
 
 ## Session Status Fields
@@ -56,11 +62,18 @@ GOOGLE_DOC_STATUS: GOOGLE_DOC_SYNC_PENDING (exact-ID metadata and native text re
 HTTP_DEMO_STATUS: WAITING_FOR_MANUAL_TEST (syntax only; VM powered off)
 STREAMING_DESIGN_STATUS: PROPOSED_NOT_REVIEWED_BY_PAIRS
 GROUP_ROSTER_STATUS: PARTIAL (2 tentative names, 4 placeholders, HTTP owners unassigned)
-PROMPT_EVIDENCE_STATUS: current slide-only task prompt saved verbatim (6,176 bytes; SHA-256 8a1becfaf94abe12afc0f11f2ddab2ebecf86f8b110a01e32c6829ef1464b749); actual student prompts pending
+PROMPT_EVIDENCE_STATUS: slide-only task prompt and final group-report task prompt saved verbatim; student prompts pending. Report prompt: 12,259 bytes; SHA-256 ef2b3a89744fe615308976c70b36e9d3ef922af647a5fb2f0d88813a742c5799
 RELIABILITY_DRAFT_STATUS: SLIDE_ONLY_DRAFT_READY; TECHNICAL_REVIEW_PENDING; TEAM_DECISION_PENDING
-RELIABILITY_NEXT_ACTION: Gia Đạo and Thiên Kỳ read the slide-only draft and easy-study guide; confirm RDT 3.0 suitability, timeout choice, and direction scope; keep all review boxes unchecked
-NEXT_ACTION: Gia Đạo and Thiên Kỳ personally review the slide-only Reliability candidate; VM network checks remain pending
+RELIABILITY_NEXT_ACTION: Gia Đạo and Thiên Kỳ review the slide-only draft and report; confirm the CO3093 slide source, RDT 3.0 choice, sequence-label mapping, timeout example, and scope; keep all review boxes unchecked
+STREAMING_REPORT_STATUS: LATEX_PDF_DRAFT_READY; 10 pages; visually reviewed; student review and source confirmation pending
+NEXT_ACTION: Gia Đạo and Thiên Kỳ review the report and Reliability candidate; fill the four missing roster names; VM network checks remain pending
 ```
+
+## Latest Report Deliverable — 2026-10-22
+- Created `report/co3094_lab2_report.tex`, `report/graphics/hcmut.png`, and `output/pdf/co3094_lab2_report.pdf` for Reliability, Flow Control, and Congestion Control.
+- Report figures: one overview, two Reliability cases, one TCP `rwnd` flow-control diagram, and one AIMD congestion-control graph. Group examples and proposed choices are labeled; the RDT 3.0 bit alternation (0/1) is distinguished from the user-requested example labels (1/2/3).
+- Compiled twice with XeLaTeX/MiKTeX; final PDF is 10 pages, 213,439 bytes, SHA-256 `f3ba1409ddbbab03cf26cba5de7bd3a2286c17b1aaf4e6bf98ec112bac41e877`. All pages were rendered and visually inspected; final runs reported no overfull/underfull layout warnings.
+- The report is a student-review draft. It does not claim that the HTTP VM demo or any network test was completed, and no student approval is recorded.
 
 ## Completed Tasks
 - Read the continuation prompt, previous README/state/log, requirements, source inventory, open questions, and all five streaming design docs.
@@ -137,6 +150,7 @@ NEXT_ACTION: Gia Đạo and Thiên Kỳ personally review the slide-only Reliabi
 - Branch: feat/reliability-lab2-draft, tracking origin/feat/reliability-lab2-draft; draft PR #1 targets main
 - Remote: `https://github.com/TiKyisme/co3094-lab2-network-streaming.git`
 - Reliability slide-only content commit: f0fc4abe07a45b2c7288301b1de11cffba1d9396 (pushed; origin ref verified; state/log push evidence is recorded separately)
+- CO3094 group report content commit: `5733f1fa174f94012cd2e153ddef100772f6a0de` (pushed to `origin/feat/reliability-lab2-draft`; `git ls-remote` matched). PR #1 readback after push: OPEN / DRAFT / NOT MERGED; no student approval recorded.
 - Pull request: [#1 - Reliability Lab 2 draft](https://github.com/TiKyisme/co3094-lab2-network-streaming/pull/1), OPEN / DRAFT / NOT MERGED
 - Handover package commit `10087e85a7c8d0e57995156df2f1044077cd5f94` was pushed to `origin/main`; `git ls-remote` matched at the post-push check. GitHub API readback confirmed the guide, handover, assignments, announcement, review checklist, prompt instructions and DOCX paths.
 - The user-provided forum PDF, source ZIP, extracted pack and handoff are present as untracked repo-root copies. The PDF, ZIP and handoff byte-match the copies in the external course folder. They were left unchanged, unstaged and uncommitted; `git ls-files` contains no PDF or ZIP.
@@ -152,10 +166,11 @@ NEXT_ACTION: Gia Đạo and Thiên Kỳ personally review the slide-only Reliabi
 - [streaming compatibility](docs/streaming-architecture.md)
 - [Reliability draft](docs/reliability-design.md), [presentation](docs/reliability-lab2-presentation.md), [oral prep](docs/reliability-oral-preparation.md), and [interface review](docs/reliability-interface-review.md)
 - [Slide-only Reliability draft](docs/reliability-slide-only.md) and [easy study guide](docs/reliability-easy-study.md)
+- [CO3094 Lab 2 LaTeX group report](report/co3094_lab2_report.tex) and [compiled PDF](output/pdf/co3094_lab2_report.pdf)
 - [prompt history](prompts/prompt-history.md)
 
 ## Next 3 Actions
-1. Gia Đạo and Thiên Kỳ personally review docs/reliability-slide-only.md and docs/reliability-easy-study.md, then confirm the RDT 3.0 choice and open scope questions.
+1. Gia Đạo and Thiên Kỳ review the group report and slide-only Reliability candidate; confirm the CO3093 lecture source, sequence-label mapping, timeout example, and congestion-control branch.
 2. Start the intended Ubuntu VM and share ip -4 addr output so the HTTP network checks can proceed.
 3. Obtain the linked full server attachment and ask the instructor about Assignment 1 conflicts when available.
 

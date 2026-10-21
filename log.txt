@@ -365,3 +365,34 @@ GitHub:
 - Content commit f0fc4abe07a45b2c7288301b1de11cffba1d9396 was pushed to origin/feat/reliability-lab2-draft; git ls-remote matched that commit.
 - gh pr view 1 reported head f0fc4abe07a45b2c7288301b1de11cffba1d9396, state OPEN, isDraft=true, and mergedAt=null. PR #1 was not merged or marked student-approved.
 - This state/log push-verification update is recorded separately from the slide-only content commit.
+
+[2026-10-22] [CO3094 GROUP REPORT - LATEX/PDF]
+
+Sources and scope:
+- Read the project requirements matrix, source inventory, team assignments, group guide, slide-only Reliability draft/study guide/presentation, and existing Flow Control, Congestion Control, integration, and streaming architecture drafts before writing.
+- Read and visually checked the professor's Chapter 3 Transport Layer lecture source from the CO3093 L02/L03 collection. The deck has 154 slides (SHA-256 `0d30baf63053f753be037a81fc23604c7148ddcf55ff9c650920e28f0c4c2379`); the companion PDF has 154 pages (SHA-256 `1600eaaf85f9a2e95f4eae2ae5a5e4606206c7fd6d076b2b6d19dd9ea572f4f4`). Read Reliability slides 45, 47-48, 53, 56-64, 66-67; Flow Control slides 93-98; Congestion Control slides 108, 112-120, 122-126. PDF page numbering matches the printed slide numbering in these sections.
+- The CO3094/L07 study pack had no separate Transport Layer lecture deck. The report identifies the source as the available CO3093 lecture and asks the two Reliability students to confirm it is the intended source for Lab 2.
+- Cross-checked the Email A/B excerpts saved in `docs/requirements-matrix.md`: Lab 2 requires an HTTP VM demo and draft designs for the three mechanisms; the excerpts do not require implementation of all three designs. The original mailbox was not reopened.
+
+Deliverables:
+- Added `report/co3094_lab2_report.tex`, `report/graphics/hcmut.png`, and `output/pdf/co3094_lab2_report.pdf`.
+- The Vietnamese 10-page report includes a cover, contents, scope and source boundaries, Reliability, Flow Control, Congestion Control, group integration, tentative member assignments, review questions, and slide/page references.
+- Added five figures: a high-level overview; two Reliability examples; a receiver buffer/`rwnd` diagram; and an AIMD graph. The labels Seq=1/2/3 and 100 ms are identified as group illustration details; the slide RDT bit alternates 0/1 and the slide does not set a millisecond timer value.
+- Saved the exact task prompt as `prompts/2026-10-22-final-group-report.txt` (12,259 bytes; SHA-256 `ef2b3a89744fe615308976c70b36e9d3ef922af647a5fb2f0d88813a742c5799`) and updated `prompts/prompt-history.md`.
+
+Validation and limits:
+- Installed MiKTeX in user scope because no TeX engine was available. Compiled the LaTeX twice with XeLaTeX; final output is 10 pages, 213,439 bytes, SHA-256 `f3ba1409ddbbab03cf26cba5de7bd3a2286c17b1aaf4e6bf98ec112bac41e877`.
+- Rendered and visually inspected all 10 final PDF pages. Final compile reported no overfull/underfull layout warnings; logo, contents, figures, tables, and page layout were checked.
+- Did not run HTTP/network tests or implement the draft mechanisms. The report does not claim the VM demo is complete. Four group names and group code remain unconfirmed; Gia Đạo and Thiên Kỳ have not personally reviewed or approved the report.
+
+Files intentionally updated:
+- `report/co3094_lab2_report.tex`
+- `report/graphics/hcmut.png`
+- `output/pdf/co3094_lab2_report.pdf`
+- `prompts/2026-10-22-final-group-report.txt`
+- `prompts/prompt-history.md`
+- `state.md`
+- `log.txt`
+
+GitHub and review:
+- Content commit `5733f1fa174f94012cd2e153ddef100772f6a0de` was pushed to `origin/feat/reliability-lab2-draft`; `git ls-remote` matched. `gh pr view 1` confirmed PR #1 head `5733f1fa174f94012cd2e153ddef100772f6a0de`, OPEN / DRAFT / NOT MERGED, `mergedAt=null`. No student approval is recorded.
