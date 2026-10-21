@@ -7,7 +7,7 @@ Date: 2026-10-21 (Asia/Saigon; no time was recorded)
 Prepare CO3094 Lab 2: evidence-grounded Windows host → Ubuntu VirtualBox HTTP access using the instructor's overwritten `new_connection`, plus one explainable draft design integrating reliability, flow control, and congestion control. Preserve actual prompt evidence and a resumable project log.
 
 ## Official Requirements
-Source basis: two instructor email excerpts supplied in the user's attached prompt. Their original mailbox messages and LMS forum have not been independently opened.
+Source basis: two instructor email excerpts supplied in the user's attached prompt. Their original mailbox messages and the LMS forum have not been independently opened.
 
 - **REQUIRED** — Physical host can access the HTTP server running in the VM; use the instructor-provided overwritten `new_connection`.
 - **REQUIRED** — Prepare a draft design for reliability, flow control, and congestion control for a streaming application.
@@ -21,14 +21,14 @@ Source basis: two instructor email excerpts supplied in the user's attached prom
 - User-supplied prompt includes Email A (dated 2026-10-08), Email B excerpt, and the Google Docs link.
 - Google Drive Search returned the native document title, metadata, and indexed text. Direct Docs text read and Drive fetch both returned 404; native structure and editability are unverified.
 - Adjacent local `MMT` bundle identifies itself as **CO3093**, not CO3094. Its Chapter 2 v9 slide 31 is a client-side netcat HTTP exercise. It is not treated as CO3094 authority.
-- Oracle VirtualBox 7.2, Python socket/threading docs, RFC 9000/9002/9221, and Valve GameNetworkingSockets are linked in the technical docs; they inform proposals only.
+- Oracle VirtualBox 7.2, Python socket/threading docs, Microsoft Test-NetConnection docs, RFC 9000/9002/9221, and Valve GameNetworkingSockets are linked in the technical docs; they inform proposals only.
 
 ## Current Phase
 - Phase 1 Discovery: **PARTIAL** — available sources inventoried; the CO3094 folder and LMS forum are missing.
 - Phase 2 Documentation audit: **PARTIAL** — full indexed text reviewed and Markdown correction prepared; original native Google Doc could not be edited/read through its content API.
 - Phase 3 HTTP networking: **WAITING_FOR_SOURCE_AND_MANUAL_TEST**.
 - Phase 4 Streaming design: draft proposals written; **not implemented or tested**.
-- Phase 5 Repository handoff: local repo created and staged diff inspected; GitHub private repo not created yet.
+- Phase 5 Repository handoff: local and GitHub private repositories created; initial docs pushed to `main`.
 
 ## Completed Tasks
 - Read the full attached master prompt and RTK instruction file.
@@ -41,10 +41,11 @@ Source basis: two instructor email excerpts supplied in the user's attached prom
 - Created requirements, source inventory, Google Doc review, corrected Markdown guide, network setup/test instructions, and integrated streaming design drafts.
 - Copied the attached master prompt byte-for-byte and verified source/destination are both 30257 bytes and identical.
 - Checked 20 Markdown files for broken relative `.md` links; none were found.
-- Initialized Git only inside the new project folder.
+- Initialized Git only inside the new project folder and reviewed the staged diff.
+- Created and verified the private GitHub repo; pushed the initial commit to `main`. The status/log bookkeeping update will be committed next.
 
 ## In Progress
-- Create and push the private GitHub repository; then record the verified remote, branch, and commit.
+- Commit and push the private repository status/log bookkeeping update.
 - Obtain correct course sources and perform real VM validation when available.
 
 ## Pending Tasks
@@ -78,10 +79,10 @@ Source basis: two instructor email excerpts supplied in the user's attached prom
 - Adjacent source bundle: `D:\01. Dai_Hoc_Dai_Dai_Di\05. HK1_NAM3\MMT`.
 
 ## GitHub Status
-- Repo: not created yet
-- Local branch: main (no commit yet)
-- Remote: none
-- Last commit: none
+- Repo: [https://github.com/TiKyisme/co3094-lab2-network-streaming](https://github.com/TiKyisme/co3094-lab2-network-streaming), visibility PRIVATE
+- Branch: main, tracking origin/main
+- Remote: `https://github.com/TiKyisme/co3094-lab2-network-streaming.git`
+- Last commit: HEAD; use `rtk git rev-parse HEAD` for the exact current hash
 
 ## Important File Paths
 - [README](README.md)
@@ -94,7 +95,7 @@ Source basis: two instructor email excerpts supplied in the user's attached prom
 - [prompt evidence](prompts/prompt-history.md)
 
 ## Next 3 Actions
-1. Commit the reviewed local file set and create the private GitHub repository.
+1. Push the state/log bookkeeping update and verify the final commit/clean tree.
 2. Obtain the correct CO3094 folder and instructor forum code.
 3. Run the documented Windows↔Ubuntu manual checks and attach real results.
 

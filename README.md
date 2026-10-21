@@ -1,6 +1,6 @@
 # CO3094 Lab 2 — HTTP Networking & Streaming Design
 
-Tài liệu làm việc riêng để chuẩn bị Lab 2 và ghi lại bằng chứng nghiên cứu. Repository được tạo tách khỏi course bundle; GitHub target là **private** theo yêu cầu, không công khai.
+Tài liệu làm việc riêng để chuẩn bị Lab 2 và ghi lại bằng chứng nghiên cứu. Repository được tạo tách khỏi course bundle và đã được tạo **private** trên GitHub.
 
 ## Phạm vi từ email thầy do người dùng cung cấp
 
@@ -18,7 +18,7 @@ Giao thức, mã nguồn, port, deliverables và ảnh minh chứng chưa đư�
 - Phase 2: đã review nội dung chữ Google Doc từ Drive Search; chưa thể xác minh cấu trúc native hoặc sửa bản gốc do Docs API trả 404. Xem [review](docs/docs-review.md) và [bản Markdown hiệu chỉnh](docs/lab2-group-guide.md).
 - Phase 3: chưa xác minh code của thầy; `new_connection` UNVERIFIED. Cần code forum và kiểm thử thật trên Windows–Ubuntu.
 - Phase 4: tài liệu streaming là PROPOSED; chưa triển khai hay kiểm thử.
-- Phase 5: repository local được tạo tại `D:\01. Dai_Hoc_Dai_Dai_Di\05. HK1_NAM3\co3094-lab2-network-streaming`; GitHub private repo chưa được tạo.
+- Phase 5: local repository đã push lên [GitHub private](https://github.com/TiKyisme/co3094-lab2-network-streaming), branch `main`.
 
 ## Đọc theo thứ tự
 
