@@ -67,3 +67,9 @@ Exact prompt: [2026-10-22-final-group-report.txt](2026-10-22-final-group-report.
 Source attachment: 3727d2ce-90a1-4850-bfb8-26bc02d7750c.
 
 Exact prompt: [2026-10-22-final-submission-cleanup.txt](2026-10-22-final-submission-cleanup.txt). Saved verbatim (9364 bytes; SHA-256 f7d8af19bc23140ffbf18696abc6ba029b8b4a6c151eba0364b029042a40469d). This is task prompt evidence, not student prompt evidence or a full session export.
+
+## 2026-10-22 — HTTP + DNS form submission
+
+Source: User message in the current Codex conversation; no separate attachment was supplied.
+
+Exact prompt: [2026-10-22-http-dns-form-submission.txt](2026-10-22-http-dns-form-submission.txt). Saved from the user message (3,374 bytes; SHA-256 `a49023541b9f6464a8aa65d94b4e2818881b3d8c266d61c99c9ab5ce59e9ec89`) as task prompt evidence, not student prompt evidence or a full session export.

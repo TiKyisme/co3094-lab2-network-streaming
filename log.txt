@@ -422,3 +422,39 @@ Files updated:
 
 GitHub and review:
 - Submission-cleanup content commit and push verification are recorded after the report commit. PR #1 remains OPEN / DRAFT / NOT MERGED; no student approval is recorded.
+
+[2026-10-22] [HTTP + DNS GOOGLE FORM DEMO]
+
+Task and source:
+- Read the supplied Lab 2 LMS PDF, including pages 2–4 (UDP server/DNS response structure) and page 9 (HTTP textbox, button and label HTML).
+- Read `state.md`, `log.txt`, `docs/network-setup.md`, `docs/network-test-cases.md`, `docs/http-server-analysis.md`, and `examples/http_server_reconstructed_demo.py` before editing.
+- User asked for two actual form screenshots and explicitly prohibited unapproved VirtualBox network-setting changes.
+
+VirtualBox/environment checks:
+- Rechecked registered and running VMs with VBoxManage 7.2.20r175154, VM details, host adapters and IPv4 addresses.
+- The registered VM `ubuntu` had Adapter 1 bridged to Intel Wi-Fi 6 AX203, but boot stopped at BIOS with `No bootable medium found`. It was powered off after the failed boot attempt; no settings were changed.
+- The already-running course VM `NetApp-EndHost` reported TinyCore Linux 10.1, Python 3.6.4 and `eth0` 192.168.111.61/24. Host Wi-Fi was 192.168.111.188/24. This guest is not the VM named `ubuntu`.
+- TinyCore had no `ufw`, `iptables`, or `nft` executable and `/proc/net/ip_tables_names` was unavailable. No firewall rule or VirtualBox network setting was changed.
+
+Files added/updated:
+- Added `examples/http_server_form.py` and `examples/dns_udp_server.py`; both use only Python standard-library modules and remain separate from instructor code.
+- Added `docs/http-dns-form-runbook.md`.
+- Updated network test/setup and HTTP analysis docs to distinguish the form demo from the untested instructor/forum server at port 22236.
+- Saved the task prompt in `prompts/2026-10-22-http-dns-form-submission.txt`; indexed it in `prompts/prompt-history.md` and `prompts/README.md`.
+- Updated `.gitignore` to keep the two private-network screenshots out of Git; updated state/log with exact test boundaries.
+
+Real test results:
+- HTTP server ran on `NetApp-EndHost` TCP 8000. Windows `Test-NetConnection` returned `TcpTestSucceeded: True`; `curl.exe` returned `HTTP/1.1 200 OK` and the required HTML. Edge loaded the VM URL, found the textbox/button/labels, filled `CO3094 Student`, clicked the button, and observed `Welcome, CO3094 Student!`.
+- DNS server ran on `NetApp-EndHost` UDP 53 with `sudo -n` and the clearly labeled demo answer `192.0.2.123`. Windows `nslookup www.example.com 192.168.111.61` returned `192.0.2.123`; the actual server process logged incoming queries and matching IDs.
+- A separate UDP wire check used transaction ID `0xC309` and verified the response ID, QR/AA flags, QDCOUNT 1, ANCOUNT 1, compressed owner `c00c`, TYPE A, CLASS IN, TTL 60, RDLENGTH 4 and A data `192.0.2.123`.
+- `192.0.2.123` is a documentation-only demo IP and is not presented as the public address for `www.example.com`.
+
+Screenshots:
+- `evidence/http-form.png` — real Edge page capture after the form interaction; 21,934 bytes.
+- `evidence/dns-nslookup.png` — real Windows terminal capture showing the `nslookup` command, queried server address and returned answer; 26,129 bytes.
+- Both files are below 1 MB, remain on the local machine and are ignored by Git because they expose the private lab-network address.
+
+Status and limits:
+- HTTP form demo: PASS on `NetApp-EndHost`; NOT TESTED on Ubuntu VM or the instructor/forum source at TCP 22236.
+- DNS demo/nslookup: PASS on `NetApp-EndHost`; NOT TESTED on Ubuntu VM. Inbound TCP and UDP were observed working; complete firewall policy was not established because common firewall utilities were absent.
+- No Google Form was submitted. PR #1 was not merged and no student approval was recorded.

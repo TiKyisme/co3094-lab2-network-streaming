@@ -37,19 +37,26 @@ Source basis: Email A and Email B excerpts supplied by the user. Original mailbo
 - Reliability evidence: slides 45, 47-48, 53, 56-64, 66-67. Flow Control: slides 93-98, especially 97. Congestion Control: slides 108, 112-120, 122-126.
 - The CO3094/L07 study pack did not contain a separate Transport Layer lecture deck. The report labels the available CO3093 deck accurately and leaves its suitability for this Lab 2 to Gia Đạo and Thiên Kỳ to confirm.
 
-## Environment Discovery
+## Environment Discovery (initial read 2026-10-21)
 - Windows 11 build 10.0.26200; Python 3.14.4 x64.
 - VirtualBox 7.2.20r175154 is installed; GUI is installed but not running.
 - Registered `ubuntu` VM is Ubuntu 64-bit and powered off; Adapter 1 is Bridged to Wi-Fi, adapters 2–8 disabled.
 - `NetApp-EndHost` is also registered and powered off.
 - Host-only interface is Up at 192.168.56.1/24; VirtualBox DHCP server is enabled with guest range 192.168.56.101–192.168.56.254.
 - Guest IP, guest firewall, and server listener are unknown because guests are off.
-- No VM settings were changed. No TCP, curl, browser, or HTTP test was run.
+- No VM settings were changed during that initial read; no TCP, curl, browser, or HTTP test was run then.
+
+### Rechecked during HTTP/DNS form execution (2026-10-22)
+- VirtualBox 7.2.20r175154: `ubuntu` remains configured as Ubuntu 64-bit, Adapter 1 Bridged to Intel Wi-Fi 6 AX203, adapters 2–8 disabled. A headless boot attempt failed at BIOS with `No bootable medium found`; the VM was powered off afterward. No guest IP was available.
+- `NetApp-EndHost` was running and bridged to the same Wi-Fi. Guest-reported OS is TinyCore Linux 10.1; `eth0` is `192.168.111.61/24`; Python versions are 3.6.4 and 2.7.14. Windows Wi-Fi was `192.168.111.188/24`.
+- No `ufw`, `iptables`, or `nft` command was present in the TinyCore guest, and `/proc/net/ip_tables_names` was unavailable. Actual incoming TCP 8000 and UDP 53 requests succeeded; no firewall or VirtualBox network setting was changed.
+- Form HTTP and DNS tests below were run on `NetApp-EndHost`; they are not Ubuntu VM or instructor-server port-22236 test results.
 
 ## Current Phase
 - Phase 1B Source Recovery: **PARTIAL** — CO3094/L07 package and forum overwrite/settings verified; the linked complete server source is unavailable.
 - Phase 2 Team handover: **READY FOR LOCAL TEAM START** — main Vietnamese guide, short handover, six detailed task cards, announcement, checklist, prompt instructions and a visually reviewed Word fallback exist. Exact Google Docs read returned 404; sync is pending.
-- Phase 3 HTTP environment: **WAITING_FOR_MANUAL_TEST**. Forum settings and local reconstruction are documented; syntax is checked only. The VM is off and no TCP/HTTP/browser test has been run.
+- Phase 3 HTTP environment: **PARTIAL**. A separate form HTTP demo passed from Windows to `NetApp-EndHost` at TCP 8000, including curl and Edge button interaction. The named Ubuntu VM fails BIOS boot; the official/forum server and port 22236 remain untested.
+- HTTP/DNS Google Form exercises: **PASS ON `NetApp-EndHost`**. UDP DNS port 53 answered Windows `nslookup` for `www.example.com`; packet validation confirmed transaction ID `0xC309` and an A/IN record for demo address `192.0.2.123`. Screenshots are ready locally and excluded from Git due the private lab IP.
 - Phase 4 Streaming: three design proposals exist; **not implemented or experimentally evaluated**, and not confirmed Assignment 1-compliant. The CO3094 group report has been cleaned for submission and reduced to 9 pages. The project record retains the source note that its Transport Layer lecture material is from the CO3093 L02/L03 collection.
 - Phase 5 Repository: public GitHub repo; handover remains on main. Reliability review is on feat/reliability-lab2-draft in open draft PR #1; no merge or student approval is recorded.
 
@@ -59,14 +66,17 @@ Source basis: Email A and Email B excerpts supplied by the user. Original mailbo
 TEAM_HANDOVER_STATUS: READY_FOR_LOCAL_TEAM_START
 TEAM_HANDOVER_READY: YES (local fallback package; Google Docs sync pending)
 GOOGLE_DOC_STATUS: GOOGLE_DOC_SYNC_PENDING (exact-ID metadata and native text reads returned 404)
-HTTP_DEMO_STATUS: WAITING_FOR_MANUAL_TEST (syntax only; VM powered off)
+HTTP_FORM_DEMO_STATUS: PASS on NetApp-EndHost TinyCore 10.1 / 192.168.111.61:8000; NOT TESTED on the VM named ubuntu or instructor server port 22236
+HTTP_FORM_SCREENSHOT: READY at evidence/http-form.png (21,934 bytes; local-only)
+DNS_DEMO_STATUS: PASS on NetApp-EndHost TinyCore 10.1 / 192.168.111.61:53/UDP; demo A answer 192.0.2.123
+DNS_NSLOOKUP_SCREENSHOT: READY at evidence/dns-nslookup.png (26,129 bytes; local-only)
 STREAMING_DESIGN_STATUS: PROPOSED_NOT_REVIEWED_BY_PAIRS
 GROUP_ROSTER_STATUS: 6 member names supplied; IDs missing for Hà Duy Lộc, Lê Thành Tiến, and Nguyễn Tuấn Anh; group number not supplied
-PROMPT_EVIDENCE_STATUS: slide-only, master report, and final-submission-cleanup prompts saved verbatim; student prompts pending. Cleanup prompt: 9,364 bytes; SHA-256 f7d8af19bc23140ffbf18696abc6ba029b8b4a6c151eba0364b029042a40469d
+PROMPT_EVIDENCE_STATUS: latest HTTP/DNS task prompt saved in prompts/2026-10-22-http-dns-form-submission.txt and indexed in prompt-history.md; earlier task prompts retained
 RELIABILITY_DRAFT_STATUS: SLIDE_ONLY_DRAFT_READY; TECHNICAL_REVIEW_PENDING; TEAM_DECISION_PENDING
 RELIABILITY_NEXT_ACTION: Gia Đạo and Thiên Kỳ review the slide-only draft and report; confirm the CO3093 slide source, RDT 3.0 choice, sequence-label mapping, timeout example, and scope; keep all review boxes unchecked
 STREAMING_REPORT_STATUS: SUBMISSION_CLEANED; LaTeX/PDF 9 pages; visual and text checks passed; personal student review pending
-NEXT_ACTION: Gia Đạo and Thiên Kỳ review the final report and Reliability design; obtain the three missing student IDs if required; VM network checks remain pending
+NEXT_ACTION: Gia Đạo and Thiên Kỳ review the final report and Reliability design; to repeat the form tests on the exact Ubuntu guest, provide a bootable Ubuntu VM/media or confirm that NetApp-EndHost is acceptable; do not change VirtualBox networking without approval
 ```
 
 ## Latest Report Deliverable — 2026-10-22
@@ -114,8 +124,7 @@ NEXT_ACTION: Gia Đạo and Thiên Kỳ review the final report and Reliability 
 - Gia Đạo and Thiên Kỳ review the slide-only RDT 3.0 proposal, stop-and-wait suitability, timeout choice, direction scope, and pair roles; no student confirmations are recorded.
 - The earlier advanced Reliability design remains preserved and unapproved; it is not the current easier-to-present candidate.
 - Complete forum-linked `sample_code_http_server_process.txt` or matching server source, including the accept/thread call that must match `new_connection(conn, addr)`.
-- Confirm whether the local `ubuntu` VM is the intended test guest.
-- Start the intended Ubuntu VM; obtain guest `ip -4 addr`, then proceed to listener, Windows TCP, curl and Chrome checks.
+- The task-named `ubuntu` VM cannot boot (`No bootable medium found`); the separate form demos passed on `NetApp-EndHost`, so an exact Ubuntu-guest rerun remains pending.
 - Confirm the Reliability pair and fill the other four names; assign HTTP primary/backup.
 - Re-review the AI-proposed designs with their pairs and add actual prompt evidence.
 - Restore access to the original Google Doc or provide the missing Word copy if it contains changes beyond the previously reviewed text; then sync the local fallback without creating a duplicate.
@@ -124,7 +133,7 @@ NEXT_ACTION: Gia Đạo and Thiên Kỳ review the final report and Reliability 
 
 ## Blockers
 - The ZIP contains a sample server image in a PDF but no standalone Python server/client or OVA. The forum override is confirmed in the supplied PDF, but its linked complete server attachment is unavailable without LMS authentication.
-- The local VMs are powered off; guest IP/firewall/server state and HTTP results are unavailable.
+- The named `ubuntu` VM cannot boot and has no guest IP. `NetApp-EndHost` test state is recorded above; do not use it as evidence for the official forum server.
 - Google Docs sync is pending: the exact ID returned 404 under the connected account, the exact-title DOCX search returned no results, and no supplied DOCX was found in the checked local folders.
 - Assignment 1 source conflicts are unresolved.
 - The original Google Doc remains unchanged because its native Docs read/fetch API returned 404 in the prior pass.
@@ -172,8 +181,21 @@ NEXT_ACTION: Gia Đạo and Thiên Kỳ review the final report and Reliability 
 
 ## Next 3 Actions
 1. Gia Đạo and Thiên Kỳ personally review the cleaned report and Reliability design; confirm the RDT 3.0 sequence-label explanation and 100 ms example.
-2. Start the intended Ubuntu VM and share ip -4 addr output so the HTTP network checks can proceed.
+2. Provide a bootable Ubuntu guest or confirm `NetApp-EndHost` is acceptable if the form task must be repeated on Ubuntu; no network-setting change is needed for the current TinyCore results.
 3. Obtain the linked full server attachment and ask the instructor about Assignment 1 conflicts when available.
 
 ## Resume Instructions
 Read this file, README, and the end of log first. Check Git status, branch, remote and HEAD. Keep original course sources outside Git. Do not treat the Sample NetApp PDF code as the forum overwrite. Do not mark tests passed without real outputs.
+
+## Latest HTTP + DNS Form Execution — 2026-10-22
+
+- Read the supplied Lab 2 LMS PDF directly: pages 2–4 contain the UDP/DNS sample and DNS A-response structure; page 9 shows the textbox/button/label HTML requirement.
+- Added separate standard-library socket demos: `examples/http_server_form.py` and `examples/dns_udp_server.py`, plus `docs/http-dns-form-runbook.md`. The instructor's source and `examples/http_server_reconstructed_demo.py` were not modified.
+- Real test guest: `NetApp-EndHost`, TinyCore Linux 10.1, Python 3.6.4, `eth0` `192.168.111.61/24`; Bridged to Wi-Fi. The host was `192.168.111.188/24`. This was not the VM named `ubuntu`.
+- HTTP: port 8000 reachable from Windows; `Test-NetConnection` succeeded; `curl.exe` received HTTP 200 with the form HTML; Edge loaded the page, filled the textbox, clicked the button and read label `Welcome, CO3094 Student!`.
+- DNS: UDP 53 bound with `sudo -n`; Windows `nslookup www.example.com 192.168.111.61` returned `192.0.2.123`. The server logged real queries including ID `0xc309`; a wire check validated matching ID, QR/AA flags, one compressed-owner A/IN record, TTL 60 and 4-byte address data.
+- `192.0.2.123` is a documentation-only demonstration address, not a claim about the public DNS address of `www.example.com`.
+- Guest firewall inspection found no `ufw`, `iptables`, or `nft` utility and no readable `/proc/net/ip_tables_names`; both observed inbound tests succeeded. No firewall rule or VirtualBox network setting was changed.
+- The VM named `ubuntu` was started once for this task, but BIOS reported `No bootable medium found`; it was powered off without changing settings. Exact-guest Ubuntu validation and the forum/instructor server on port 22236 remain NOT TESTED.
+- Screenshots: `evidence/http-form.png` (21,934 bytes) and `evidence/dns-nslookup.png` (26,129 bytes). Both are real captures, under 1 MB, kept local and ignored by Git because the DNS image shows the private lab IP.
+- Exact task prompt is saved in `prompts/2026-10-22-http-dns-form-submission.txt` and indexed in `prompts/prompt-history.md`.

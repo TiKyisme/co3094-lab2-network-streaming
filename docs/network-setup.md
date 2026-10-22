@@ -1,6 +1,6 @@
 # Windows host ↔ Ubuntu guest HTTP setup
 
-**Status:** Forum handler/settings verified; user skeleton and a separate reconstruction syntax-checked; **WAITING_FOR_MANUAL_TEST**. The complete instructor attachment is still missing. No VM settings were changed and no connection test was run.
+**Status:** The forum handler/settings remain verified, but its complete source and port-22236 run are still unavailable. A separate HTTP form/DNS socket demo was tested on the course VM `NetApp-EndHost`; the VM named `ubuntu` fails BIOS boot. No VirtualBox network setting was changed.
 
 ## Read-only environment discovery (2026-10-21)
 
@@ -15,6 +15,24 @@
 | Host-only interface | VirtualBox Host-Only Ethernet Adapter, Up; host IPv4 192.168.56.1/24 |
 | Host-only DHCP server | Enabled; guest lease range 192.168.56.101–192.168.56.254 |
 | Guest IPv4/firewall/server | NOT AVAILABLE: guests are powered off |
+
+## Recheck and form-demo execution (2026-10-22)
+
+VirtualBox 7.2.20r175154 currently lists `ubuntu` as Ubuntu 64-bit with Adapter 1
+Bridged to Intel Wi-Fi 6 AX203; adapters 2–8 remain disabled. Starting it
+headless produced the BIOS error `No bootable medium found`; it was powered off
+again without changing its settings. No guest IP was available for this VM.
+
+The separate `NetApp-EndHost` guest was already running, bridged to the same
+Wi-Fi network, and reported TinyCore Linux 10.1, Python 3.6.4 and `eth0`
+`192.168.111.61/24`. Windows Wi-Fi was `192.168.111.188/24`. The form demo on
+TCP 8000 passed `Test-NetConnection`, `curl.exe` returned HTTP 200 and a real
+Edge browser check confirmed the button updates the label. The UDP DNS demo on
+port 53 passed Windows `nslookup`; a packet check verified transaction ID
+`0xC309` and one A/IN answer with demo address `192.0.2.123`. No `ufw`,
+`iptables` or `nft` utility was present in that TinyCore guest; the observed TCP
+and UDP requests reached their listeners. These results do not establish the
+Ubuntu VM or the separate instructor HTTP server on port 22236.
 
 The ZIP contains no OVA, so the registered `ubuntu` VM's identity as the instructor's intended VM is not established.
 
