@@ -161,6 +161,7 @@ NEXT_ACTION: Gia Đạo and Thiên Kỳ review the final report and Reliability 
 - Remote: `https://github.com/TiKyisme/co3094-lab2-network-streaming.git`
 - Reliability slide-only content commit: f0fc4abe07a45b2c7288301b1de11cffba1d9396 (pushed; origin ref verified; state/log push evidence is recorded separately)
 - CO3094 group report content commit: `5733f1fa174f94012cd2e153ddef100772f6a0de` (pushed to `origin/feat/reliability-lab2-draft`; `git ls-remote` matched). PR #1 readback after push: OPEN / DRAFT / NOT MERGED; no student approval recorded.
+- HTTP + DNS form execution commit: `96c4d43e6b397c8ffa9785da6b1a5e524fe5349c` (pushed to `origin/feat/reliability-lab2-draft`; remote OID matched). PR #1 remains OPEN / DRAFT / NOT MERGED; no student approval recorded.
 - Pull request: [#1 - Reliability Lab 2 draft](https://github.com/TiKyisme/co3094-lab2-network-streaming/pull/1), OPEN / DRAFT / NOT MERGED
 - Handover package commit `10087e85a7c8d0e57995156df2f1044077cd5f94` was pushed to `origin/main`; `git ls-remote` matched at the post-push check. GitHub API readback confirmed the guide, handover, assignments, announcement, review checklist, prompt instructions and DOCX paths.
 - The user-provided forum PDF, source ZIP, extracted pack and handoff are present as untracked repo-root copies. The PDF, ZIP and handoff byte-match the copies in the external course folder. They were left unchanged, unstaged and uncommitted; `git ls-files` contains no PDF or ZIP.

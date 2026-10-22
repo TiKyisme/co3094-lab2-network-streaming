@@ -458,3 +458,8 @@ Status and limits:
 - HTTP form demo: PASS on `NetApp-EndHost`; NOT TESTED on Ubuntu VM or the instructor/forum source at TCP 22236.
 - DNS demo/nslookup: PASS on `NetApp-EndHost`; NOT TESTED on Ubuntu VM. Inbound TCP and UDP were observed working; complete firewall policy was not established because common firewall utilities were absent.
 - No Google Form was submitted. PR #1 was not merged and no student approval was recorded.
+
+GitHub and review:
+- Commit `96c4d43e6b397c8ffa9785da6b1a5e524fe5349c` was pushed to `origin/feat/reliability-lab2-draft`; `git ls-remote` returned the same object ID.
+- GitHub readback confirmed PR #1 remains OPEN / DRAFT / NOT MERGED. No student approval was recorded.
+- The pre-existing modification to `report/co3094_lab2_report.tex` remained unstaged and untouched. The two local screenshots remain ignored by Git.
