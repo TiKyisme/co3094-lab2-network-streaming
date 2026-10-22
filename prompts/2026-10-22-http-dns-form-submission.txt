@@ -1,0 +1,64 @@
+# CO3094 LAB 2 — COMPLETE HTTP + DNS FORM SUBMISSION
+
+Tiếp tục repository `TiKyisme/co3094-lab2-network-streaming`.
+
+**Ưu tiên khẩn cấp:** Hoàn thành hai bài thực hành của Google Form `Lab2-Application-HTMLbutton-DNS`, chạy thực tế và thu thập hai screenshot thật để nộp. "D:\01. Dai_Hoc_Dai_Dai_Di\05. HK1_NAM3\co3094-lab2-network-streaming\79738_CO3094_003446_CQ\_ Lab 2 - Application & Transport Layer HTTP-DNS TCP-UDP \_ BK-LMS.pdf"
+
+Form yêu cầu:
+
+1. HTTP Server over TCP có HTML chứa Textbox, Button, Label.
+2. DNS Server over UDP, dùng `nslookup` truy vấn `www.example.com`.
+
+## HTTP TASK
+
+- Đọc `examples/http_server_reconstructed_demo.py` và các tài liệu network setup hiện có.
+- Không sửa mã nguồn chính thức của giảng viên.
+- Chuẩn bị một HTTP Server bằng Python socket, theo đúng yêu cầu của Lab.
+- HTML phải chứa textbox, button và label.
+- Button phải có chức năng đơn giản, ví dụ đọc textbox và hiển thị lời chào trong label.
+- Hướng dẫn chạy server trên Ubuntu VM.
+- Hướng dẫn Windows truy cập trang bằng địa chỉ IP thực tế.
+- Kiểm tra HTTP response và chức năng button.
+- Chuẩn bị screenshot browser thật cho Form.
+
+## DNS TASK
+
+- Tạo một DNS Server dùng UDP bằng Python socket, ưu tiên thư viện chuẩn, không thêm dependency không cần thiết.
+- Server phải phân tích được truy vấn DNS A record cho `www.example.com`.
+- Trả về DNS response hợp lệ, có transaction ID tương ứng và resource record đúng cấu trúc.
+- Cấu hình một IP trả lời phục vụ minh họa, ghi rõ giá trị và không giả vờ đó là địa chỉ thực của example.com nếu chưa xác minh.
+- Hướng dẫn bind UDP port 53 trên Ubuntu và giải quyết quyền bind nếu cần.
+- Hướng dẫn chạy `nslookup www.example.com <VM_IP>` từ Windows.
+- Kiểm tra có output thật từ DNS Server trước khi xác nhận thành công.
+- Chuẩn bị screenshot terminal hiển thị lệnh, DNS Server được truy vấn và kết quả.
+
+## NETWORK TESTING
+
+- Kiểm tra VirtualBox, VM IP, adapter và firewall thực tế.
+- Không thay đổi VirtualBox network settings nếu chưa có sự đồng ý.
+- Hướng dẫn từng bước khi cần thao tác thủ công.
+- Không giả lập output hoặc screenshot.
+- Nếu lỗi, ưu tiên sửa lỗi để hoàn thành hai bài thực hành.
+
+## DELIVERABLES
+
+- HTTP Server Python source.
+- DNS Server Python source.
+- Hướng dẫn chạy ngắn gọn.
+- Hai screenshot thật, mỗi ảnh tối đa 1 MB.
+- Lưu ảnh trong `evidence/`, không commit nếu chứa thông tin cá nhân hoặc nhạy cảm.
+- Cập nhật `state.md`, `log.txt` và lịch sử prompt.
+- Không sửa, merge hoặc phá các công việc đang có của nhóm.
+
+## FINAL STATUS
+
+Báo cáo rõ:
+
+- HTTP Server: PASS/FAIL/NOT TESTED.
+- HTTP screenshot: READY/NOT READY.
+- DNS Server: PASS/FAIL/NOT TESTED.
+- nslookup screenshot: READY/NOT READY.
+- Đường dẫn chính xác hai ảnh cần upload.
+- Nếu bị chặn, cho tôi **một thao tác tiếp theo cụ thể**, không chỉ đưa kế hoạch.
+
+Bắt đầu ngay. Trả lời bằng tiếng Việt và ưu tiên hoàn thành hai screenshot của Google Form.

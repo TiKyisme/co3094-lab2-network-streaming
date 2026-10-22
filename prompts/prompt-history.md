@@ -31,3 +31,45 @@ The exact user reply identifying the LMS PDF and noting that the Lab 1 work was 
 Source: `C:\Users\TiKy\.codex\attachments\87c688de-08c4-475c-9548-0ddc2268eefa\Pasted text.txt`.
 
 Exact prompt: [2026-10-21-execution-documentation-handover.txt](2026-10-21-execution-documentation-handover.txt). Source and saved copy are byte-identical (30,226 bytes; SHA-256 `bfbead30d4206ea34cabf4439373e9583aa5b022fbde905fd7dee5667f555182`).
+
+## 2026-10-21 - Reliability design implementation draft
+
+Source: C:\Users\TiKy\.codex\attachments\ef74c1f9-126a-447c-8bcd-e5d4ecdb733b\Pasted text.txt.
+
+Exact prompt: [2026-10-21-reliability-design-draft.txt](2026-10-21-reliability-design-draft.txt). Source and saved copy are byte-identical (16,438 bytes; SHA-256 adb66bf54f8964b9233ee1f63a6adf4c5b9a70d9eaaf5cd942e44410e80dadd4). This is the master task prompt, not a student prompt or full session export. The two owners' actual prompt evidence remains pending.
+
+## 2026-10-21 — Reliability final technical correction
+
+Source: User message in the current Codex conversation; no separate attachment was supplied.
+
+Exact prompt: [2026-10-21-reliability-final-correction.txt](2026-10-21-reliability-final-correction.txt). Saved verbatim (2,235 bytes; SHA-256 3530ec029a0939f57d6c8604f7aeb74ed200b548bc232031e61a358416995620). This is task prompt evidence, not either student's actual prompt or a full session export.
+
+## 2026-10-22 — Reliability slide-only simplification
+
+Source: User message in the current Codex conversation; no separate attachment was supplied.
+
+Exact prompt: [2026-10-22-reliability-slide-only.txt](2026-10-22-reliability-slide-only.txt). Saved verbatim (6,176 bytes; SHA-256 8a1becfaf94abe12afc0f11f2ddab2ebecf86f8b110a01e32c6829ef1464b749). This is task prompt evidence, not either student's actual prompt or a full session export.
+
+## 2026-10-22 — Reliability slide-only simplification
+
+Source: User message in the current Codex conversation; no separate attachment was supplied.
+
+Exact prompt: [2026-10-22-reliability-slide-only.txt](2026-10-22-reliability-slide-only.txt). Saved verbatim (6,176 bytes; SHA-256 8a1becfaf94abe12afc0f11f2ddab2ebecf86f8b110a01e32c6829ef1464b749). This is task prompt evidence, not either student's actual prompt or a full session export.
+
+## 2026-10-22 - Final group report (LaTeX + PDF)
+
+Source attachment: f01d3f61-9f96-4924-bc9e-01d896acc635.
+
+Exact prompt: [2026-10-22-final-group-report.txt](2026-10-22-final-group-report.txt). Saved verbatim (12259 bytes; SHA-256 ef2b3a89744fe615308976c70b36e9d3ef922af647a5fb2f0d88813a742c5799). This is task prompt evidence, not student prompt evidence or a full session export.
+
+## 2026-10-22 - Final submission cleanup
+
+Source attachment: 3727d2ce-90a1-4850-bfb8-26bc02d7750c.
+
+Exact prompt: [2026-10-22-final-submission-cleanup.txt](2026-10-22-final-submission-cleanup.txt). Saved verbatim (9364 bytes; SHA-256 f7d8af19bc23140ffbf18696abc6ba029b8b4a6c151eba0364b029042a40469d). This is task prompt evidence, not student prompt evidence or a full session export.
+
+## 2026-10-22 — HTTP + DNS form submission
+
+Source: User message in the current Codex conversation; no separate attachment was supplied.
+
+Exact prompt: [2026-10-22-http-dns-form-submission.txt](2026-10-22-http-dns-form-submission.txt). Saved from the user message (3,374 bytes; SHA-256 `a49023541b9f6464a8aa65d94b4e2818881b3d8c266d61c99c9ab5ce59e9ec89`) as task prompt evidence, not student prompt evidence or a full session export.

@@ -6,3 +6,4 @@
 - The repository is intended to remain private because the prompt includes course communications and AI-process context.
 
 - `2026-10-21-phase1b-phase3.txt` is the verbatim continuation prompt attachment for source recovery/environment discovery.
+- `2026-10-22-http-dns-form-submission.txt` records the user's HTTP/DNS form task prompt; see `prompt-history.md` for its source note.

@@ -16,6 +16,8 @@ venv/
 
 # Local/private evidence and raw session exports
 evidence/private/
+evidence/http-form.png
+evidence/dns-nslookup.png
 prompts/session-exports/
 *.har
 *.pcap

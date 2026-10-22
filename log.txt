@@ -268,3 +268,198 @@ Post-push verification:
 - Commit `10087e85a7c8d0e57995156df2f1044077cd5f94` was pushed to `origin/main`; `git ls-remote origin refs/heads/main` matched the same hash.
 - GitHub API readback confirmed the main guide, short handover, assignments, announcement, review checklist, prompt instructions and Word fallback paths.
 - `git ls-files "*.pdf" "*.zip"` returned no tracked source PDFs or ZIPs. The provided course assets and old server skeleton remain untracked and were left untouched.
+
+[2026-10-21] [RELIABILITY DESIGN DRAFT AND REVIEW HANDOFF]
+Task:
+- Prepare an explainable Reliability design proposal for CO3094 Lab 2 with detailed documentation, diagrams, pseudocode, examples, a short presentation, oral preparation, interface questions, and exact prompt evidence.
+Source and scope:
+- Read the user-provided Reliability implementation-draft prompt and saved the attachment byte-identically to prompts/2026-10-21-reliability-design-draft.txt.
+- Continued from the verified CO3094/L07 project state, requirements matrix, tentative REL-01/REL-02 cards, and existing streaming, integration, Flow Control, and Congestion Control drafts.
+- Verified the relevant RFC 9000, RFC 9002, RFC 9221, and Valve GameNetworkingSockets technical references. These remain technical references, not instructor requirements.
+Design decisions recorded:
+- Use per-direction packet numbers and channel plus stream offsets; distinguish packet ACK from application processing and from reliable content identity.
+- Use ACK ranges and selective retransmission of outstanding useful reliable byte ranges in a fresh packet number.
+- Count three later ACKed ack-eliciting packets for the proposed packet threshold, rather than raw packet-number distance, so ACK-only packet numbers do not become false loss evidence. The rule is an application-level adaptation informed by RFC 9002.
+- Use the RFC 9002 time-threshold and PTO formulas as technical references. A PTO probes for progress and does not itself mark old packets lost. Five unacknowledged PTO probe attempts is an explicit application-policy assumption for review.
+- Preserve per-channel ordered delivery, bound out-of-order bytes by Flow Control credit, keep real-time updates non-retransmitted, and expose open expiry-clock questions.
+- Left Flow Control and Congestion Control design documents unchanged. No protocol implementation was added. Assignment 1 conflicts remain unresolved.
+Files and status:
+- Updated docs/reliability-design.md and created docs/reliability-lab2-presentation.md, docs/reliability-oral-preparation.md, and docs/reliability-interface-review.md.
+- Added an accessible two-page presentation PDF at output/pdf/reliability-lab2-presentation.pdf.
+- Owner names remain TENTATIVE. Every TEAM REVIEW REQUIRED checkbox remains unchecked. Status is AI_DRAFT_COMPLETE, TECHNICAL_REVIEW_PENDING, and TEAM_DECISION_PENDING.
+Validation and limits:
+- Prompt copy verified byte-identical: 16,438 bytes; SHA-256 adb66bf54f8964b9233ee1f63a6adf4c5b9a70d9eaaf5cd942e44410e80dadd4.
+- Markdown AST parsing completed for the four Reliability documents. Mermaid CLI 12.0.0 rendered all five detailed-design diagrams and both presentation diagrams; all seven rendered PNGs were visually inspected. Temporary render files were removed.
+- Exported a two-page PDF and visually inspected both pages. PDF SHA-256 at the final render: 769ea9de889d0877526a0f36804eb0d147acd3dc7f7f16eeede02fbf339fbe9e.
+- Staged diff check passed. No transport runtime or network tests were run because this work is a design/documentation draft.
+Git and review handoff:
+- Branch feat/reliability-lab2-draft is pushed to origin; local and remote content commit is 6514a17e6399307de4d704be5d4159f1ffaf2b8e, based on main commit f34bd9e0cb8538f39f7459b364c83dd884cd7a7a.
+- Opened draft PR #1, https://github.com/TiKyisme/co3094-lab2-network-streaming/pull/1, targeting main. It is OPEN, DRAFT, and NOT MERGED.
+- No student technical review, team decision, test, or approval is claimed.
+
+[2026-10-22] [RELIABILITY FINAL CORRECTION PASS]
+Task and prompt evidence:
+- Continued on feat/reliability-lab2-draft for a final technical correction before the pair review.
+- Saved the exact current user prompt to prompts/2026-10-21-reliability-final-correction.txt (2,235 bytes; SHA-256 3530ec029a0939f57d6c8604f7aeb74ed200b548bc232031e61a358416995620). The original prompt arrived under the 2026-10-21 workspace date; no separate attachment was supplied.
+- Read state.md, this log, and the existing Reliability design, presentation, oral preparation, and interface review before editing.
+
+Technical corrections:
+- Distinguished the draft's custom packet-count rule (three distinct higher PNs that are ACKed and marked ack-eliciting) from RFC 9002's raw packet-number-distance condition (largest_acked >= packet.PN + 3). Added the worked PN 100-103 example: RFC distance can meet 3 while the custom count is only 1 because PNs 101-102 are ACK-only. Explicitly stated that the rules are different and not equivalent.
+- Corrected ACK-range semantics to record received PNs including ACK-only PNs, while filtering the custom count by the sender's ack-eliciting metadata.
+- Added scheduled loss_time computation and on_loss_time_expiry() re-evaluation without a new ACK. Documented the single loss-detection timer, loss_time precedence over PTO, and that PTO expiry probes but never declares existing packets lost.
+- Replaced the presentation's lost-ACK sequence diagram with a prominent packet-loss recovery diagram. The two-page PDF was regenerated from the updated presentation content.
+- Updated the oral review prompts and Reliability interface review to match. All student-review checkboxes remain unchecked.
+
+Validation:
+- Mermaid CLI 12.0.0 rendered all five detailed-design diagrams and both presentation diagrams successfully. The updated packet-loss diagrams were inspected for clipping and label readability.
+- Regenerated output/pdf/reliability-lab2-presentation.pdf: 2 pages, 174,750 bytes, SHA-256 1c2e3918802c4b24978afca135f4c2b88c445ac1b88ef9c6738d34a40b46dc4d. Rendered and visually inspected both pages; the recovery diagram is legible and the page layout remains within two pages.
+- No protocol implementation, transport tests, or network tests were run. These edits remain a design draft pending student review.
+
+Files intentionally updated:
+- docs/reliability-design.md
+- docs/reliability-lab2-presentation.md
+- docs/reliability-oral-preparation.md
+- docs/reliability-interface-review.md
+- output/pdf/reliability-lab2-presentation.pdf
+- prompts/2026-10-21-reliability-final-correction.txt
+- prompts/prompt-history.md
+- state.md
+- log.txt
+
+GitHub:
+- Content commit `053ad2a225853903386739f1afb57aa6187f098e` was pushed to `origin/feat/reliability-lab2-draft`; `git ls-remote` matched that commit.
+- `gh pr view 1` reported head `053ad2a225853903386739f1afb57aa6187f098e`, state OPEN, `isDraft=true`, and `mergedAt=null`. PR #1 was not merged or marked student-approved.
+- This state/log push-verification update is recorded separately from the Reliability content commit.
+
+[2026-10-22] [RELIABILITY SLIDE-ONLY SIMPLIFICATION]
+Source verification:
+- Located the actual CO3093 Chapter 3 slide deck in the course folder: Chapter 3_ Transport Layer - Chapter_3_v9.0.pptx (8,866,433 bytes; SHA-256 0d30baf63053f753be037a81fc23604c7148ddcf55ff9c650920e28f0c4c2379). The CO3093 Study Pack source index identifies it as slide source src_7d0e4bf812cb; the deck has 154 slides.
+- Read slides 45, 47-48, 53, 56-64, and 66-67. Visually inspected the relevant slide/PDF pages for stop-and-wait, sequence numbers, checksum, ACK, timeout, retransmission, and duplicate handling.
+- Cross-checked the available user-supplied Email A/B excerpts recorded in docs/requirements-matrix.md, section 1: Lab 2 requires draft designs for Reliability, Flow Control, and Congestion Control; QUIC and Steam are examples; implementation is not required by those excerpts. The original mailbox was not independently reopened.
+
+Design and study handoff:
+- Selected RDT 3.0 stop-and-wait as a slide-based candidate: checksum, alternating sequence numbers 0/1, ACK for the matching packet, timer expiry, retransmission of the same packet, and duplicate suppression.
+- Marked the Lab 2 selection, diagram redraw, and reverse-direction extension as group proposals where applicable. Used the lecture's examples rather than creating examples and attributing them to the instructor.
+- Added docs/reliability-slide-only.md and docs/reliability-easy-study.md and simplified docs/reliability-lab2-presentation.md.
+- Preserved docs/reliability-design.md as the prior advanced draft; did not edit Flow Control or Congestion Control documents.
+- Easy-study guide contains exactly five oral questions. Gia Đạo and Thiên Kỳ remain tentative owners pending their own review.
+- Saved the exact current user prompt in prompts/2026-10-22-reliability-slide-only.txt (6,176 bytes; SHA-256 8a1becfaf94abe12afc0f11f2ddab2ebecf86f8b110a01e32c6829ef1464b749).
+
+Validation:
+- Mermaid CLI rendered the one diagram in the slide-only design and the one presentation diagram successfully.
+- Regenerated output/pdf/reliability-lab2-presentation.pdf: 2 pages, 124,874 bytes, SHA-256 e8bcbd9d2e6ac7bd2088726bf66836419ab8ae4b97b2b9572d27f1ff013104ca. Rendered and visually inspected both pages.
+- Existing oral-preparation (18) and interface-review (6) student checkboxes remain unchecked.
+- No protocol implementation, transport tests, or network tests were run.
+
+Files intentionally updated:
+- docs/reliability-slide-only.md
+- docs/reliability-easy-study.md
+- docs/reliability-lab2-presentation.md
+- output/pdf/reliability-lab2-presentation.pdf
+- prompts/2026-10-22-reliability-slide-only.txt
+- prompts/prompt-history.md
+- state.md
+- log.txt
+
+GitHub:
+- Content commit f0fc4abe07a45b2c7288301b1de11cffba1d9396 was pushed to origin/feat/reliability-lab2-draft; git ls-remote matched that commit.
+- gh pr view 1 reported head f0fc4abe07a45b2c7288301b1de11cffba1d9396, state OPEN, isDraft=true, and mergedAt=null. PR #1 was not merged or marked student-approved.
+- This state/log push-verification update is recorded separately from the slide-only content commit.
+
+[2026-10-22] [CO3094 GROUP REPORT - LATEX/PDF]
+
+Sources and scope:
+- Read the project requirements matrix, source inventory, team assignments, group guide, slide-only Reliability draft/study guide/presentation, and existing Flow Control, Congestion Control, integration, and streaming architecture drafts before writing.
+- Read and visually checked the professor's Chapter 3 Transport Layer lecture source from the CO3093 L02/L03 collection. The deck has 154 slides (SHA-256 `0d30baf63053f753be037a81fc23604c7148ddcf55ff9c650920e28f0c4c2379`); the companion PDF has 154 pages (SHA-256 `1600eaaf85f9a2e95f4eae2ae5a5e4606206c7fd6d076b2b6d19dd9ea572f4f4`). Read Reliability slides 45, 47-48, 53, 56-64, 66-67; Flow Control slides 93-98; Congestion Control slides 108, 112-120, 122-126. PDF page numbering matches the printed slide numbering in these sections.
+- The CO3094/L07 study pack had no separate Transport Layer lecture deck. The report identifies the source as the available CO3093 lecture and asks the two Reliability students to confirm it is the intended source for Lab 2.
+- Cross-checked the Email A/B excerpts saved in `docs/requirements-matrix.md`: Lab 2 requires an HTTP VM demo and draft designs for the three mechanisms; the excerpts do not require implementation of all three designs. The original mailbox was not reopened.
+
+Deliverables:
+- Added `report/co3094_lab2_report.tex`, `report/graphics/hcmut.png`, and `output/pdf/co3094_lab2_report.pdf`.
+- The Vietnamese 10-page report includes a cover, contents, scope and source boundaries, Reliability, Flow Control, Congestion Control, group integration, tentative member assignments, review questions, and slide/page references.
+- Added five figures: a high-level overview; two Reliability examples; a receiver buffer/`rwnd` diagram; and an AIMD graph. The labels Seq=1/2/3 and 100 ms are identified as group illustration details; the slide RDT bit alternates 0/1 and the slide does not set a millisecond timer value.
+- Saved the exact task prompt as `prompts/2026-10-22-final-group-report.txt` (12,259 bytes; SHA-256 `ef2b3a89744fe615308976c70b36e9d3ef922af647a5fb2f0d88813a742c5799`) and updated `prompts/prompt-history.md`.
+
+Validation and limits:
+- Installed MiKTeX in user scope because no TeX engine was available. Compiled the LaTeX twice with XeLaTeX; final output is 10 pages, 213,439 bytes, SHA-256 `f3ba1409ddbbab03cf26cba5de7bd3a2286c17b1aaf4e6bf98ec112bac41e877`.
+- Rendered and visually inspected all 10 final PDF pages. Final compile reported no overfull/underfull layout warnings; logo, contents, figures, tables, and page layout were checked.
+- Did not run HTTP/network tests or implement the draft mechanisms. The report does not claim the VM demo is complete. Four group names and group code remain unconfirmed; Gia Đạo and Thiên Kỳ have not personally reviewed or approved the report.
+
+Files intentionally updated:
+- `report/co3094_lab2_report.tex`
+- `report/graphics/hcmut.png`
+- `output/pdf/co3094_lab2_report.pdf`
+- `prompts/2026-10-22-final-group-report.txt`
+- `prompts/prompt-history.md`
+- `state.md`
+- `log.txt`
+
+GitHub and review:
+- Content commit `5733f1fa174f94012cd2e153ddef100772f6a0de` was pushed to `origin/feat/reliability-lab2-draft`; `git ls-remote` matched. `gh pr view 1` confirmed PR #1 head `5733f1fa174f94012cd2e153ddef100772f6a0de`, OPEN / DRAFT / NOT MERGED, `mergedAt=null`. No student approval is recorded.
+
+[2026-10-22] [FINAL SUBMISSION CLEANUP]
+
+Prompt evidence:
+- Saved the exact user attachment as `prompts/2026-10-22-final-submission-cleanup.txt` (9,364 bytes; SHA-256 `f7d8af19bc23140ffbf18696abc6ba029b8b4a6c151eba0364b029042a40469d`). It byte-matches the supplied attachment.
+
+Report cleanup:
+- Revised only the submission report content: replaced preparation-log introduction and source-boundary notes with an academic introduction and scope; removed tentative status language, unconfirmed role table, unresolved-action checklist, and internal project references.
+- Updated the cover to CO3094 - Mạng máy tính (Thí nghiệm), lecturer Nguyễn Phương Duy, leader Nguyễn Đổng Thiên Kỳ, and the six supplied names. Student IDs 2411818, 2410652, and 2414026 are included; IDs not supplied for Hà Duy Lộc, Lê Thành Tiến, and Nguyễn Tuấn Anh are shown as em dashes. No group number was inferred.
+- Kept the three technical sections, five figures, diagrams, examples, RDT 3.0 sequence-bit distinction, and 100 ms illustration note. Replaced internal references with slide-only lecture references.
+
+Validation:
+- XeLaTeX compiled twice with no overfull/underfull warnings. Final PDF is 9 pages, 198,865 bytes, SHA-256 `4230fb3fe25a947bccfb54397ad543c2ca645378be3a862c4f3e7406c4142f2d`.
+- Rendered and visually inspected all 9 pages. PDF text scan found no Gmail, Email A/B, user/AI/Codex, internal repository-file, source-verification, pending-status, or draft-label terms named in the request. Cover fields, six members, five figures, table of contents, slide references, and pagination were checked.
+- No protocol implementation or HTTP/network test was performed. The PDF makes no claim of implementation or experimental evaluation. Personal student review remains outstanding.
+
+Files updated:
+- `report/co3094_lab2_report.tex`
+- `output/pdf/co3094_lab2_report.pdf`
+- `prompts/2026-10-22-final-submission-cleanup.txt`
+- `prompts/prompt-history.md`
+- `state.md`
+- `log.txt`
+
+GitHub and review:
+- Submission-cleanup content commit and push verification are recorded after the report commit. PR #1 remains OPEN / DRAFT / NOT MERGED; no student approval is recorded.
+
+[2026-10-22] [HTTP + DNS GOOGLE FORM DEMO]
+
+Task and source:
+- Read the supplied Lab 2 LMS PDF, including pages 2–4 (UDP server/DNS response structure) and page 9 (HTTP textbox, button and label HTML).
+- Read `state.md`, `log.txt`, `docs/network-setup.md`, `docs/network-test-cases.md`, `docs/http-server-analysis.md`, and `examples/http_server_reconstructed_demo.py` before editing.
+- User asked for two actual form screenshots and explicitly prohibited unapproved VirtualBox network-setting changes.
+
+VirtualBox/environment checks:
+- Rechecked registered and running VMs with VBoxManage 7.2.20r175154, VM details, host adapters and IPv4 addresses.
+- The registered VM `ubuntu` had Adapter 1 bridged to Intel Wi-Fi 6 AX203, but boot stopped at BIOS with `No bootable medium found`. It was powered off after the failed boot attempt; no settings were changed.
+- The already-running course VM `NetApp-EndHost` reported TinyCore Linux 10.1, Python 3.6.4 and `eth0` 192.168.111.61/24. Host Wi-Fi was 192.168.111.188/24. This guest is not the VM named `ubuntu`.
+- TinyCore had no `ufw`, `iptables`, or `nft` executable and `/proc/net/ip_tables_names` was unavailable. No firewall rule or VirtualBox network setting was changed.
+
+Files added/updated:
+- Added `examples/http_server_form.py` and `examples/dns_udp_server.py`; both use only Python standard-library modules and remain separate from instructor code.
+- Added `docs/http-dns-form-runbook.md`.
+- Updated network test/setup and HTTP analysis docs to distinguish the form demo from the untested instructor/forum server at port 22236.
+- Saved the task prompt in `prompts/2026-10-22-http-dns-form-submission.txt`; indexed it in `prompts/prompt-history.md` and `prompts/README.md`.
+- Updated `.gitignore` to keep the two private-network screenshots out of Git; updated state/log with exact test boundaries.
+
+Real test results:
+- HTTP server ran on `NetApp-EndHost` TCP 8000. Windows `Test-NetConnection` returned `TcpTestSucceeded: True`; `curl.exe` returned `HTTP/1.1 200 OK` and the required HTML. Edge loaded the VM URL, found the textbox/button/labels, filled `CO3094 Student`, clicked the button, and observed `Welcome, CO3094 Student!`.
+- DNS server ran on `NetApp-EndHost` UDP 53 with `sudo -n` and the clearly labeled demo answer `192.0.2.123`. Windows `nslookup www.example.com 192.168.111.61` returned `192.0.2.123`; the actual server process logged incoming queries and matching IDs.
+- A separate UDP wire check used transaction ID `0xC309` and verified the response ID, QR/AA flags, QDCOUNT 1, ANCOUNT 1, compressed owner `c00c`, TYPE A, CLASS IN, TTL 60, RDLENGTH 4 and A data `192.0.2.123`.
+- `192.0.2.123` is a documentation-only demo IP and is not presented as the public address for `www.example.com`.
+
+Screenshots:
+- `evidence/http-form.png` — real Edge page capture after the form interaction; 21,934 bytes.
+- `evidence/dns-nslookup.png` — real Windows terminal capture showing the `nslookup` command, queried server address and returned answer; 26,129 bytes.
+- Both files are below 1 MB, remain on the local machine and are ignored by Git because they expose the private lab-network address.
+
+Status and limits:
+- HTTP form demo: PASS on `NetApp-EndHost`; NOT TESTED on Ubuntu VM or the instructor/forum source at TCP 22236.
+- DNS demo/nslookup: PASS on `NetApp-EndHost`; NOT TESTED on Ubuntu VM. Inbound TCP and UDP were observed working; complete firewall policy was not established because common firewall utilities were absent.
+- No Google Form was submitted. PR #1 was not merged and no student approval was recorded.
+
+GitHub and review:
+- Commit `96c4d43e6b397c8ffa9785da6b1a5e524fe5349c` was pushed to `origin/feat/reliability-lab2-draft`; `git ls-remote` returned the same object ID.
+- GitHub readback confirmed PR #1 remains OPEN / DRAFT / NOT MERGED. No student approval was recorded.
+- The pre-existing modification to `report/co3094_lab2_report.tex` remained unstaged and untouched. The two local screenshots remain ignored by Git.

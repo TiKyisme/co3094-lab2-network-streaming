@@ -1,0 +1,165 @@
+# CO3094 LAB 2 — SIMPLIFY RELIABILITY DESIGN (SLIDE-ONLY)
+
+Bạn đang tiếp tục repository:
+
+`TiKyisme/co3094-lab2-network-streaming`
+
+Branch: `feat/reliability-lab2-draft`
+
+PR #1 đã có bản Reliability Design nhưng đang **QUÁ PHỨC TẠP so với trình độ và mục tiêu học tập của sinh viên**.
+
+## MỤC TIÊU
+
+Viết lại phần Reliability thành một bản draft đơn giản, dễ đọc, dễ hiểu, đủ để hai sinh viên trình bày trong buổi Lab ngày 22/10/2026.
+
+**QUY TẮC QUAN TRỌNG NHẤT: CHỈ SỬ DỤNG KIẾN THỨC CÓ TRONG SLIDE BÀI GIẢNG CỦA THẦY VÀ YÊU CẦU TỪ EMAIL: "Mạng máy tính (CO3093)_NGUYỄN PHƯƠNG DUY (CQ_HK261) [L02,L03]_AI_Study_Pack.zip".**
+
+Không tự bổ sung các thuật toán hoặc kỹ thuật nâng cao ngoài slide.
+
+## 1. ĐỌC SLIDE TRƯỚC KHI VIẾT
+
+1. Kiểm tra workspace và bộ tài liệu CO3094.
+2. Tìm slide bài giảng liên quan Reliability, Reliable Data Transfer, Transport Layer hoặc các cơ chế tương ứng.
+3. Đọc nội dung thực tế của slide.
+4. Xác định thuật ngữ và thuật toán đã được thầy dạy.
+5. Ghi rõ tên file và số slide/trang làm căn cứ.
+6. Đối chiếu email thầy để bảo đảm bản draft vẫn trả lời đúng yêu cầu Lab 2.
+
+Không được mặc định tài liệu Assignment 1, tài liệu do AI tạo, RFC bên ngoài hoặc PDF bài Lab là slide giảng dạy lý thuyết.
+
+Nếu không tìm thấy slide liên quan, **hãy dừng phần viết lại, báo chính xác tài liệu còn thiếu và yêu cầu tôi cung cấp**. Tuyệt đối không đoán nội dung slide.
+
+## 2. LOẠI BỎ ĐỘ PHỨC TẠP KHÔNG CẦN THIẾT
+
+Bản hiện tại có nhiều nội dung như:
+
+- ACK Range nâng cao.
+- Thuật toán QUIC RFC 9002.
+- Packet threshold tùy chỉnh.
+- RTT variance và PTO phức tạp.
+- Stream offset nhiều channel.
+- Các timer, công thức và state machine dài.
+
+Chỉ giữ những phần này nếu thực sự có trong slide của thầy và cần thiết cho draft.
+
+Nếu slide sử dụng các thuật toán đơn giản hơn, hãy ưu tiên đúng thuật toán đã học.
+
+Không cần tạo một giao thức tương đương QUIC.
+
+Không cần lập trình hoàn chỉnh.
+
+Không cần một bản tài liệu nghiên cứu dài.
+
+## 3. CHIA VIỆC GIỮA HAI THÀNH VIÊN
+
+**Gia Đạo — Reliability Part 1**
+
+Phụ trách các kiến thức cơ bản về đánh số gói và cơ chế xác nhận dữ liệu đã nhận, đúng theo slide.
+
+**Thiên Kỳ — Reliability Part 2**
+
+Phụ trách phát hiện dữ liệu chưa được xác nhận, gửi lại khi cần và xử lý các tình huống lỗi, đúng theo slide.
+
+Điều chỉnh cách chia chi tiết nếu thuật toán trong slide có cấu trúc khác.
+
+Hai phần phải tạo thành một thiết kế chung.
+
+## 4. SẢN PHẨM YÊU CẦU
+
+Tạo một tài liệu tiếng Việt tối đa khoảng **2 trang A4**:
+
+`docs/reliability-slide-only.md`
+
+Bố cục:
+
+### 1. Reliability là gì?
+
+Giải thích bằng 3–5 câu cực kỳ dễ hiểu.
+
+### 2. Nhóm đề xuất cách hoạt động nào?
+
+Chọn một cơ chế đơn giản có cơ sở từ slide.
+
+Giải thích từng bước Sender và Receiver thực hiện gì.
+
+### 3. Sơ đồ minh họa
+
+Chỉ cần 1 sơ đồ dễ nhìn, có Sender, Receiver, dữ liệu và ACK hoặc các thành phần tương ứng trong slide.
+
+### 4. Hai ví dụ
+
+- Ví dụ hoạt động bình thường.
+- Ví dụ xảy ra lỗi và cách xử lý.
+
+### 5. Ưu điểm và hạn chế
+
+Mỗi mục khoảng 2–3 ý đơn giản.
+
+### 6. Phân công
+
+- Gia Đạo giải thích phần gì?
+- Thiên Kỳ giải thích phần gì?
+
+### 7. Nguồn
+
+Tên file và số slide/trang hỗ trợ từng ý chính.
+
+Nếu một chi tiết là đề xuất của nhóm chứ không có trong slide, đánh dấu rõ `ĐỀ XUẤT`, không được nói thầy đã dạy.
+
+## 5. TÀI LIỆU ĐỂ HAI ĐỨA HỌC
+
+Tạo:
+
+`docs/reliability-easy-study.md`
+
+Yêu cầu:
+
+- Giải thích như đang dạy sinh viên mới học mạng máy tính.
+- Mỗi thuật ngữ được giải thích bằng một câu ngắn và ví dụ.
+- Không sử dụng thuật ngữ chưa giải thích.
+- Có đúng 5 câu hỏi vấn đáp cơ bản với đáp án ngắn.
+- Đọc khoảng 5–10 phút là hiểu được ý tưởng chính.
+- Chỉ dựa trên kiến thức xác minh được từ slide.
+
+## 6. CẬP NHẬT BẢN TRÌNH BÀY
+
+Sau khi xác minh nguồn slide:
+
+- Rút gọn `docs/reliability-lab2-presentation.md` theo bản slide-only.
+- Nếu tạo PDF được, xuất một bản 1–2 trang dễ đọc.
+- Giữ bản thiết kế nâng cao trước đó, không xóa lịch sử hoặc bằng chứng.
+- Không chỉnh sửa tài liệu Flow Control hay Congestion Control.
+- Không merge PR #1.
+- Cập nhật prompt history, state và log.
+- Commit/push vào feature branch nếu có thể thực hiện an toàn.
+
+## 7. QUY TẮC VIẾT
+
+**Ưu tiên dễ hiểu hơn phức tạp.**
+
+Không viết dài dòng.
+
+Không cố gây ấn tượng bằng thuật ngữ nâng cao.
+
+Không sử dụng kiến thức ngoài slide để lấp chỗ trống.
+
+Không tự tạo ví dụ rồi trình bày đó là ví dụ của thầy.
+
+Đảm bảo bản thiết kế có thể được hai sinh viên đọc, tự hiểu, tự thảo luận và giải thích lại.
+
+## 8. KẾT QUẢ CUỐI
+
+Trả lời bằng tiếng Việt:
+
+1. Đã tìm thấy slide nào? Trang nào?
+2. Giảng viên thực sự dạy những cơ chế nào liên quan Reliability?
+3. Đã đơn giản hóa và bỏ những nội dung nâng cao nào?
+4. Link tài liệu Reliability 1–2 trang.
+5. Link tài liệu học nhanh.
+6. Phần Gia Đạo cần đọc.
+7. Phần Thiên Kỳ cần đọc.
+8. Những nội dung nào còn chờ hai sinh viên xác nhận?
+
+**Nếu chưa có slide phù hợp, hãy yêu cầu tôi cung cấp slide thay vì tự triển khai kiến thức ngoài phạm vi.**
+
+START NOW.

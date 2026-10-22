@@ -1,6 +1,6 @@
 # Network test cases
 
-**Overall status: WAITING_FOR_MANUAL_TEST.** The local reconstruction passes syntax parsing only. The forum PDF contains a historical instructor demonstration; no VirtualBox VM or GUI test of the current local environment was run.
+**Overall status: PARTIAL.** A separate HTTP form and UDP DNS demo were tested on the running course VM `NetApp-EndHost` (TinyCore Linux 10.1). The Ubuntu VM named `ubuntu` fails BIOS boot, and the instructor/forum HTTP server on port 22236 remains untested. The forum PDF's historical result is not a current test pass.
 
 ## Historical course demonstration (not a current test pass)
 
@@ -17,16 +17,24 @@ The supplied LMS PDF p. 3 shows command-prompt output with `HTTP/1.1 200 OK` and
 | NET-06 | Wrong port negative control | Test a confirmed unused port | TCP check fails; do not mistake this for a server defect | NOT RUN |
 | NET-07 | Server stopped negative control | Stop server and retry the correct port | Refused/failed connection; restart server before proceeding | NOT RUN |
 | NET-08 | NAT forwarding alternative | Only if using NAT: test host port mapped to guest service port | Host-side forwarding reaches the guest listener | NOT RUN |
+| NET-09 | Separate HTTP form demo | Run `examples/http_server_form.py` on course guest TCP 8000; test from Windows with TCP check, curl and browser input/button | TCP succeeds, HTTP 200, label displays the greeting | PASS on TinyCore 10.1 at 192.168.111.61; Edge check returned `Welcome, CO3094 Student!`; not the instructor server or Ubuntu VM |
+| NET-10 | Separate UDP DNS demo | Run `examples/dns_udp_server.py` on UDP 53; use Windows `nslookup` and a binary query with transaction ID 0xC309 | `nslookup` returns the demo A value; transaction ID and A/IN resource record are valid | PASS on TinyCore 10.1 at 192.168.111.61; `192.0.2.123` is a documentation-only answer, not the public address of example.com |
 
-## Evidence to capture after a real test
+## Evidence from the 2026-10-22 form demo
 
-- Date/time and host OS/Ubuntu VM version.
+- `evidence/http-form.png`: real Edge page screenshot after filling and clicking the button; 21,934 bytes.
+- `evidence/dns-nslookup.png`: real Windows terminal screenshot with the `nslookup` command, server IP and returned A answer; 26,129 bytes.
+- Both screenshots remain local and are excluded from Git because the DNS image contains the private lab-network IP. The DNS server's live output and a packet-level check were also observed during the session.
+
+## Evidence to capture after a real instructor-server test
+
+- Date/time and host OS/guest VM version.
 - VirtualBox version and adapter mode(s).
 - Guest interface name, IP, subnet, and actual server port.
 - Exact server source revision/hash and run command.
 - Full PowerShell test output.
 - Browser URL and HTTP result.
-- Relevant Ubuntu server log.
+- Relevant guest server log.
 - Any firewall change, if a narrow rule was needed.
 - Privacy review before placing evidence in GitHub.
 

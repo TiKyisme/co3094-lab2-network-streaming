@@ -1,0 +1,293 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage[a4paper,margin=1.8cm,top=1.7cm,bottom=1.8cm]{geometry}
+\usepackage{graphicx,xcolor,booktabs,tabularx,array,caption,float,tikz,enumitem,fancyhdr,hyperref}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\definecolor{navy}{HTML}{17365D}
+\definecolor{blue}{HTML}{2878B5}
+\definecolor{teal}{HTML}{238B8E}
+\definecolor{lightblue}{HTML}{EEF5FA}
+\definecolor{lightteal}{HTML}{EDF7F6}
+\definecolor{muted}{HTML}{5E6B75}
+\renewcommand{\contentsname}{Mục lục}
+\renewcommand{\figurename}{Hình}
+\renewcommand{\tablename}{Bảng}
+\hypersetup{colorlinks=true,linkcolor=navy,urlcolor=blue,pdftitle={CO3094 Lab 2 Report},pdfauthor={CO3094 Lab 2 Group}}
+\urlstyle{same}
+\captionsetup{font=small,labelfont=bf,skip=5pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.36em}
+\setlength{\emergencystretch}{2em}
+\renewcommand{\arraystretch}{1.15}
+\raggedbottom
+\setlist{leftmargin=1.55em,itemsep=0.15em,topsep=0.25em}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\sourcenote}[1]{\par{\small\color{muted}\textit{Căn cứ bài giảng: #1}}\par}
+\newcommand{\proposallabel}{\textbf{\color{navy}Phương án thiết kế:}\enspace}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small CO3094 Lab 2}
+\rhead{\small Lab 2 | Transport Layer}
+\cfoot{\small\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+\setlength{\headheight}{14pt}
+
+\begin{document}
+\begin{titlepage}
+  \thispagestyle{empty}
+  \centering
+  \vspace*{0.25cm}
+  \includegraphics[width=3.15cm]{report/graphics/hcmut.png}\par
+  \vspace{0.35cm}
+  {\large\bfseries TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG TP.HCM\par}
+  \vspace{0.15cm}
+  {\large KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH\par}
+  \vspace{0.85cm}
+  {\large\bfseries CO3094 - Mạng máy tính (Thí nghiệm)\par}
+  \vspace{0.55cm}
+  {\Huge\bfseries CO3094 Lab 2 Report\par}
+  \vspace{0.3cm}
+  {\LARGE Báo cáo thiết kế\par}
+  \vspace{0.2cm}
+  {\Large Reliability, Flow Control và Congestion Control\par}
+  \vspace{0.55cm}
+  \vspace{0.8cm}
+  \begin{tabular}{@{}rl@{}}
+    \textbf{Lớp:} & L07 \\
+    \textbf{Giảng viên:} & Nguyễn Phương Duy \\
+    \textbf{Trưởng nhóm:} & Nguyễn Đổng Thiên Kỳ \\
+  \end{tabular}\par
+  \vspace{0.55cm}
+  {\large\bfseries Thành viên\par}
+  \vspace{0.2cm}
+  \begin{tabularx}{0.92\linewidth}{@{}c Y P{2.6cm}@{}}
+    \toprule
+    \textbf{No.} & \textbf{Member} & \textbf{Student ID} \\
+    \midrule
+    1 & Nguyễn Đổng Thiên Kỳ (Group Leader) & 2411818 \\
+    2 & Nguyễn Đăng Gia Đạo & 2410652 \\
+    3 & Trần Trọng Vũ & 2414026 \\
+    4 & Hà Duy Lộc & --- \\
+    5 & Lê Thành Tiến & --- \\
+    6 & Nguyễn Tuấn Anh & --- \\
+    \bottomrule
+  \end{tabularx}\par
+  \vfill
+  {\large 22 tháng 10 năm 2026\par}
+\end{titlepage}
+
+\pagenumbering{roman}
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\section{Giới thiệu}
+\subsection{Mục tiêu}
+Bài báo cáo trình bày thiết kế đề xuất cho ba cơ chế quan trọng trong truyền dữ liệu qua mạng: Reliability, Flow Control và Congestion Control. Mỗi cơ chế được mô tả qua nguyên lý hoạt động, thuật toán cơ bản và các tình huống minh họa. Nội dung dựa trên kiến thức của chương Transport Layer và phục vụ việc thảo luận, đánh giá trong Lab 2.
+
+\subsection{Phạm vi}
+Báo cáo tập trung vào nguyên lý, các bước xử lý và ví dụ minh họa cho ba cơ chế; không mô tả một giao thức truyền dữ liệu hoàn chỉnh.
+
+\subsection{Mô hình khái quát}
+Sender gửi dữ liệu qua mạng tới receiver; receiver gửi ACK hoặc thông tin điều khiển theo chiều ngược lại. Reliability xử lý lỗi và mất packet, Flow Control giới hạn dữ liệu theo khả năng nhận của receiver, còn Congestion Control điều chỉnh tốc độ gửi theo tình trạng mạng.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[>=Stealth,node distance=1.75cm,
+    box/.style={draw,rounded corners,thick,align=center,minimum width=3.25cm,minimum height=1.15cm,fill=lightblue},
+    every node/.style={font=\small}]
+    \node[box] (s) {Sender\\Ứng dụng gửi dữ liệu};
+    \node[box,right=of s,fill=white] (n) {Mạng\\có thể trễ hoặc mất};
+    \node[box,right=of n,fill=lightteal] (r) {Receiver\\buffer và ứng dụng};
+    \draw[->,very thick,blue] (s.east) -- node[above,align=center]{dữ liệu} (n.west);
+    \draw[->,very thick,blue] (n.east) -- (r.west);
+    \draw[->,thick,teal,bend left=28] (r.south) to node[below,align=center]{ACK / thông tin điều khiển} (s.south);
+  \end{tikzpicture}
+  \caption{Mô hình tổng quát giữa sender, mạng và receiver.}
+  \label{fig:overview}
+\end{figure}
+\proposallabel Ba cơ chế được trình bày ở mức nguyên lý và ví dụ minh họa.
+
+\clearpage
+\section{Reliability: phát hiện lỗi và gửi lại}
+\subsection{Nguyên lý hoạt động}
+RDT 3.0 xét kênh có thể làm lỗi bit hoặc làm mất packet và ACK. Phương án thiết kế sử dụng stop-and-wait: sender gửi một packet rồi chờ ACK xác nhận packet đó trước khi gửi packet tiếp theo.
+
+\begin{enumerate}
+  \item Sender thêm checksum và sequence number 0 hoặc 1 vào packet, lưu packet đang chờ, gửi packet và bật countdown timer.
+  \item Receiver kiểm tra packet. Nếu packet hợp lệ và đúng packet đang chờ, receiver giao dữ liệu một lần và gửi ACK kèm sequence number.
+  \item Khi sender nhận đúng ACK, sender dừng timer, chuyển sang sequence number còn lại và mới gửi packet tiếp theo.
+  \item Nếu chưa nhận ACK trong một khoảng chờ hợp lý, sender gửi lại packet đang lưu với cùng sequence number.
+  \item Nếu receiver đã nhận packet đó trước đây, receiver nhận ra duplicate, không giao dữ liệu lần hai và gửi lại ACK phù hợp.
+\end{enumerate}
+Checksum giúp phát hiện lỗi bit; sequence number giúp phân biệt packet mới với bản gửi lại; ACK cho biết packet nào đã được nhận. Sender dùng countdown timer để giới hạn thời gian chờ ACK. Mô hình truyền dữ liệu một chiều và thông tin điều khiển hai chiều.
+
+\begin{quote}
+\small
+\textbf{Ưu điểm:} quy tắc sender/receiver ngắn, xử lý được packet hoặc ACK mất và nhận ra packet trùng.\\
+\textbf{Hạn chế:} stop-and-wait buộc sender chờ ACK trước packet kế tiếp nên có thể sử dụng kênh kém hiệu quả. Timeout quá sớm cũng có thể gửi lại một packet chỉ đang bị trễ.
+\end{quote}
+\sourcenote{slides 45, 47--48, 53, 56--64, 66--67. Slide 67 nêu hạn chế hiệu năng của stop-and-wait.}
+
+\clearpage
+\subsection{Hai tình huống minh họa Reliability}
+Hai hình minh họa hai trường hợp của RDT 3.0: packet dữ liệu bị mất và ACK bị mất.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1cm,y=0.72cm,>=Stealth,every node/.style={font=\small}]
+  \draw[dashed,gray] (1,0) -- (1,-6.35);
+  \draw[dashed,gray] (13,0) -- (13,-6.35);
+  \node[font=\bfseries] at (1,0.18) {Sender};
+  \node[font=\bfseries] at (13,0.18) {Receiver};
+  \draw[->,very thick,blue] (1,-0.65) -- (13,-1.0) node[midway,above,sloped,fill=white,inner sep=1pt] {\texttt{[VITAL, Seq=1]}};
+  \draw[->,thick,teal] (13,-1.8) -- (1,-2.15) node[midway,below,sloped,fill=white,inner sep=1pt] {\texttt{[ACK, Seq=1]}};
+  \draw[->,very thick,blue] (1,-2.9) -- (13,-3.25) node[midway,above,sloped,fill=white,inner sep=1pt] {\texttt{[VITAL, Seq=2]}};
+  \node[draw=red,circle,fill=white,text=red,inner sep=1.2pt] at (10.8,-3.2) {$\times$};
+  \node[above right,text=red] at (10.85,-3.0) {packet mất};
+  \node[draw=orange!80!black,rounded corners,fill=orange!8,align=center] at (2.3,-4.0) {Chờ ACK\\Timer = 100 ms*};
+  \draw[->,very thick,blue,dashed] (1,-4.75) -- (13,-5.1) node[midway,above,sloped,fill=white,inner sep=1pt] {\texttt{gửi lại [VITAL, Seq=2]}};
+  \draw[->,thick,teal] (13,-5.85) -- (1,-6.2) node[midway,below,sloped,fill=white,inner sep=1pt] {\texttt{[ACK, Seq=2]}};
+\end{tikzpicture}
+\caption{Receiver giao packet đầu một lần; packet thứ hai mất, hết timer thì sender gửi lại và nhận ACK.}
+\label{fig:reliability-loss}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1cm,y=0.72cm,>=Stealth,every node/.style={font=\small}]
+  \draw[dashed,gray] (1,0) -- (1,-6.2);
+  \draw[dashed,gray] (13,0) -- (13,-6.2);
+  \node[font=\bfseries] at (1,0.18) {Sender};
+  \node[font=\bfseries] at (13,0.18) {Receiver};
+  \draw[->,very thick,blue] (1,-0.65) -- (13,-1.0) node[midway,above,sloped,fill=white,inner sep=1pt] {\texttt{[VITAL, Seq=3]}};
+  \draw[->,thick,teal] (13,-1.8) -- (1,-2.15) node[midway,below,sloped,fill=white,inner sep=1pt] {\texttt{[ACK, Seq=3]}};
+  \node[draw=red,circle,fill=white,text=red,inner sep=1.2pt] at (2.0,-2.1) {$\times$};
+  \node[anchor=east,text=red] at (0.75,-2.2) {ACK mất};
+  \node[draw=orange!80!black,rounded corners,fill=orange!8,align=center] at (2.3,-3.15) {Không thấy ACK\\timer hết hạn};
+  \draw[->,very thick,blue,dashed] (1,-3.95) -- (13,-4.3) node[midway,above,sloped,fill=white,inner sep=1pt] {\texttt{gửi lại [VITAL, Seq=3]}};
+  \node[draw=teal,rounded corners,fill=lightteal,align=center] at (10.5,-4.9) {Đã giao 1 lần\\Seq=3 trùng\\bỏ dữ liệu};
+  \draw[->,thick,teal] (13,-5.65) -- (1,-6.0) node[midway,below,sloped,fill=white,inner sep=1pt] {\texttt{gửi lại [ACK, Seq=3]}};
+\end{tikzpicture}
+\caption{ACK bị mất: receiver bỏ phần dữ liệu trùng và gửi lại ACK đã xác nhận.}
+\label{fig:reliability-ack-loss}
+\end{figure}
+
+\small
+\textbf{Ghi chú:} các nhãn \texttt{Seq=1,2,3} là số thứ tự thông điệp \texttt{VITAL} trong ví dụ; packet sequence number của RDT 3.0 luân phiên 0/1. Timer 100 ms là giá trị minh họa, không phải thông số trong bài giảng; RDT 3.0 dùng một khoảng chờ hợp lý.
+
+\clearpage
+\section{Flow Control: bảo vệ receiver}
+Flow control xử lý tình huống receiver có thể bị quá tải nếu dữ liệu tới nhanh hơn ứng dụng đọc dữ liệu khỏi socket buffer. Cơ chế này bảo vệ receiver; congestion control xử lý giới hạn năng lực của mạng trên đường truyền.
+\subsection{Cách TCP báo chỗ trống}
+\begin{itemize}
+  \item Receiver quảng bá vùng buffer còn trống bằng trường \texttt{rwnd} trong TCP header.
+  \item Sender giới hạn tổng lượng dữ liệu chưa được ACK đang trên đường truyền theo \texttt{rwnd} nhận được.
+  \item Cơ chế giúp tránh làm tràn receive buffer. Dung lượng buffer do socket options đặt và nhiều hệ điều hành tự điều chỉnh.
+\end{itemize}
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[>=Stealth,every node/.style={font=\small}]
+  \node[draw,rounded corners,thick,fill=lightblue,minimum width=2.8cm,minimum height=1.1cm,align=center] (s) at (0,1.15) {Sender};
+  \node[draw,rounded corners,thick,fill=lightteal,minimum width=4.2cm,minimum height=1.7cm,align=center] (b) at (9.2,1.15) {};
+  \node[font=\bfseries] at (9.2,1.78) {Receiver RcvBuffer};
+  \fill[blue!20] (7.1,1.1) rectangle (11.3,1.55);
+  \fill[teal!20] (7.1,0.7) rectangle (11.3,1.1);
+  \node at (9.2,1.32) {buffered data};
+  \node at (9.2,0.9) {free space = \texttt{rwnd}};
+  \draw[->,very thick,blue] (1.45,1.15) -- (7.0,1.15) node[midway,above,align=center] {TCP segment payloads\\sender giới hạn theo rwnd};
+  \draw[->,very thick,teal] (7.0,0.22) -- (1.45,0.22) node[midway,below,align=center] {receiver quảng bá vùng trống: \texttt{rwnd}};
+\end{tikzpicture}
+\caption{Receiver quảng bá vùng buffer còn trống bằng trường \texttt{rwnd}.}
+\label{fig:rwnd}
+\end{figure}
+
+\proposallabel Ví dụ minh họa giả sử \texttt{RcvBuffer = 4096 B}, trong đó 3072 B đang được giữ và 1024 B còn trống. Khi receiver quảng bá \texttt{rwnd = 1024 B}, sender giới hạn dữ liệu chưa ACK theo mức 1024 B này. 4096 B là giá trị mặc định thường gặp; hệ điều hành có thể tự điều chỉnh buffer.
+\begin{quote}
+\small
+\textbf{Ưu điểm:} receiver báo lượng buffer trống; sender có cơ sở để tránh tràn buffer.\\
+\textbf{Giới hạn:} \texttt{rwnd} bảo vệ receiver, nhưng không cho biết riêng liệu đường mạng đang nghẽn hay còn dư năng lực.
+\end{quote}
+\sourcenote{slides 93--98, nhất là slide 97 về \texttt{rwnd}, dữ liệu in-flight và receive buffer.}
+
+\clearpage
+\section{Congestion Control: bảo vệ mạng}
+Congestion xảy ra khi nhiều nguồn gửi quá nhiều dữ liệu quá nhanh so với khả năng mạng xử lý. Dấu hiệu gồm độ trễ hàng đợi tăng và packet bị mất khi buffer router đầy. Flow control bảo vệ receiver đơn lẻ; congestion control điều chỉnh lưu lượng trên đường truyền.
+\subsection{Các cơ chế cơ bản}
+\begin{description}[style=nextline,leftmargin=2.6cm]
+  \item[End-to-end] TCP không nhận phản hồi tường minh từ mạng; sender suy luận nghẽn từ loss hoặc delay quan sát được.
+  \item[Slow start] Khi bắt đầu, \texttt{cwnd} khởi đầu ở 1 MSS và tăng gấp đôi mỗi RTT bằng cách tăng \texttt{cwnd} theo ACK nhận được. RTT là thời gian khứ hồi; MSS là kích thước segment tối đa.
+  \item[Ngưỡng] \texttt{ssthresh} được đặt bằng một nửa \texttt{cwnd} ngay trước loss event; ngưỡng này đánh dấu chuyển từ tăng nhanh sang tăng tuyến tính.
+  \item[AIMD] Additive Increase tăng tốc độ gửi khoảng 1 MSS mỗi RTT; Multiplicative Decrease giảm tốc độ gửi còn một nửa khi có loss event.
+\end{description}
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\linewidth}{@{}P{3.3cm}Y Y@{}}
+\toprule
+\textbf{Tình huống} & \textbf{Phản ứng} & \textbf{Phiên bản TCP} \\
+\midrule
+Triple duplicate ACK & Giảm tốc độ còn một nửa & TCP Reno \\
+Timeout phát hiện loss & Giảm xuống 1 MSS & TCP Tahoe \\
+\bottomrule
+\end{tabularx}
+\caption{Hai phản ứng sau loss minh họa cho TCP Reno và TCP Tahoe.}
+\label{tab:tcp-variants}
+\end{table}
+\proposallabel Slow start và AIMD mô tả cách sender tăng tốc độ gửi rồi giảm tốc độ khi xuất hiện dấu hiệu nghẽn. Reno và Tahoe minh họa hai phản ứng khác nhau sau loss.
+\sourcenote{slides 108, 112--120, 122--126. Slide 108 phân biệt flow/congestion; slide 119 nói về suy luận end-to-end; slides 122--126 trình bày AIMD, slow start và \texttt{ssthresh}.}
+
+\clearpage
+\subsection{Ví dụ và hình AIMD}
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1cm,y=0.78cm,>=Stealth,every node/.style={font=\small}]
+  \draw[->,thick] (0.6,0.6) -- (11.9,0.6) node[right]{thời gian};
+  \draw[->,thick] (0.6,0.6) -- (0.6,6.0) node[above,align=center]{tốc độ gửi\\(ý tưởng)};
+  \draw[very thick,blue] plot coordinates {
+    (1.0,1.25) (2.0,2.15) (3.0,3.05) (4.0,3.95) (5.0,4.85) (5.0,2.43)
+    (6.0,3.33) (7.0,4.23) (8.0,5.13) (8.0,2.57)
+    (9.0,3.47) (10.0,4.37) (11.0,5.27) (11.0,2.64)
+  };
+  \node[align=center,text=blue] at (3.0,5.35) {Additive Increase\\tăng dần};
+  \node[align=center,text=red] at (5.75,1.55) {loss\\giảm};
+  \node[align=center,text=red] at (8.75,1.55) {loss\\giảm};
+  \draw[dashed,gray] (5.0,0.6)--(5.0,4.85);
+  \draw[dashed,gray] (8.0,0.6)--(8.0,5.13);
+  \node[align=center,text=muted] at (6.2,5.65) {AIMD sawtooth\\không theo tỉ lệ};
+\end{tikzpicture}
+\caption{Đồ thị định tính AIMD: tốc độ gửi tăng dần rồi giảm khi phát hiện loss.}
+\label{fig:aimd}
+\end{figure}
+
+Ví dụ minh họa: nếu \texttt{cwnd} là 1 MSS lúc bắt đầu, slow start có thể đi theo 1, 2, 4, 8 MSS qua các RTT. Nếu trước loss \texttt{cwnd = 8 MSS} và loss được báo bằng triple duplicate ACK, Reno giảm còn 4 MSS. Với timeout theo Tahoe, tốc độ giảm về 1 MSS. Các số 8, 4 được tính từ quy tắc minh họa.
+\begin{quote}
+\small
+\textbf{Ưu điểm:} sender giảm tốc độ sau dấu hiệu nghẽn thay vì cứ tăng; AIMD trình bày được bằng một quy tắc tăng và một quy tắc giảm.\\
+\textbf{Giới hạn:} mất gói và trễ vẫn có thể xảy ra; phản ứng giảm tốc độ phụ thuộc biến thể TCP.
+\end{quote}
+
+\clearpage
+\section{Tổng hợp thiết kế}
+\subsection{Ba cơ chế, ba câu hỏi}
+\begin{tabularx}{\linewidth}{@{}P{3.2cm}Y Y@{}}
+\toprule
+\textbf{Cơ chế} & \textbf{Câu hỏi} & \textbf{Ý tưởng trong bài giảng} \\
+\midrule
+Reliability & Packet/ACK có tới không? & ACK, sequence number, timer và retransmission \\
+Flow Control & Receiver còn buffer không? & Receiver quảng bá \texttt{rwnd}; sender giới hạn dữ liệu chưa ACK \\
+Congestion Control & Đường mạng có đang bị gửi quá nhiều không? & TCP quan sát loss/delay, điều chỉnh tốc độ theo slow start/AIMD \\
+\bottomrule
+\end{tabularx}
+
+\section{Tài liệu tham khảo}
+\begin{enumerate}
+  \item Nguyễn Phương Duy, \emph{Chapter 3 - Transport Layer - Chapter\_3\_v9.0}, slides 45, 47--48, 53, 56--64, 66--67 (Reliable Data Transfer).
+  \item Nguyễn Phương Duy, \emph{Chapter 3 - Transport Layer - Chapter\_3\_v9.0}, slides 93--98 (TCP Flow Control).
+  \item Nguyễn Phương Duy, \emph{Chapter 3 - Transport Layer - Chapter\_3\_v9.0}, slides 108, 112--120, 122--126 (Congestion Control).
+\end{enumerate}
+Các thiết kế Reliability, Flow Control và Congestion Control được trình bày bằng nguyên lý, ví dụ và giới hạn hoạt động tương ứng.
+\end{document}
